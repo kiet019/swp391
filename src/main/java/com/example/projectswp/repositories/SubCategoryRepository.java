@@ -2,7 +2,7 @@ package com.example.projectswp.repositories;
 
 import com.example.projectswp.model.Category;
 import com.example.projectswp.model.SubCategory;
-import com.example.projectswp.rowmapper.SubCategoryRowMapper;
+import com.example.projectswp.repositories.rowMapper.SubCategoryRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;

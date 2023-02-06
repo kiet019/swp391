@@ -1,7 +1,7 @@
 package com.example.projectswp.repositories;
 
 import com.example.projectswp.model.Blog;
-import com.example.projectswp.rowmapper.BlogRowMapper;
+import com.example.projectswp.repositories.rowMapper.BlogRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -10,7 +10,6 @@ import java.util.List;
 
 @Repository
 public class BlogRepository {
-    //get post put delete
     private static final BlogRowMapper BLOG_ROW_MAPPER = new BlogRowMapper();
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -33,7 +32,6 @@ public class BlogRepository {
     }
     public boolean insertBlog(Blog blog) {
         String sql = "";
-
 
         return false;
     }
