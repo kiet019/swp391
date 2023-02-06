@@ -21,4 +21,5 @@ public class RoleController {
         Role role = roleRepository.getRole(id);
         return role != null ? ResponseEntity.ok(role) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
+
 }
