@@ -13,8 +13,6 @@ import java.util.List;
 @RequestMapping("/api/blogs")
 public class BlogController {
 
-    // blogs/blogid; delete by id;
-
     @Autowired
     BlogRepository blogRepository = new BlogRepository();
 
@@ -24,11 +22,6 @@ public class BlogController {
         return blogs != null? ResponseEntity.ok(blogs) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    @GetMapping("users/{userid}/blog")
-    public ResponseEntity<List<Blog>> getBlogs(@PathVariable int userID) {
-        List<Blog> blogs = blogRepository.getBlogs(userID);
-        return blogs != null? ResponseEntity.ok(blogs) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    }
     @GetMapping("/{blogID}")
     public ResponseEntity<Blog> getBlog(@PathVariable int blogID) {
         Blog blog = blogRepository.getBlog(blogID);
@@ -39,16 +32,5 @@ public class BlogController {
 
     }
 
-    @GetMapping("/test")
-    public String test() {
-        try{
-            Blog blog = blogRepository.getBlog(1);
-            return blog != null? "success" : "fail";
-        }catch(Exception e){
-            System.out.println(e);
-        }finally {
-            return "fail";
-        }
 
-    }
 }

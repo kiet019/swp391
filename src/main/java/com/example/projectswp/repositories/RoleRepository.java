@@ -1,6 +1,7 @@
 package com.example.projectswp.repositories;
 
 import com.example.projectswp.model.Role;
+import com.example.projectswp.rowmapper.RoleRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
