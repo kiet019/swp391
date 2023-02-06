@@ -1,6 +1,7 @@
 package com.example.projectswp.repositories;
 
 import com.example.projectswp.model.Category;
+import com.example.projectswp.repositories.rowMapper.CategoryRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;

@@ -1,4 +1,4 @@
-package com.example.projectswp.repositories;
+package com.example.projectswp.repositories.rowMapper;
 
 import com.example.projectswp.model.Blog;
 import org.springframework.jdbc.core.RowMapper;
