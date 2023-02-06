@@ -28,18 +28,21 @@ public class BlogController {
         Blog blog = blogRepository.getBlog(blogID);
         return blog != null? ResponseEntity.ok(blog) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
+
     @PostMapping("")
     public ResponseEntity<Blog> createBlog(@RequestBody Blog blog){
         boolean result = blogRepository.insertBlog(blog);
         URI uri = URI.create("localhost:8080/api/blogs/" + blogRepository.getLastBlogId() );
         return result ? ResponseEntity.created(uri).build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
-    @PutMapping("/{blogid}")
+
+    @PutMapping("/{blogId}")
     public void updateBlog(@PathVariable int blogId, @RequestBody Blog blog){
 
     }
-    @DeleteMapping("/{blogid}")
-    public void deleteBlog(@PathVariable int blogid){
+
+    @DeleteMapping("/{blogId}")
+    public void deleteBlog(@PathVariable int blogId){
 
     }
 
