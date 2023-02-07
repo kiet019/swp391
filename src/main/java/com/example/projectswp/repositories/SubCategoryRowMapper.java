@@ -15,7 +15,7 @@ public class SubCategoryRowMapper implements RowMapper<SubCategory> {
         subCategory.setId(rs.getInt("Sub_CategoryID"));
         subCategory.setCategoryID(rs.getInt("CategoryID"));
         subCategory.setName(rs.getString("Sub_Category_Name"));
-
+        subCategory.setStatus(rs.getBoolean("Sub_Category_Status"));
         return subCategory;
     }
 }
