@@ -39,7 +39,7 @@ public class CategoryRepository {
                 "values (?, ?)";
 
         int check = jdbcTemplate.update(sql, category.getName(), category.getImage());
-        return check !=0 ? true : false;
+        return check != 0;
     }
 
     public boolean updateCategory(Category category) {
@@ -48,6 +48,6 @@ public class CategoryRepository {
                 "    Category_Image = ?\n" +
                 "where CategoryID = ?";
         int check = jdbcTemplate.update(sql, category.getName(), category.getImage(), category.getId());
-        return check !=0 ? true : false;
+        return check != 0;
     }
 }
