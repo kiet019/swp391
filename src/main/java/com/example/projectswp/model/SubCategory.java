@@ -14,5 +14,6 @@ public class SubCategory {
     private int id;
     private int categoryID;
     private String name;
-    private boolean status;
+
+
 }

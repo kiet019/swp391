@@ -1,4 +1,6 @@
-package com.example.projectswp.repositories;
+
+package com.example.projectswp.repositories.rowMapper;
+
 
 import com.example.projectswp.model.SubCategory;
 import org.springframework.jdbc.core.RowMapper;
@@ -15,7 +17,7 @@ public class SubCategoryRowMapper implements RowMapper<SubCategory> {
         subCategory.setId(rs.getInt("Sub_CategoryID"));
         subCategory.setCategoryID(rs.getInt("CategoryID"));
         subCategory.setName(rs.getString("Sub_Category_Name"));
-        subCategory.setStatus(rs.getBoolean("Sub_Category_Status"));
+
         return subCategory;
     }
 }

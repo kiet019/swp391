@@ -1,4 +1,6 @@
-package com.example.projectswp.repositories;
+
+package com.example.projectswp.repositories.rowMapper;
+
 
 import com.example.projectswp.model.Category;
 import org.springframework.jdbc.core.RowMapper;
@@ -14,7 +16,6 @@ public class CategoryRowMapper implements RowMapper<Category> {
         category.setId(rs.getInt("CategoryID"));
         category.setName(rs.getString("Category_Name"));
         category.setImage(rs.getString("Category_Image"));
-        category.setStatus(rs.getBoolean("Category_Status"));
 
         return category;
     }
