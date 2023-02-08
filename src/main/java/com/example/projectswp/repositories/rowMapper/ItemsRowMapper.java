@@ -1,6 +1,5 @@
 package com.example.projectswp.repositories.rowMapper;
 
-import com.example.projectswp.model.Blog;
 import com.example.projectswp.model.Items;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -31,7 +30,6 @@ public class ItemsRowMapper implements RowMapper<Items> {
         items.setDateCreated(rs.getDate("Item_Date_Created"));
         items.setDateUpdate(rs.getDate("Item_Date_Update"));
         items.setImageID(rs.getInt("ImageID"));
-
         return items;
     }
 }
