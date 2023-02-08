@@ -23,9 +23,9 @@ public class BlogCategoryController {
     }
 
     @GetMapping("/{categoryID}")
-    public ResponseEntity<BlogCategory> getBlogCategory(@PathVariable int categoryId) {
-        BlogCategory blogCategory = blogCategoryRepository.getBlogCategory(categoryId);
-        return blogCategory != null? ResponseEntity.ok(blogCategory) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    public ResponseEntity<BlogCategory> getBlogCategory(@PathVariable int categoryID) {
+        BlogCategory blogCategory = blogCategoryRepository.getBlogCategory(categoryID);
+        return blogCategory != null ? ResponseEntity.ok(blogCategory) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @PostMapping("")
@@ -35,13 +35,13 @@ public class BlogCategoryController {
         return isCreated ? ResponseEntity.created(uri).build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{blogCategoryId}")
     public ResponseEntity<BlogCategory> updateBlogCategory(@PathVariable int blogCategoryId,@RequestBody BlogCategory blogCategory) {
-        boolean isUpdated = blogCategoryRepository.updateBlogCategory(blogCategoryId, blogCategory.getName());
+        boolean isUpdated = blogCategoryRepository.updateBlogCategory(blogCategoryId, blogCategory);
         return isUpdated ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{blogCategoryId}")
     public ResponseEntity<BlogCategory> deleteBlogCategory(@PathVariable int blogCategoryId){
         boolean isDeleted = blogCategoryRepository.deleteBlogCategory(blogCategoryId);
         return isDeleted ? ResponseEntity.accepted().build() : ResponseEntity.notFound().build();

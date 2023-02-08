@@ -19,7 +19,8 @@ public class BlogRowMapper implements RowMapper<Blog> {
         blog.setTitle(rs.getString("Blog_Title"));
         blog.setDescription(rs.getString("Blog_Description"));
         blog.setContent(rs.getString("Blog_Content"));
-        blog.setDateCreate(rs.getDate("Blog_Date_Create"));
+        blog.setDateCreated(rs.getDate("Blog_Date_Create"));
+        blog.setDateUpdated(rs.getDate("Blog_Date_Update"));
         return blog;
     }
 }

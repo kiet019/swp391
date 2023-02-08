@@ -37,13 +37,15 @@ public class BlogController {
     }
 
     @PutMapping("/{blogId}")
-    public void updateBlog(@PathVariable int blogId, @RequestBody Blog blog){
-
+    public ResponseEntity<Blog> updateBlog(@PathVariable int blogId, @RequestBody Blog blog){
+        boolean isUpdated = blogRepository.updateBlog(blogId, blog);
+        return isUpdated ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @DeleteMapping("/{blogId}")
-    public void deleteBlog(@PathVariable int blogId){
-
+    public ResponseEntity<Blog> deleteBlog(@PathVariable int blogId){
+        boolean isDeleted = blogRepository.deleteBlog(blogId);
+        return isDeleted ? ResponseEntity.accepted().build() : ResponseEntity.notFound().build();
     }
 
 }

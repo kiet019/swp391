@@ -22,14 +22,14 @@ public class BlogCategoryRepository {
     }
 
     public BlogCategory getBlogCategory(int blogCategoryId) {
-        String sql = "select * from BlogCategories where Blog_CategoryID = ?";
+        String sql = "SELECT * from BlogCategories WHERE Blog_CategoryID = ?";
         List<BlogCategory> categories = jdbcTemplate.query(sql, BLOG_CATEGORY_ROW_MAPPER, blogCategoryId);
         return categories.size() != 0? categories.get(0) : null;
     }
 
     public boolean insertBlogCategory(BlogCategory blogCategory) {
         String sql = "INSERT INTO dbo.BlogCategories(Blog_Category_Name) VALUES(?)";
-        int rowAffected = jdbcTemplate.update(sql, BLOG_CATEGORY_ROW_MAPPER, blogCategory.getName());
+        int rowAffected = jdbcTemplate.update(sql, blogCategory.getName());
         return rowAffected > 0;
     }
     public int getLastBlogCategoryID() {
@@ -37,15 +37,15 @@ public class BlogCategoryRepository {
         return blogCategories.get( blogCategories.size()-1 ).getId();
     }
 
-    public boolean updateBlogCategory(int blogCategoryID, String blogCategoryName) {
+    public boolean updateBlogCategory(int blogCategoryID, BlogCategory blogCategory) {
         String sql = "UPDATE dbo.BlogCategories SET Blog_Category_Name = ? WHERE Blog_CategoryID = ?";
-        int rowAffected = jdbcTemplate.update(sql, BLOG_CATEGORY_ROW_MAPPER, blogCategoryName, blogCategoryID);
+        int rowAffected = jdbcTemplate.update(sql, blogCategory.getName(), blogCategoryID);
         return rowAffected > 0;
     }
 
     public boolean deleteBlogCategory(int blogCategoryId) {
         String sql = "DELETE dbo.BlogCategories WHERE Blog_CategoryID = ?";
-        int rowAffected = jdbcTemplate.update(sql, BLOG_CATEGORY_ROW_MAPPER, blogCategoryId);
+        int rowAffected = jdbcTemplate.update(sql ,blogCategoryId);
         return rowAffected > 0;
     }
 }
