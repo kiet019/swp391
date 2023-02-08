@@ -16,7 +16,7 @@ public class ItemController {
     @Autowired
     ItemsRepository itemsRepository = new ItemsRepository();
 
-    @GetMapping("/{id}")
+    @GetMapping("/{itemID}")
     public ResponseEntity<Items> getCategory(@PathVariable int id) {
         Items category = itemsRepository.getItem(id);
         return category != null ? ResponseEntity.ok(category) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
