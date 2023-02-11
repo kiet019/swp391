@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping("api/order-details")
 public class OrderDetailController {
     @Autowired
-    OrderDetailRepository orderDetailRepository = new OrderDetailRepository();
+    OrderDetailRepository orderDetailRepository;
 
     @GetMapping("")
     public ResponseEntity<List<OrderDetail>> getOrderDetails() {

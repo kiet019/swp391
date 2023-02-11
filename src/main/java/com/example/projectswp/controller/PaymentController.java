@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping("api/payments")
 public class PaymentController {
     @Autowired
-    PaymentRepository paymentRepository = new PaymentRepository();
+    PaymentRepository paymentRepository;
 
     @GetMapping("")
     public ResponseEntity<List<Payment>> getPayments() {

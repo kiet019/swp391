@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping("api/blog-categories")
 public class BlogCategoryController {
     @Autowired
-    private final BlogCategoryRepository blogCategoryRepository = new BlogCategoryRepository();
+    BlogCategoryRepository blogCategoryRepository;
 
     @GetMapping("")
     public ResponseEntity<List<BlogCategory>> getBlogCategories() {

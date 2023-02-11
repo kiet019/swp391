@@ -15,7 +15,7 @@ import java.util.List;
 public class BlogController {
 
     @Autowired
-    BlogRepository blogRepository = new BlogRepository();
+    BlogRepository blogRepository;
 
     @GetMapping("")
     public ResponseEntity<List<Blog>> getBlogs() {
