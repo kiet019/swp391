@@ -55,9 +55,8 @@ public class ItemsRepository {
                 "    Item_Date_Created = ?\n" +
                 "    Item_Date_Update = ?\n" +
                 "    ImageID = ?\n" +
-
                 "where ItemID = ?";
-        int check = jdbcTemplate.update(sql, item.getItemCode(), item.getUserID(), item.getSubCategoryID(), item.getItemTitle(), item.getItemDetailedDescription(), item.getMass(), item.isSize(),  item.getStatus(), item.getValue(), item.getPrice(), item.getAmount(), item.isSponsoredOrderShippingFee(), item.getTime(), item.getAddress(), item.getDateCreated(), item.getDateUpdate(), item.getImageID());
+        int check = jdbcTemplate.update(sql, item.getItemCode(), item.getUserID(), item.getSubCategoryID(), item.getItemTitle(), item.getItemDetailedDescription(), item.getMass(), item.isSize(),  item.getStatus(), item.getValue(), item.getPrice(), item.getAmount(), item.isSponsoredOrderShippingFee(), item.getTime(), item.getAddress(), item.getDateCreated(), item.getDateUpdate(), item.getImageID(), item.getID());
         return check != 0;
     }
 
