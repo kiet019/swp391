@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping("/api/items")
 public class ItemController {
     @Autowired
-    ItemsRepository itemsRepository = new ItemsRepository();
+    ItemsRepository itemsRepository;
 
     @GetMapping("/{itemID}")
     public ResponseEntity<Items> getCategory(@PathVariable int id) {

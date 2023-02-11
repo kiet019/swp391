@@ -1,5 +1,6 @@
 package com.example.projectswp.controller;
 
+import com.example.projectswp.model.CateAndSub;
 import com.example.projectswp.model.Category;
 import com.example.projectswp.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import java.util.List;
 @RequestMapping("/api/category")
 public class CategoryController {
     @Autowired
-    CategoryRepository categoryRepository = new CategoryRepository();
+    CategoryRepository categoryRepository;
 
     @GetMapping("/{id}")
     public ResponseEntity<Category> getCategory(@PathVariable int id) {

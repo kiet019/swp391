@@ -17,7 +17,7 @@ import java.util.List;
 public class SubCategoryController {
 
     @Autowired
-    SubCategoryRepository subCategoryRepository = new SubCategoryRepository();
+    SubCategoryRepository subCategoryRepository;
 
     @GetMapping
     public ResponseEntity<List<SubCategory>> getSubCategories() {

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "/api/role")
 public class RoleController {
     @Autowired
-    RoleRepository roleRepository = new RoleRepository();
+    RoleRepository roleRepository;
 
     @GetMapping("/{id}")
     public ResponseEntity<Role> getRole(@PathVariable int id) {

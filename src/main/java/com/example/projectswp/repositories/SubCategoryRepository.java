@@ -47,4 +47,12 @@ public class SubCategoryRepository {
         int check = jdbcTemplate.update(sql, category.getName(), category.getImage(), category.getId());
         return check !=0 ? true : false;
     }
+
+    public List<SubCategory> getSubCategoriesByCategory(int categoryId) {
+        String sql = "select * from SubCategories where CategoryID = ?";
+
+        List<SubCategory> list = jdbcTemplate.query(sql, SUB_CATEGORY_ROW_MAPPER, categoryId);
+
+        return list.size() != 0 ? list : null;
+    }
 }
