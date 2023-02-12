@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "/api/role")
-@CrossOrigin
 
 public class RoleController {
     @Autowired

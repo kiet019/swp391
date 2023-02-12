@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/category-sub")
-@CrossOrigin
+
 public class CateAndSubController {
     @Autowired
     CateAndSubRepository cateAndSubRepository;
