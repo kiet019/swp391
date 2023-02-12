@@ -1,4 +1,4 @@
-package com.example.projectswp.swagger;
+package com.example.projectswp.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
