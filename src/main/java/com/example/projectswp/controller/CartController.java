@@ -11,6 +11,7 @@ import java.net.URI;
 import java.util.List;
 @RestController
 @RequestMapping("/api/carts")
+@CrossOrigin
 public class CartController {
     @Autowired
     CartRepository cartRepository = new CartRepository();
