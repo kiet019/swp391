@@ -16,8 +16,8 @@ public class ReportController {
     ReportRepository reportRepository = new ReportRepository();
 
     @GetMapping("/{reportID}")
-    public ResponseEntity<Reports> getReport(@PathVariable int id) {
-        Reports report = reportRepository.getReport(id);
+    public ResponseEntity<Reports> getReport(@PathVariable int reportID) {
+        Reports report = reportRepository.getReport(reportID);
         return report != null ? ResponseEntity.ok(report) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
     @GetMapping("")

@@ -17,8 +17,8 @@ public class CartController {
     CartRepository cartRepository = new CartRepository();
 
     @GetMapping("/{cartID}")
-    public ResponseEntity<Carts> getCart(@PathVariable int id) {
-        Carts cart = cartRepository.getCart(id);
+    public ResponseEntity<Carts> getCart(@PathVariable int cartID) {
+        Carts cart = cartRepository.getCart(cartID);
         return cart != null ? ResponseEntity.ok(cart) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
     @GetMapping("")

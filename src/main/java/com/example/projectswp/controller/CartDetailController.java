@@ -18,8 +18,8 @@ public class CartDetailController {
     @Autowired
     CartDetailsRepository cartDetailsRepository = new CartDetailsRepository();
     @GetMapping("/{cartDetailsID}")
-    public ResponseEntity<CartDetails> getCartDetail(@PathVariable int id) {
-        CartDetails cartDetails = cartDetailsRepository.getCartDetail(id);
+    public ResponseEntity<CartDetails> getCartDetail(@PathVariable int cartDetailsID) {
+        CartDetails cartDetails = cartDetailsRepository.getCartDetail(cartDetailsID);
         return cartDetails != null ? ResponseEntity.ok(cartDetails) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
     @GetMapping("")

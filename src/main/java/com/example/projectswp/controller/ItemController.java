@@ -17,8 +17,8 @@ public class ItemController {
     ItemsRepository itemsRepository;
 
     @GetMapping("/{itemID}")
-    public ResponseEntity<Items> getCategory(@PathVariable int id) {
-        Items items = itemsRepository.getItem(id);
+    public ResponseEntity<Items> getCategory(@PathVariable int itemID) {
+        Items items = itemsRepository.getItem(itemID);
         return items != null ? ResponseEntity.ok(items) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
     @GetMapping("")
