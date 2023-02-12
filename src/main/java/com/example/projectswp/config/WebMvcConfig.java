@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 //package com.example.projectswp.config;
 //
 //import org.springframework.context.annotation.Configuration;
