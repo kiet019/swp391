@@ -18,8 +18,8 @@ public class ItemController {
 
     @GetMapping("/{itemID}")
     public ResponseEntity<Items> getCategory(@PathVariable int id) {
-        Items category = itemsRepository.getItem(id);
-        return category != null ? ResponseEntity.ok(category) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        Items items = itemsRepository.getItem(id);
+        return items != null ? ResponseEntity.ok(items) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
     @GetMapping("")
     public ResponseEntity<List<Items>> getItem() {
@@ -27,7 +27,7 @@ public class ItemController {
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
     @PostMapping("")
-    public ResponseEntity<Items> insertCategory(@RequestBody Items addItems) {
+    public ResponseEntity<Items> insertItem(@RequestBody Items addItems) {
         boolean result = itemsRepository.addItems(addItems);
         URI uri = URI.create("localhost:8080/api/items/" + itemsRepository.getLastItem().getID());
         return result ? ResponseEntity.created(uri).build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();

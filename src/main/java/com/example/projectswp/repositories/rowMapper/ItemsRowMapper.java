@@ -25,7 +25,7 @@ public class ItemsRowMapper implements RowMapper<Items> {
         items.setPrice(rs.getDouble("Item_Sale_Price"));
         items.setAmount(rs.getInt("Item_Share_Amount"));
         items.setSponsoredOrderShippingFee(rs.getBoolean("Item_Sponsored_Order_Shipping_Fee"));
-        items.setTime(rs.getDate("Item_Share_Amount"));
+        items.setTime(rs.getDate("Item_Expired_Time"));
         items.setAddress(rs.getString("Item_Shipping_Address"));
         items.setDateCreated(rs.getDate("Item_Date_Created"));
         items.setDateUpdate(rs.getDate("Item_Date_Update"));
