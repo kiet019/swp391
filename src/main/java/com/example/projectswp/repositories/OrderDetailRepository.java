@@ -1,5 +1,6 @@
 package com.example.projectswp.repositories;
 
+import com.example.projectswp.model.Order;
 import com.example.projectswp.model.OrderDetail;
 import com.example.projectswp.repositories.rowMapper.OrderDetailRowMapper;
 import com.example.projectswp.repositories.ultil.Ultil;
@@ -38,10 +39,37 @@ public class OrderDetailRepository {
         return orderDetails.get(orderDetails.size() - 1).getId();
     }
 
-    public boolean updateOrderDetail(int orderDetailId, OrderDetail orderDetail) {
-        String sql = "";
-        int rowAffected = jdbcTemplate.update(sql);
+    public boolean updateOrderDetail(final int orderDetailId, OrderDetail orderDetail) {
+        OrderDetail oldOrderDetail = getOrderDetail(orderDetailId);
+        if (orderDetail == null)
+            return false;
+        updateOrderDetailObject(orderDetail, orderDetail);
+        String sql = "UPDATE dbo.OrderDetails \n" +
+                "SET OrderID = ?, ItemID = ?, Order_Detail_Quantity = ?, " +
+                "Order_Detail_Price = ?, Order_Detail_Date_Update = ?,Order_Detail_Share_Address = ?\n" +
+                "WHERE Order_DetailID = ?";
+        int rowAffected = jdbcTemplate.update(sql,
+                orderDetail.getOrderID(), orderDetail.getItemID(), orderDetail.getQuantity(),
+                orderDetail.getPrice(), Ultil.getCurrentDate(), orderDetail.getShareAddress(),
+                orderDetailId);
         return rowAffected > 0;
+    }
+
+    private void updateOrderDetailObject(OrderDetail old, OrderDetail orderDetail) {
+        if (orderDetail.getOrderID() == 0)
+            orderDetail.setOrderID(old.getOrderID());
+
+        if (orderDetail.getItemID() == 0)
+            orderDetail.setItemID(old.getItemID());
+
+        if (orderDetail.getQuantity() == 0)
+            orderDetail.setQuantity(old.getQuantity());
+
+        if (orderDetail.getPrice() == null)
+            orderDetail.setPrice(old.getPrice());
+
+        if (orderDetail.getShareAddress() == null || orderDetail.getShareAddress().trim().length() == 0)
+            orderDetail.setShareAddress(old.getShareAddress());
     }
 
     public boolean deleteOrderDetail(int orderDetailID) {

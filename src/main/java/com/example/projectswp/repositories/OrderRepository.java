@@ -42,10 +42,32 @@ public class OrderRepository {
         return orders.get(orders.size() - 1).getId();
     }
 
-    public boolean updateOrder(int orderId, Order order) {
-        String sql = "";
-        int rowAffected = jdbcTemplate.update(sql);
+    public boolean updateOrder(final int orderId, Order order) {
+        Order oldOrder = getOrder(orderId);
+        if (oldOrder == null)
+            return false;
+        updateOrderObject(oldOrder, order);
+        String sql = "UPDATE dbo.Orders SET UserID = ?, Order_Code = ?, PaymentID = ?, Order_Status = ?, Order_Date_Update = ?, Order_Address = ? WHERE OrderID = ?";
+        int rowAffected = jdbcTemplate.update(sql, order.getUserID(), order.getCode(), order.getPaymentID(), order.getStatus(), Ultil.getCurrentDate(), order.getAddress(), orderId);
         return rowAffected > 0;
+    }
+
+    private void updateOrderObject(Order oldOrder, Order order) {
+        if (order.getUserID() == 0)
+            order.setUserID(order.getUserID());
+
+        if (order.getCode() == null || order.getCode().trim().length() == 0)
+            order.setCode(oldOrder.getCode());
+
+        if (order.getPaymentID() == 0)
+            order.setPaymentID(oldOrder.getPaymentID());
+
+        if (order.getStatus() == 0)
+            order.setStatus(oldOrder.getStatus());
+
+        if (order.getAddress() == null || order.getAddress().trim().length() == 0)
+            order.setAddress(oldOrder.getAddress());
+
     }
 
     public boolean deleteOrder(int orderID) {
