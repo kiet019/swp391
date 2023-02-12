@@ -7,13 +7,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 @Repository
 public class CartDetailsRepository {
     private static final CartDetailsRowMapper  CART_DETAILS_ROW_MAPPER  = new CartDetailsRowMapper();
     @Autowired
     JdbcTemplate jdbcTemplate;
-
+    public Date getCurrentDate(){
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        LocalDateTime now = LocalDateTime.now();
+        return new Date(dtf.format(now));
+    }
     public CartDetails getCartDetail(int cartDetailsID) {
         String sql = "select * from CartDetails where Cart_DetailID = ?";
         List<CartDetails> cartDetails = jdbcTemplate.query(sql,CART_DETAILS_ROW_MAPPER, cartDetailsID);
@@ -32,7 +39,7 @@ public class CartDetailsRepository {
         String sql = "insert into dbo.CartDetails ([Cart_DetailID], [CartID], [ItemID], [Cart_Detail_Date_Create], [Cart_Detail_Date_Update], [Cart_Detail_Item_Quantity])\n" +
                 "values (?, ?, ?, ?, ?, ?)";
 
-        int check = jdbcTemplate.update(sql, cartDetails.getCartDetailsID(), cartDetails.getCartID(), cartDetails.getItemID(), cartDetails.getCartDetailDateCreate(), cartDetails.getCartDetailDateUpdate(), cartDetails.getCartDetailItemQuantity());
+        int check = jdbcTemplate.update(sql, cartDetails.getCartDetailsID(), cartDetails.getCartID(), cartDetails.getItemID(), getCurrentDate(), null, cartDetails.getCartDetailItemQuantity());
         return check != 0;
     }
 
@@ -44,7 +51,7 @@ public class CartDetailsRepository {
                 "    Cart_Detail_Date_Update = ?\n" +
                 "    Cart_Detail_Item_Quantity = ?\n" +
                 "where Cart_DetailID = ?";
-        int check = jdbcTemplate.update(sql, cartDetails.getCartID(), cartDetails.getItemID(), cartDetails.getCartDetailDateCreate(), cartDetails.getCartDetailDateUpdate(), cartDetails.getCartDetailItemQuantity(), cartDetails.getCartDetailsID());
+        int check = jdbcTemplate.update(sql, cartDetails.getCartID(), cartDetails.getItemID(), cartDetails.getCartDetailDateCreate(), getCurrentDate(), cartDetails.getCartDetailItemQuantity(), cartDetails.getCartDetailsID());
         return check != 0;
     }
 

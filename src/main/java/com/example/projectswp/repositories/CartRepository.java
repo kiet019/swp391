@@ -5,6 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -12,7 +15,11 @@ public class CartRepository {
     private static final CartsRowMapper CART_ROW_MAPPER = new CartsRowMapper();
     @Autowired
     JdbcTemplate jdbcTemplate;
-
+    public Date getCurrentDate(){
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        LocalDateTime now = LocalDateTime.now();
+        return new Date(dtf.format(now));
+    }
     public Carts getCart(int cartID) {
         String sql = "select * from Carts where CartID = ?";
         List<Carts> cart = jdbcTemplate.query(sql,CART_ROW_MAPPER, cartID);
@@ -31,7 +38,7 @@ public class CartRepository {
         String sql = "insert into dbo.Carts ([CartID], [Cart_Date_Create])\n" +
                 "values (?, ?)";
 
-        int check = jdbcTemplate.update(sql, cart.getCartID(), cart.getCartDateCreate());
+        int check = jdbcTemplate.update(sql, cart.getCartID(), getCurrentDate());
         return check != 0;
     }
 

@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -13,7 +16,11 @@ public class ItemsRepository {
     private static final ItemsRowMapper ITEMS_ROW_MAPPER = new ItemsRowMapper();
     @Autowired
     JdbcTemplate jdbcTemplate;
-
+    public Date getCurrentDate(){
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        LocalDateTime now = LocalDateTime.now();
+        return new Date(dtf.format(now));
+    }
     public Items getItem(int itemID) {
         String sql = "select * from Items where ItemID = ?";
         List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, itemID);
@@ -31,8 +38,7 @@ public class ItemsRepository {
     public boolean addItems(Items item) {
         String sql = "insert into dbo.Items ([Item_Code], [UserID], [Sub_CategoryID], [Item_Title], [Item_Detailed_Description], [Item_Mass], [Item_Size], [Item_Status], [Item_Estimate_Value], [Item_Sale_Price], [Item_Share_Amount], [Item_Sponsored_Order_Shipping_Fee], [Item_Expired_Time], [Item_Shipping_Address], [Item_Date_Created], [Item_Date_Update], [ImageID])\n" +
                 "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-        int check = jdbcTemplate.update(sql, item.getItemCode(), item.getUserID(), item.getSubCategoryID(), item.getItemTitle(), item.getItemDetailedDescription(), item.getMass(), item.isSize(),  item.getStatus(), item.getValue(), item.getPrice(), item.getAmount(), item.isSponsoredOrderShippingFee(), item.getTime(), item.getAddress(), item.getDateCreated(), item.getDateUpdate(), item.getImageID());
+        int check = jdbcTemplate.update(sql, item.getItemCode(), item.getUserID(), item.getSubCategoryID(), item.getItemTitle(), item.getItemDetailedDescription(), item.getMass(), item.isSize(),  1, item.getValue(), item.getPrice(), item.getAmount(), item.isSponsoredOrderShippingFee(), item.getTime(), item.getAddress(), getCurrentDate(), null, item.getImageID());
         return check != 0;
     }
 
@@ -56,7 +62,7 @@ public class ItemsRepository {
                 "    Item_Date_Update = ?\n" +
                 "    ImageID = ?\n" +
                 "where ItemID = ?";
-        int check = jdbcTemplate.update(sql, item.getItemCode(), item.getUserID(), item.getSubCategoryID(), item.getItemTitle(), item.getItemDetailedDescription(), item.getMass(), item.isSize(),  item.getStatus(), item.getValue(), item.getPrice(), item.getAmount(), item.isSponsoredOrderShippingFee(), item.getTime(), item.getAddress(), item.getDateCreated(), item.getDateUpdate(), item.getImageID(), item.getID());
+        int check = jdbcTemplate.update(sql, item.getItemCode(), item.getUserID(), item.getSubCategoryID(), item.getItemTitle(), item.getItemDetailedDescription(), item.getMass(), item.isSize(),  item.getStatus(), item.getValue(), item.getPrice(), item.getAmount(), item.isSponsoredOrderShippingFee(), item.getTime(), item.getAddress(), item.getDateCreated(), getCurrentDate(), item.getImageID(), item.getID());
         return check != 0;
     }
 
