@@ -1,5 +1,6 @@
 package com.example.projectswp.controller;
 
+import com.example.projectswp.model.Blog;
 import com.example.projectswp.model.Carts;
 import com.example.projectswp.model.Items;
 import com.example.projectswp.repositories.CartRepository;
@@ -31,18 +32,20 @@ public class CartController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Carts> insertCarts(@RequestBody Carts addCarts) {
+    public ResponseEntity<Carts> createCart(@RequestBody Carts addCarts) {
         boolean result = cartRepository.addCart(addCarts);
         URI uri = URI.create("localhost:8080/api/carts/" + cartRepository.getLastCart().getCartID());
         return result ? ResponseEntity.created(uri).build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 
-    @PutMapping("")
-    public ResponseEntity<Items> updateCarts(@RequestBody Carts updateCart) {
-        boolean result = false;
-        if (cartRepository.getCart(updateCart.getCartID()) != null) {
-            result = cartRepository.updateCart(updateCart);
-        }
-        return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+    @PutMapping("/{cartID}")
+    public ResponseEntity<Carts> updateCart(@PathVariable int imageID, @RequestBody Carts cart) {
+        boolean result = cartRepository.updateCart(imageID, cart);
+        return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+    @DeleteMapping("/{cartID}")
+    public ResponseEntity<Carts> deleteCart(@PathVariable int imageID){
+        boolean result = cartRepository.deleteCart(imageID);
+        return result ? ResponseEntity.accepted().build() : ResponseEntity.notFound().build();
     }
 }

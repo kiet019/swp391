@@ -1,5 +1,6 @@
 package com.example.projectswp.controller;
 
+import com.example.projectswp.model.Images;
 import com.example.projectswp.model.Reports;
 import com.example.projectswp.repositories.ReportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,19 +30,21 @@ public class ReportController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Reports> insertReport(@RequestBody Reports addReport) {
+    public ResponseEntity<Reports> createReport(@RequestBody Reports addReport) {
         boolean result = reportRepository.addReport(addReport);
         URI uri = URI.create("localhost:8080/api/reports/" + reportRepository.getLastReport().getReportID());
         return result ? ResponseEntity.created(uri).build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 
-    @PutMapping("")
-    public ResponseEntity<Reports> updateReport(@RequestBody Reports updateReport) {
-        boolean result = false;
-        if (reportRepository.getReport(updateReport.getReportID()) != null) {
-            result = reportRepository.updateReport(updateReport);
-        }
-        return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+    @PutMapping("/{reportID}")
+    public ResponseEntity<Reports> updateReport(@PathVariable int reportID,@RequestBody Reports report) {
+        boolean result = reportRepository.updateReport(reportID, report);
+        return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+    @DeleteMapping("/{reportID}")
+    public ResponseEntity<Images> deleteReport(@PathVariable int reportID){
+        boolean result = reportRepository.deleteReport(reportID);
+        return result ? ResponseEntity.accepted().build() : ResponseEntity.notFound().build();
     }
 }
 

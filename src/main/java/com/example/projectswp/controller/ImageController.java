@@ -36,12 +36,12 @@ public class ImageController    {
     }
     @PutMapping("/{imageID}")
     public ResponseEntity<Images> updateImage(@PathVariable int imageID, @RequestBody Images images){
-        boolean isUpdated = imageRepository.updateImage(imageID, images);
-        return isUpdated ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        boolean result = imageRepository.updateImage(imageID, images);
+        return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
     @DeleteMapping("/{imageID}")
-    public ResponseEntity<Blog> deleteBlog(@PathVariable int imageID){
-        boolean isDeleted = imageRepository.deleteImage(imageID);
-        return isDeleted ? ResponseEntity.accepted().build() : ResponseEntity.notFound().build();
+    public ResponseEntity<Images> deleteImage(@PathVariable int imageID){
+        boolean result = imageRepository.deleteImage(imageID);
+        return result ? ResponseEntity.accepted().build() : ResponseEntity.notFound().build();
     }
 }

@@ -42,7 +42,7 @@ public class ItemsRepository {
         return check != 0;
     }
 
-    public boolean updateItems(Items item) {
+    public boolean updateItems(int itemID,Items item) {
         String sql = "update dbo.Items\n" +
                 "set Item_Code = ?,\n" +
                 "    UserID = ?\n" +
@@ -62,8 +62,13 @@ public class ItemsRepository {
                 "    Item_Date_Update = ?\n" +
                 "    ImageID = ?\n" +
                 "where ItemID = ?";
-        int check = jdbcTemplate.update(sql, item.getItemCode(), item.getUserID(), item.getSubCategoryID(), item.getItemTitle(), item.getItemDetailedDescription(), item.getMass(), item.isSize(),  item.getStatus(), item.getValue(), item.getPrice(), item.getAmount(), item.isSponsoredOrderShippingFee(), item.getTime(), item.getAddress(), item.getDateCreated(), getCurrentDate(), item.getImageID(), item.getID());
+        int check = jdbcTemplate.update(sql, item.getItemCode(), item.getUserID(), item.getSubCategoryID(), item.getItemTitle(), item.getItemDetailedDescription(), item.getMass(), item.isSize(),  item.getStatus(), item.getValue(), item.getPrice(), item.getAmount(), item.isSponsoredOrderShippingFee(), item.getTime(), item.getAddress(), item.getDateCreated(), getCurrentDate(), item.getImageID(), itemID);
         return check != 0;
+    }
+    public boolean deleteImage(int itemID){
+        String sql = "DELETE dbo.Items WHERE ItemID = ?";
+        int check = jdbcTemplate.update(sql, itemID);
+        return check > 0;
     }
 
 }

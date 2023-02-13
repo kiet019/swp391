@@ -1,5 +1,6 @@
 package com.example.projectswp.controller;
 
+import com.example.projectswp.model.Blog;
 import com.example.projectswp.model.CartDetails;
 import com.example.projectswp.model.Items;
 import com.example.projectswp.repositories.CartDetailsRepository;
@@ -18,9 +19,9 @@ public class CartDetailController {
     @Autowired
     CartDetailsRepository cartDetailsRepository;
 
-    @GetMapping("/{cartDetailsID}")
-    public ResponseEntity<CartDetails> getCartDetail(@PathVariable int cartDetailsID) {
-        CartDetails cartDetails = cartDetailsRepository.getCartDetail(cartDetailsID);
+    @GetMapping("/{cartDetailID}")
+    public ResponseEntity<CartDetails> getCartDetail(@PathVariable int cartDetailID) {
+        CartDetails cartDetails = cartDetailsRepository.getCartDetail(cartDetailID);
         return cartDetails != null ? ResponseEntity.ok(cartDetails) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
@@ -31,18 +32,20 @@ public class CartDetailController {
     }
 
     @PostMapping("")
-    public ResponseEntity<CartDetails> insertCartDetails(@RequestBody CartDetails addCartDetails) {
+    public ResponseEntity<CartDetails> createCartDetail(@RequestBody CartDetails addCartDetails) {
         boolean result = cartDetailsRepository.addCartDetails(addCartDetails);
         URI uri = URI.create("localhost:8080/api/cart-details/" + cartDetailsRepository.getLastCartDetails().getCartDetailsID());
         return result ? ResponseEntity.created(uri).build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 
-    @PutMapping("")
-    public ResponseEntity<CartDetails> updateCartDetails(@RequestBody CartDetails updateCartDetails) {
-        boolean result = false;
-        if (cartDetailsRepository.getCartDetail(updateCartDetails.getCartDetailsID()) != null) {
-            result = cartDetailsRepository.updateCart(updateCartDetails);
-        }
-        return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+    @PutMapping("/{cartDetailID}")
+    public ResponseEntity<CartDetails> updateCartDetail(@PathVariable int cartDetailID, @RequestBody CartDetails cartDetail) {
+        boolean result = cartDetailsRepository.updateCartDetail(cartDetailID, cartDetail);
+        return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+    @DeleteMapping("/{cartDetailID}")
+    public ResponseEntity<CartDetails> deleteCartDetail(@PathVariable int cartDetailID){
+        boolean result = cartDetailsRepository.deleteCartDetail(cartDetailID);
+        return result ? ResponseEntity.accepted().build() : ResponseEntity.notFound().build();
     }
 }

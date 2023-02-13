@@ -21,6 +21,10 @@ public class CartDetailsRepository {
         LocalDateTime now = LocalDateTime.now();
         return new Date(dtf.format(now));
     }
+    public CartDetails getLastCartDetails() {
+        List<CartDetails> list = getCartDetails();
+        return list.size() != 0 ? list.get(list.size()-1) : null;
+    }
     public CartDetails getCartDetail(int cartDetailsID) {
         String sql = "select * from CartDetails where Cart_DetailID = ?";
         List<CartDetails> cartDetails = jdbcTemplate.query(sql,CART_DETAILS_ROW_MAPPER, cartDetailsID);
@@ -31,10 +35,7 @@ public class CartDetailsRepository {
         List<CartDetails> cartDetails = jdbcTemplate.query(sql,CART_DETAILS_ROW_MAPPER);
         return cartDetails.size() != 0? cartDetails: null;
     }
-    public CartDetails getLastCartDetails() {
-        List<CartDetails> list = getCartDetails();
-        return list.size() != 0 ? list.get(list.size()-1) : null;
-    }
+
     public boolean addCartDetails(CartDetails cartDetails) {
         String sql = "insert into dbo.CartDetails ([Cart_DetailID], [CartID], [ItemID], [Cart_Detail_Date_Create], [Cart_Detail_Date_Update], [Cart_Detail_Item_Quantity])\n" +
                 "values (?, ?, ?, ?, ?, ?)";
@@ -43,7 +44,7 @@ public class CartDetailsRepository {
         return check != 0;
     }
 
-    public boolean updateCart(CartDetails cartDetails) {
+    public boolean updateCartDetail(int cartDetailID, CartDetails cartDetails) {
         String sql = "update dbo.CartDetails\n" +
                 "set CartID = ?,\n" +
                 "    ItemID = ?\n" +
@@ -51,8 +52,12 @@ public class CartDetailsRepository {
                 "    Cart_Detail_Date_Update = ?\n" +
                 "    Cart_Detail_Item_Quantity = ?\n" +
                 "where Cart_DetailID = ?";
-        int check = jdbcTemplate.update(sql, cartDetails.getCartID(), cartDetails.getItemID(), cartDetails.getCartDetailDateCreate(), getCurrentDate(), cartDetails.getCartDetailItemQuantity(), cartDetails.getCartDetailsID());
+        int check = jdbcTemplate.update(sql, cartDetails.getCartID(), cartDetails.getItemID(), cartDetails.getCartDetailDateCreate(), getCurrentDate(), cartDetails.getCartDetailItemQuantity(), cartDetailID);
         return check != 0;
     }
-
+    public boolean deleteCartDetail(int cartDetailID){
+        String sql = "DELETE dbo.CartDetails WHERE Cart_DetailID = ?";
+        int check = jdbcTemplate.update(sql, cartDetailID);
+        return check > 0;
+    }
 }

@@ -43,7 +43,7 @@ public class ImageRepository {
                 "    Image_Link_4 = ?\n" +
                 "    Image_Link_5 = ?\n" +
                 "where ImageID = ?";
-        int check = jdbcTemplate.update(sql, images.getImageLink1(), images.getImageLink2(), images.getImageLink3(), images.getImageLink4(), images.getImageLink5(), images.getImageID());
+        int check = jdbcTemplate.update(sql, images.getImageLink1(), images.getImageLink2(), images.getImageLink3(), images.getImageLink4(), images.getImageLink5(), imageID);
         return check != 0;
     }
     public boolean deleteImage(int imageID){
