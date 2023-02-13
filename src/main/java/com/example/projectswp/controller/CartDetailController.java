@@ -16,23 +16,27 @@ import java.util.List;
 
 public class CartDetailController {
     @Autowired
-    CartDetailsRepository cartDetailsRepository = new CartDetailsRepository();
+    CartDetailsRepository cartDetailsRepository;
+
     @GetMapping("/{cartDetailsID}")
     public ResponseEntity<CartDetails> getCartDetail(@PathVariable int cartDetailsID) {
         CartDetails cartDetails = cartDetailsRepository.getCartDetail(cartDetailsID);
         return cartDetails != null ? ResponseEntity.ok(cartDetails) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
+
     @GetMapping("")
     public ResponseEntity<List<CartDetails>> getCartDetails() {
         List<CartDetails> cartDetails = cartDetailsRepository.getCartDetails();
         return cartDetails != null ? ResponseEntity.ok(cartDetails) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
+
     @PostMapping("")
     public ResponseEntity<CartDetails> insertCartDetails(@RequestBody CartDetails addCartDetails) {
         boolean result = cartDetailsRepository.addCartDetails(addCartDetails);
         URI uri = URI.create("localhost:8080/api/cart-details/" + cartDetailsRepository.getLastCartDetails().getCartDetailsID());
         return result ? ResponseEntity.created(uri).build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
+
     @PutMapping("")
     public ResponseEntity<CartDetails> updateCartDetails(@RequestBody CartDetails updateCartDetails) {
         boolean result = false;
