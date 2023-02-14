@@ -43,7 +43,7 @@ public class ReportRepository {
         return check != 0;
     }
 
-    public boolean updateReport(Reports report) {
+    public boolean updateReport(int reportID, Reports report) {
         String sql = "update dbo.Reports\n" +
                 "set ItemID = ?,\n" +
                 "    Report_Date_Create = ?\n" +
@@ -51,8 +51,13 @@ public class ReportRepository {
                 "    Report_Status = ?\n" +
                 "    Report_Content = ?\n" +
                 "where ReportID = ?";
-        int check = jdbcTemplate.update(sql, report.getReportID(), report.getReportDateCreate(), getCurrentDate(), report.isReportStatus(), report.getReportContent());
+        int check = jdbcTemplate.update(sql, report.getReportID(), report.getReportDateCreate(), getCurrentDate(), report.isReportStatus(), report.getReportContent(), reportID);
         return check != 0;
+    }
+    public boolean deleteReport(int reportID){
+        String sql = "DELETE dbo.Reports WHERE ReportID = ?";
+        int check = jdbcTemplate.update(sql, reportID);
+        return check > 0;
     }
 
 }

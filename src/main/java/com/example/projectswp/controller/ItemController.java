@@ -1,5 +1,6 @@
 package com.example.projectswp.controller;
 
+import com.example.projectswp.model.Blog;
 import com.example.projectswp.model.Items;
 import com.example.projectswp.repositories.ItemsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,18 +28,20 @@ public class ItemController {
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
     @PostMapping("")
-    public ResponseEntity<Items> insertItem(@RequestBody Items addItems) {
+    public ResponseEntity<Items> createItem(@RequestBody Items addItems) {
         boolean result = itemsRepository.addItems(addItems);
         URI uri = URI.create("localhost:8080/api/items/" + itemsRepository.getLastItem().getID());
         return result ? ResponseEntity.created(uri).build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 
-    @PutMapping("")
-    public ResponseEntity<Items> updateItems(@RequestBody Items updateItem) {
-        boolean result = false;
-        if (itemsRepository.getItem(updateItem.getID()) != null) {
-            result = itemsRepository.updateItems(updateItem);
-        }
-        return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+    @PutMapping("/{itemID}")
+    public ResponseEntity<Items> updateItem(@PathVariable int itemID, @RequestBody Items item) {
+        boolean result = itemsRepository.updateItems(itemID, item);
+        return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+    @DeleteMapping("/{itemID}")
+    public ResponseEntity<Items> deleteItem(@PathVariable int itemID){
+        boolean result = itemsRepository.deleteImage(itemID);
+        return result ? ResponseEntity.accepted().build() : ResponseEntity.notFound().build();
     }
 }
