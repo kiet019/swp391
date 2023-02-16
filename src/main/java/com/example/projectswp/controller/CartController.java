@@ -44,8 +44,8 @@ public class CartController {
         return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
     @DeleteMapping("/{cartID}")
-    public ResponseEntity<Carts> deleteCart(@PathVariable int imageID){
-        boolean result = cartRepository.deleteCart(imageID);
+    public ResponseEntity<Carts> deleteCart(@PathVariable int cartID){
+        boolean result = cartRepository.deleteCart(cartID);
         return result ? ResponseEntity.accepted().build() : ResponseEntity.notFound().build();
     }
 }
