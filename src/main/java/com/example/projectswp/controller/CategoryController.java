@@ -36,11 +36,11 @@ public class CategoryController {
         return result ? ResponseEntity.created(uri).build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 
-    @PutMapping("")
-    public ResponseEntity<Category> updateCategory(@RequestBody Category updateCategory) {
+    @PutMapping("/{id}")
+    public ResponseEntity<Category> updateCategory(@PathVariable int id, @RequestBody Category updateCategory) {
         boolean result = false;
-        if (categoryRepository.getCategory(updateCategory.getId()) != null) {
-             result = categoryRepository.updateCategory(updateCategory);
+        if (categoryRepository.getCategory(id) != null) {
+             result = categoryRepository.updateCategory(id, updateCategory);
         }
         return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }

@@ -42,12 +42,12 @@ public class CategoryRepository {
         return check != 0;
     }
 
-    public boolean updateCategory(Category category) {
+    public boolean updateCategory(int id ,Category category) {
         String sql = "update dbo.Categories\n" +
                 "set Category_Name = ?,\n" +
                 "    Category_Image = ?\n" +
                 "where CategoryID = ?";
-        int check = jdbcTemplate.update(sql, category.getName(), category.getImage(), category.getId());
+        int check = jdbcTemplate.update(sql, category.getName(), category.getImage(), id);
         return check != 0;
     }
 }
