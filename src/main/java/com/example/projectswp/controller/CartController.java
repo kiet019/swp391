@@ -1,8 +1,6 @@
 package com.example.projectswp.controller;
 
-import com.example.projectswp.model.Blog;
 import com.example.projectswp.model.Carts;
-import com.example.projectswp.model.Items;
 import com.example.projectswp.repositories.CartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,9 +38,13 @@ public class CartController {
 
     @PutMapping("/{cartID}")
     public ResponseEntity<Carts> updateCart(@PathVariable int cartID, @RequestBody Carts cart) {
-        boolean result = cartRepository.updateCart(cartID, cart);
-        return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        boolean result = false;
+        if (cartRepository.getCart(cartID) != null) {
+            result = cartRepository.updateCart(cartID, cart);
+        }
+        return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
+
     @DeleteMapping("/{cartID}")
     public ResponseEntity<Carts> deleteCart(@PathVariable int cartID){
         boolean result = cartRepository.deleteCart(cartID);
