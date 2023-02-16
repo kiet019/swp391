@@ -38,9 +38,9 @@ public class ImageRepository {
     public boolean updateImage(int imageID, Images images) {
         String sql = "update dbo.Images\n" +
                 "set Image_Link_1 = ?,\n" +
-                "    Image_Link_2 = ?\n" +
-                "    Image_Link_3 = ?\n" +
-                "    Image_Link_4 = ?\n" +
+                "    Image_Link_2 = ?,\n" +
+                "    Image_Link_3 = ?,\n" +
+                "    Image_Link_4 = ?,\n" +
                 "    Image_Link_5 = ?\n" +
                 "where ImageID = ?";
         int check = jdbcTemplate.update(sql, images.getImageLink1(), images.getImageLink2(), images.getImageLink3(), images.getImageLink4(), images.getImageLink5(), imageID);
