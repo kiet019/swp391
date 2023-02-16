@@ -39,8 +39,8 @@ public class CartController {
     }
 
     @PutMapping("/{cartID}")
-    public ResponseEntity<Carts> updateCart(@PathVariable int imageID, @RequestBody Carts cart) {
-        boolean result = cartRepository.updateCart(imageID, cart);
+    public ResponseEntity<Carts> updateCart(@PathVariable int cartID, @RequestBody Carts cart) {
+        boolean result = cartRepository.updateCart(cartID, cart);
         return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
     @DeleteMapping("/{cartID}")
