@@ -22,9 +22,9 @@ public class CartController {
         List<Carts> cart = cartRepository.getCarts();
         return cart != null ? ResponseEntity.ok(cart) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @GetMapping("/{id}")
-    public ResponseEntity<Carts> getCart(@PathVariable int id) {
-        Carts cart = cartRepository.getCart(id);
+    @GetMapping("/{cartID}")
+    public ResponseEntity<Carts> getCart(@PathVariable int cartID) {
+        Carts cart = cartRepository.getCart(cartID);
         return cart != null ? ResponseEntity.ok(cart) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
@@ -35,16 +35,13 @@ public class CartController {
         return result ? ResponseEntity.created(uri).build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Carts> updateCart(@PathVariable int id, @RequestBody Carts carts) {
-        boolean result = false;
-        if (cartRepository.getCart(id) != null) {
-            result = cartRepository.updateCart(id, carts);
-        }
-        return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+    @PutMapping("/{cartID}")
+    public ResponseEntity<Carts> updateCart(@PathVariable int cartID, @RequestBody Carts carts) {
+        boolean isUpdated = cartRepository.updateCart(cartID, carts);
+        return isUpdated ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{cartID}")
     public ResponseEntity<Carts> deleteCart(@PathVariable int id){
         boolean result = cartRepository.deleteCart(id);
         return result ? ResponseEntity.accepted().build() : ResponseEntity.notFound().build();
