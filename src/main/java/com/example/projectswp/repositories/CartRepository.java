@@ -39,19 +39,17 @@ public class CartRepository {
     public boolean addCart(Carts cart) {
         String sql = "insert into dbo.Carts ([CartID], [Cart_Date_Create])\n" +
                 "values (?, ?)";
-
         int check = jdbcTemplate.update(sql, cart.getCartID(), getCurrentDate());
         return check != 0;
     }
 
 
-    public boolean updateCart(int id , Carts cart) {
+    public boolean updateCart(int cartID , Carts cart) {
         String sql = "update dbo.Carts\n" +
-                "set Cart_Date_Create = ?,\n" +
-
+                "set Cart_Date_Create = ?\n" +
                 "where CartID = ?";
-        int check = jdbcTemplate.update(sql, cart.getCartDateCreate(), id);
-        return check != 0;
+        int check = jdbcTemplate.update(sql, cart.getCartDateCreate(), cartID);
+        return check > 0;
     }
     public boolean deleteCart(int cartID){
         String sql = "DELETE dbo.Carts WHERE CartID = ?";
