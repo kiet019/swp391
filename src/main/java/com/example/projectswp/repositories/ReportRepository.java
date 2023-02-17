@@ -46,9 +46,9 @@ public class ReportRepository {
     public boolean updateReport(int reportID, Reports report) {
         String sql = "update dbo.Reports\n" +
                 "set ItemID = ?,\n" +
-                "    Report_Date_Create = ?\n" +
-                "    Report_Date_Update = ?\n" +
-                "    Report_Status = ?\n" +
+                "    Report_Date_Create = ?,\n" +
+                "    Report_Date_Update = ?,\n" +
+                "    Report_Status = ?,\n" +
                 "    Report_Content = ?\n" +
                 "where ReportID = ?";
         int check = jdbcTemplate.update(sql, report.getReportID(), report.getReportDateCreate(), getCurrentDate(), report.isReportStatus(), report.getReportContent(), reportID);

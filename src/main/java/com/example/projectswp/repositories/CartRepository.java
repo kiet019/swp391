@@ -1,5 +1,7 @@
 package com.example.projectswp.repositories;
+
 import com.example.projectswp.model.Carts;
+import com.example.projectswp.model.Category;
 import com.example.projectswp.repositories.rowMapper.CartsRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -37,17 +39,17 @@ public class CartRepository {
     public boolean addCart(Carts cart) {
         String sql = "insert into dbo.Carts ([CartID], [Cart_Date_Create])\n" +
                 "values (?, ?)";
-
         int check = jdbcTemplate.update(sql, cart.getCartID(), getCurrentDate());
         return check != 0;
     }
 
-    public boolean updateCart(int cartID, Carts cart) {
+
+    public boolean updateCart(int cartID , Carts cart) {
         String sql = "update dbo.Carts\n" +
-                "set Cart_Date_Create = ?,\n" +
+                "set Cart_Date_Create = ?\n" +
                 "where CartID = ?";
         int check = jdbcTemplate.update(sql, cart.getCartDateCreate(), cartID);
-        return check != 0;
+        return check > 0;
     }
     public boolean deleteCart(int cartID){
         String sql = "DELETE dbo.Carts WHERE CartID = ?";

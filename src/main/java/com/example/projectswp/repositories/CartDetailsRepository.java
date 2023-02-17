@@ -47,9 +47,9 @@ public class CartDetailsRepository {
     public boolean updateCartDetail(int cartDetailID, CartDetails cartDetails) {
         String sql = "update dbo.CartDetails\n" +
                 "set CartID = ?,\n" +
-                "    ItemID = ?\n" +
-                "    Cart_Detail_Date_Create = ?\n" +
-                "    Cart_Detail_Date_Update = ?\n" +
+                "    ItemID = ?,\n" +
+                "    Cart_Detail_Date_Create = ?,\n" +
+                "    Cart_Detail_Date_Update = ?,\n" +
                 "    Cart_Detail_Item_Quantity = ?\n" +
                 "where Cart_DetailID = ?";
         int check = jdbcTemplate.update(sql, cartDetails.getCartID(), cartDetails.getItemID(), cartDetails.getCartDetailDateCreate(), getCurrentDate(), cartDetails.getCartDetailItemQuantity(), cartDetailID);

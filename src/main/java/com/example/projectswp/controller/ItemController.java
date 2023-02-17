@@ -37,7 +37,7 @@ public class ItemController {
     @PutMapping("/{itemID}")
     public ResponseEntity<Items> updateItem(@PathVariable int itemID, @RequestBody Items item) {
         boolean result = itemsRepository.updateItems(itemID, item);
-        return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
     @DeleteMapping("/{itemID}")
     public ResponseEntity<Items> deleteItem(@PathVariable int itemID){
