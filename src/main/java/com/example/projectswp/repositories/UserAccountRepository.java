@@ -32,4 +32,15 @@ public class UserAccountRepository {
         return rowAffected > 0;
     }
 
+    public int getUserAccountId(String code) {
+        String sql = "select * from UserAccounts where User_Code = ?";
+        List<UserAccount> userAccounts = jdbcTemplate.query(sql, USER_ACCOUNT_ROW_MAPPER, code);
+        return userAccounts.size() != 0 ? userAccounts.get(0).getId() : 0;
+    }
+
+    public int getUserAccountRole(String code) {
+        String sql = "select * from UserAccounts where User_Code = ?";
+        List<UserAccount> userAccounts = jdbcTemplate.query(sql, USER_ACCOUNT_ROW_MAPPER, code);
+        return userAccounts.size() != 0 ? userAccounts.get(0).getRoleId() : 0;
+    }
 }

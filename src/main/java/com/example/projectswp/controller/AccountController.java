@@ -8,6 +8,9 @@ import com.google.firebase.auth.UserRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,8 +22,9 @@ public class AccountController {
     UserAccountRepository userAccountRepository;
 
     @PostMapping ("/login")
-    public ResponseEntity<UserAccount> getUserAccount(HttpServletRequest request) {
-        UserRecord userRecord = (UserRecord) request.getAttribute("userRecord");
+    public ResponseEntity<UserAccount> getUserAccount(HttpServletRequest request) throws FirebaseAuthException {
+        String userUid = request.getHeader("Authorization");
+        UserRecord userRecord = FirebaseAuth.getInstance().getUser(userUid);
         UserAccount userAccount = userAccountRepository.getUserAccount(userRecord.getUid());
         if (userAccount == null) {
             userAccountRepository.addUserAccount(userRecord);
@@ -29,5 +33,12 @@ public class AccountController {
         return ResponseEntity.ok(userAccount);
     }
 
+    @PostMapping("/api/hello")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<String> getUserRole() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String role = (String) authentication.getPrincipal();
+        return ResponseEntity.ok(role);
+    }
 
 }
