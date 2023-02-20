@@ -36,12 +36,5 @@ public class AccountController {
         return userAccount != null ? ResponseEntity.ok(userAccount) : ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
-    @PostMapping("/api/hello")
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    public ResponseEntity<String> getUserRole() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String code = (String) authentication.getPrincipal();
-        return ResponseEntity.ok(code);
-    }
 
 }
