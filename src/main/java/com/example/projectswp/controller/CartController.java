@@ -6,6 +6,7 @@ import com.example.projectswp.repositories.CartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -13,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/carts")
-
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class CartController {
     @Autowired
     CartRepository cartRepository;

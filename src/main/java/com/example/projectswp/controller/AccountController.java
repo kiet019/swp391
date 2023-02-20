@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("")
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class AccountController {
     @Autowired
     UserAccountRepository userAccountRepository;
@@ -35,13 +37,4 @@ public class AccountController {
         }
         return userAccount != null ? ResponseEntity.ok(userAccount) : ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
-
-    @PostMapping("/api/hello")
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    public ResponseEntity<String> getUserRole() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String code = (String) authentication.getPrincipal();
-        return ResponseEntity.ok(code);
-    }
-
 }
