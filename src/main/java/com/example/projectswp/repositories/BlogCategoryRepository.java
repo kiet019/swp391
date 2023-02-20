@@ -27,9 +27,9 @@ public class BlogCategoryRepository {
         return categories.size() != 0? categories.get(0) : null;
     }
 
-    public boolean insertBlogCategory(BlogCategory blogCategory) {
+    public boolean insertBlogCategory(String blogCateName) {
         String sql = "INSERT INTO dbo.BlogCategories(Blog_Category_Name) VALUES(?)";
-        int rowAffected = jdbcTemplate.update(sql, blogCategory.getName());
+        int rowAffected = jdbcTemplate.update(sql, blogCateName);
         return rowAffected > 0;
     }
     public int getLastBlogCategoryID() {

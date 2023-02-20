@@ -11,42 +11,53 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/blogs")
+@RequestMapping("/api/blog")
 
 public class BlogController {
+
+    /*
+    * /api/blog/all (get)
+    * /api/blog (get/put)
+    * /api/useraccount/blog
+    * /api/blog/create
+    * /api/blog/accept
+    * /api/blog/deny
+     */
+
 
     @Autowired
     BlogRepository blogRepository;
 
-    @GetMapping("")
+    @GetMapping("/all")
     public ResponseEntity<List<Blog>> getBlogs() {
         List<Blog> blogs = blogRepository.getBlogs();
         return blogs != null? ResponseEntity.ok(blogs) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-
-    @GetMapping("/{blogID}")
-    public ResponseEntity<Blog> getBlog(@PathVariable int blogID) {
-        Blog blog = blogRepository.getBlog(blogID);
-        return blog != null? ResponseEntity.ok(blog) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    
+    //TODO: fix path url
+    @RequestMapping("/api/useraccount/blog")
+    @GetMapping("")
+    public ResponseEntity<List<Blog>> getBlog(int userID) {
+        List<Blog> blogs = blogRepository.getBlogByUserId(userID);
+        return blogs != null ? ResponseEntity.ok(blogs) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    @PostMapping("")
+    @GetMapping("")
+
+    @PutMapping("")
+    public ResponseEntity<Blog> updateBlog(@PathVariable int blogId, @RequestBody Blog blog){
+        boolean isUpdated = blogRepository.updateBlog(blogId, blog);
+        return isUpdated ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+    @PostMapping("/create")
     public ResponseEntity<Blog> createBlog(@RequestBody Blog blog){
         boolean result = blogRepository.insertBlog(blog);
         URI uri = URI.create("localhost:8080/api/blogs/" + blogRepository.getLastBlogId() );
         return result ? ResponseEntity.created(uri).build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 
-    @PutMapping("/{blogId}")
-    public ResponseEntity<Blog> updateBlog(@PathVariable int blogId, @RequestBody Blog blog){
-        boolean isUpdated = blogRepository.updateBlog(blogId, blog);
-        return isUpdated ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    }
-
-    @DeleteMapping("/{blogId}")
-    public ResponseEntity<Blog> deleteBlog(@PathVariable int blogId){
-        boolean isDeleted = blogRepository.deleteBlog(blogId);
-        return isDeleted ? ResponseEntity.accepted().build() : ResponseEntity.notFound().build();
-    }
+//    @PatchMapping("/accept")
+//
+//    @PatchMapping("/deny")
 
 }
