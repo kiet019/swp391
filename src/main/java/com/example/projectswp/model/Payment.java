@@ -7,7 +7,8 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-public class BlogCategory {
-    private int BlogCategoryId;
-    private String blogCateName;
+public class Payment {
+    private int id;
+    private String name;
+    private String description;
 }

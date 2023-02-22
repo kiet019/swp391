@@ -83,4 +83,10 @@ public class BlogRepository {
         int rowAffected = jdbcTemplate.update(sql, id);
         return rowAffected > 0;
     }
+
+    public List<Blog> getBlogByUserId(int userID){
+        String sql = "select * from Blogs where UserID = ?";
+        List<Blog> blogs = jdbcTemplate.query(sql,BLOG_ROW_MAPPER, userID);
+        return blogs.size() != 0? blogs: null;
+    }
 }

@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.util.List;
 
@@ -50,7 +49,7 @@ public class CategoryController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Category> insertCategory(@RequestBody Category addCategory) {
         boolean result = categoryRepository.addCategory(addCategory);
-        URI uri = URI.create("" + categoryRepository.getLastCategory().getId());
+        URI uri = URI.create("localhost:8080/api/category/" + categoryRepository.getLastCategory().getId());
         return result ? ResponseEntity.created(uri).build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 
