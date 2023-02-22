@@ -1,6 +1,5 @@
 package com.example.projectswp.controller;
 
-import com.example.projectswp.model.Images;
 import com.example.projectswp.model.Reports;
 import com.example.projectswp.repositories.ReportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
