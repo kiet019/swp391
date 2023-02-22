@@ -9,7 +9,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -26,13 +25,13 @@ public class AuthorizationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
-            List<GrantedAuthority> authorities = new ArrayList<>(authentication.getAuthorities());
+            List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
             int role = userAccountRepository.getUserAccountRole(authentication.getPrincipal().toString());
-            if (role == 1) {
-                authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-            } else if (role == 2) {
-                authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-            }
+                if (role == 1) {
+                    authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+                } else if (role == 2) {
+                    authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+                }
             Authentication updatedAuthentication = new UsernamePasswordAuthenticationToken(authentication.getPrincipal(), authentication.getCredentials(), authorities);
             SecurityContextHolder.getContext().setAuthentication(updatedAuthentication);
         }

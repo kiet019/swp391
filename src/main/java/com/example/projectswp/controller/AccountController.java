@@ -34,13 +34,4 @@ public class AccountController {
         }
         return ResponseEntity.ok(userAccount);
     }
-
-    @PostMapping("/api/hello")
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    public ResponseEntity<String> getUserRole() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String code = (String) authentication.getPrincipal();
-        return ResponseEntity.ok(code);
-    }
-
 }

@@ -4,7 +4,6 @@ import com.example.projectswp.model.UserAccount;
 import com.example.projectswp.repositories.rowMapper.UserAccountRowMapper;
 import com.example.projectswp.repositories.ultil.Ultil;
 import com.google.firebase.auth.UserRecord;
-import jdk.nashorn.internal.runtime.regexp.joni.ast.StringNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -28,7 +27,7 @@ public class UserAccountRepository {
         String sql = "insert [dbo].[UserAccounts]([User_Code],[RoleID],[User_Name],[User_Gmail],[User_Address],[User_Date_Of_Birth],[User_Image],[User_Status],[User_Date_Create])\n" +
                 "values ( ? , ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        int rowAffected = jdbcTemplate.update(sql, userRecord.getUid(), 1, userRecord.getEmail(), userRecord.getEmail(), " ", " ", " ", true, Ultil.getCurrentDate());
+        int rowAffected = jdbcTemplate.update(sql, userRecord.getUid(), 2, userRecord.getEmail(), userRecord.getEmail(), " ", " ", " ", true, Ultil.getCurrentDate());
         return rowAffected > 0;
     }
 

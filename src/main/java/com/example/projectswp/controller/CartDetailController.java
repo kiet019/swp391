@@ -14,7 +14,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/cart-details")
+@RequestMapping("/api/cartdetail")
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class CartDetailController {
     @Autowired
@@ -25,7 +25,7 @@ public class CartDetailController {
         CartDetails cartDetails = cartDetailsRepository.getCartDetail(cartDetailID);
         return cartDetails != null ? ResponseEntity.ok(cartDetails) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-
+    @RequestMapping("/api/useraccount/cartdetail/all")
     @GetMapping("")
     public ResponseEntity<List<CartDetails>> getCartDetails() {
         List<CartDetails> cartDetails = cartDetailsRepository.getCartDetails();
@@ -35,7 +35,7 @@ public class CartDetailController {
     @PostMapping("")
     public ResponseEntity<CartDetails> createCartDetail(@RequestBody CartDetails addCartDetails) {
         boolean result = cartDetailsRepository.addCartDetails(addCartDetails);
-        URI uri = URI.create("localhost:8080/api/cart-details/" + cartDetailsRepository.getLastCartDetails().getCartDetailsID());
+        URI uri = URI.create("localhost:8080/api/cartdetail/" + cartDetailsRepository.getLastCartDetails().getCartDetailsID());
         return result ? ResponseEntity.created(uri).build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 
@@ -49,4 +49,5 @@ public class CartDetailController {
         boolean result = cartDetailsRepository.deleteCartDetail(cartDetailID);
         return result ? ResponseEntity.accepted().build() : ResponseEntity.notFound().build();
     }
+
 }
