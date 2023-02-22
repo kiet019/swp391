@@ -16,7 +16,7 @@ public class CategoryRowMapper implements RowMapper<Category> {
         category.setId(rs.getInt("CategoryID"));
         category.setName(rs.getString("Category_Name"));
         category.setImage(rs.getString("Category_Image"));
-
+        category.setStatus(rs.getBoolean("Category_Status"));
         return category;
     }
 }

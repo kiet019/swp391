@@ -31,20 +31,19 @@ public class SubCategoryRepository {
         return list.size() != 0 ? list : null;
     }
 
+    public SubCategory getSubCategoryByName(String name) {
+        String sql = "select * from SubCategories where Sub_Category_Name = ?";
+
+        List<SubCategory> list = jdbcTemplate.query(sql, SUB_CATEGORY_ROW_MAPPER, name);
+
+        return list.size() != 0 ? list.get(0) : null;
+    }
+
     public boolean addSubCategory(SubCategory subCategory) {
         String sql = "insert into SubCategories([categoryID],[Sub_Category_Name])\n" +
                 "values (?,?)";
 
         int check = jdbcTemplate.update(sql, subCategory.getCategoryID(), subCategory.getName());
-        return check !=0 ? true : false;
-    }
-
-    public boolean updateCategory(Category category) {
-        String sql = "update dbo.Categories\n" +
-                "set Category_Name = ?,\n" +
-                "    Category_Image = ?\n" +
-                "where CategoryID = ?";
-        int check = jdbcTemplate.update(sql, category.getName(), category.getImage(), category.getId());
         return check !=0 ? true : false;
     }
 
