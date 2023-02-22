@@ -5,14 +5,16 @@ import com.example.projectswp.repositories.BlogCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
 
 @RestController
-
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @RequestMapping("api/blogcategory")
+
 public class BlogCategoryController {
     @Autowired
     BlogCategoryRepository blogCategoryRepository;
