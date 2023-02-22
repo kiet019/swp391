@@ -10,12 +10,13 @@ import java.util.Date;
 @Setter
 @ToString
 public class Blog {
-    private int ID;
-    private int categoryID;
-    private int userID;
-    private String title;
-    private String description;
-    private String content;
-    private Date dateCreated;
-    private Date dateUpdated;
+    private int blogId;
+    private int blogCategoryId;
+    private int userId;
+    private String blogContent;
+    private String blogTitle;
+    private String blogDescription;
+    private Date blogDateCreate;
+    private Date blogDateUpdate;
+    private boolean blogStatus;
 }

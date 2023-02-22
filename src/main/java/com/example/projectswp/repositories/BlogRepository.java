@@ -2,6 +2,7 @@ package com.example.projectswp.repositories;
 
 import com.example.projectswp.model.Blog;
 import com.example.projectswp.repositories.rowMapper.BlogRowMapper;
+import com.example.projectswp.repositories.ultil.Ultil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -14,6 +15,7 @@ import java.util.List;
 @Repository
 public class BlogRepository {
     private static final BlogRowMapper BLOG_ROW_MAPPER = new BlogRowMapper();
+    private static final boolean BLOG_STATUS = true;
     @Autowired
     JdbcTemplate jdbcTemplate;
 
@@ -34,10 +36,11 @@ public class BlogRepository {
         return blogs.size() != 0? blogs.get(0): null;
     }
     public boolean insertBlog(Blog blog) {
-        String sql = "INSERT INTO dbo.Blogs(Blog_CategoryID, UserID, Blog_Title, Blog_Description, Blog_Content, Blog_Date_Create, Blog_Date_Update, Blog_Status) values (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO dbo.Blogs(Blog_CategoryID, UserID, Blog_Title, Blog_Description, Blog_Content, Blog_Date_Create, Blog_Status) values (?, ?, ?, ?, ?, ?, ?)";
         Date currentDate = getCurrentDate();
-        int check = jdbcTemplate.update(sql, blog.getCategoryID(), blog.getUserID(), blog.getTitle(), blog.getDescription(), blog.getContent(), currentDate, currentDate, 1);
-        return check > 0;
+        int rowAffected = jdbcTemplate.update(sql, blog.getBlogCategoryId(), blog.getUserId(), blog.getBlogTitle(),
+                blog.getBlogDescription(), blog.getBlogContent(), Ultil.getCurrentDate(), BLOG_STATUS);
+        return rowAffected > 0;
     }
     public Date getCurrentDate(){
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
@@ -47,36 +50,39 @@ public class BlogRepository {
 
     public int getLastBlogId(){
         List<Blog> blogs = getBlogs();
-        return (blogs != null) ? blogs.get(blogs.size() - 1).getID() : -1;
+        return (blogs != null) ? blogs.get(blogs.size() - 1).getBlogId() : -1;
     }
 
-    public boolean updateBlog(int blogId, Blog blog){
-        Blog newBlog = updateBlogData(blogId, blog);
-        String sql = "UPDATE dbo.Blogs set Blog_CategoryID = ?, UserID = ?, Blog_Title = ?, Blog_Description = ?, Blog_Content = ?, Blog_Date_Update = ? WHERE BlogID = ?";
-        int rowAffected = jdbcTemplate.update(sql, newBlog.getCategoryID(), newBlog.getUserID(), newBlog.getTitle(), newBlog.getDescription(), newBlog.getContent(), getCurrentDate(), blogId);
+    public boolean updateBlog(Blog blog){
+        if(blog == null)
+            return false;
+
+        updateBlogData(blog);
+        String sql = "UPDATE dbo.Blogs set Blog_CategoryID = ?, Blog_Title = ?, Blog_Description = ?, Blog_Content = ?, Blog_Date_Update = ? WHERE BlogID = ?";
+        int rowAffected = jdbcTemplate.update(sql, blog.getBlogCategoryId(),
+                blog.getBlogTitle(), blog.getBlogDescription(), blog.getBlogContent(), getCurrentDate(), blog.getBlogId());
         return rowAffected > 0;
     }
-    public Blog updateBlogData(int id, Blog newBlog){
-        Blog oldbBlog = getBlog(id);
+    public void updateBlogData(Blog blog){
+        Blog oldbBlog = getBlog(blog.getBlogId());
         if(oldbBlog == null)
-            return newBlog;
+            return;
 
-        if(newBlog.getCategoryID() == 0)
-            newBlog.setCategoryID(oldbBlog.getCategoryID());
+        if(blog.getBlogCategoryId() == 0){
+            blog.setBlogCategoryId(oldbBlog.getBlogCategoryId());
+        }
 
-        if(newBlog.getUserID() == 0)
-            newBlog.setUserID(oldbBlog.getUserID());
+        if(blog.getBlogTitle() == null || blog.getBlogTitle().trim().length() == 0){
+            blog.setBlogTitle(oldbBlog.getBlogTitle());
+        }
 
-        if(newBlog.getTitle() == null || newBlog.getTitle().trim().length() == 0)
-            newBlog.setTitle(oldbBlog.getTitle());
+        if(blog.getBlogDescription() == null || blog.getBlogDescription().trim().length() == 0){
+            blog.setBlogDescription(oldbBlog.getBlogDescription());
+        }
 
-        if(newBlog.getDescription() == null || newBlog.getDescription().trim().length() == 0)
-            newBlog.setDescription(oldbBlog.getDescription());
-
-        if(newBlog.getContent() == null || newBlog.getContent().trim().length() == 0)
-            newBlog.setContent(oldbBlog.getContent());
-
-        return newBlog;
+        if(blog.getBlogContent() == null || blog.getBlogContent().trim().length() == 0){
+            blog.setBlogContent(oldbBlog.getBlogContent());
+        }
     }
     public boolean deleteBlog(int id){
         String sql = "DELETE dbo.Blogs WHERE BlogID = ?";
@@ -88,5 +94,11 @@ public class BlogRepository {
         String sql = "select * from Blogs where UserID = ?";
         List<Blog> blogs = jdbcTemplate.query(sql,BLOG_ROW_MAPPER, userID);
         return blogs.size() != 0? blogs: null;
+    }
+
+    public boolean updateStatusToTrue(int blogId) {
+        String sql = "UPDATE dbo.Blogs set Blog_Status = 1 WHERE BlogID = ?";
+        int rowAffected = jdbcTemplate.update(sql, blogId);
+        return rowAffected > 0;
     }
 }
