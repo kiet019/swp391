@@ -26,15 +26,12 @@ public class AccountController {
     @PostMapping ("/login")
     public ResponseEntity<UserAccount> getUserAccount(HttpServletRequest request) throws FirebaseAuthException {
         String userUid = request.getHeader("Authorization");
-        UserAccount userAccount = null;
-        if (userUid != null) {
-            UserRecord userRecord = FirebaseAuth.getInstance().getUser(userUid);
+        UserRecord userRecord = FirebaseAuth.getInstance().getUser(userUid);
+        UserAccount userAccount = userAccountRepository.getUserAccount(userRecord.getUid());
+        if (userAccount == null) {
+            userAccountRepository.addUserAccount(userRecord);
             userAccount = userAccountRepository.getUserAccount(userRecord.getUid());
-            if (userAccount == null) {
-                userAccountRepository.addUserAccount(userRecord);
-                userAccount = userAccountRepository.getUserAccount(userRecord.getUid());
-            }
         }
-        return userAccount != null ? ResponseEntity.ok(userAccount) : ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        return ResponseEntity.ok(userAccount);
     }
 }

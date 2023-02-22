@@ -26,9 +26,44 @@ public class ItemsRepository {
         List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, itemID);
         return items.size() != 0? items.get(0): null;
     }
+    public Items getItemDetail(int itemID) {
+        String sql = "select Item_Detailed_Description from Items where ItemID = ?";
+        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, itemID);
+        return items.size() != 0? items.get(0): null;
+    }
     public List<Items> getItems() {
         String sql = "Select * from Items";
         List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER);
+        return items.size() != 0? items: null;
+    }
+    public List<Items> getAllBriefItemAndBriefRequest(boolean share) {
+        String sql = "Select * from Items where Share =?";
+        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, share);
+        return items.size() != 0? items: null;
+    }
+    public List<Items> getBriefItemByUserId(int userID) {
+        String sql = "Select * from Items where UserID =?";
+        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, userID);
+        return items.size() != 0? items: null;
+    }
+    public List<Items> searchBriefItemByItemTitlle(String itemTitlle) {
+        String sql = "Select * from Items where Item_Title like ?";
+        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, itemTitlle);
+        return items.size() != 0? items: null;
+    }
+    public List<Items> searchBriefItemBySubCategoryID(int subcategoryID) {
+        String sql = "Select * from Items where Sub_CategoryID = ?";
+        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, subcategoryID);
+        return items.size() != 0? items: null;
+    }
+//    public List<Items> searchBriefItemByCategoryID(int categoryID) {
+//        String sql = "Select * from Items where CategoryID = ?";
+//        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, categoryID);
+//        return items.size() != 0? items: null;
+//    }
+    public List<Items> getAllBriefItemAndBriefRequestByUserID(int userID, boolean share) {
+        String sql = "Select * from Items where UserID = ? and Share = ?";
+        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, userID ,share);
         return items.size() != 0? items: null;
     }
     public Items getLastItem() {
