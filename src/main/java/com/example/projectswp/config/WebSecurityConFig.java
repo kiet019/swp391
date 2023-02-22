@@ -22,7 +22,7 @@ public class WebSecurityConFig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.addFilterBefore(firebaseAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(authorizationFilter, UsernamePasswordAuthenticationFilter.class)
-                .authorizeRequests().antMatchers(HttpMethod.GET,"/api/blog/**", "/api/blogcategory", "/api/Category", "/api/Item", "/api/SubCategory").permitAll()
+                .authorizeRequests().antMatchers(HttpMethod.GET,"/api/blog/**", "/api/blogcategory/**", "/api/Category/**", "/api/Item/**", "/api/SubCategory/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
                 .anyRequest().authenticated()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

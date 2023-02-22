@@ -27,6 +27,16 @@ public class CateAndSubRepository {
         return cateAndSubList.size() != 0 ? cateAndSubList : null;
     }
 
+    public CateAndSub getCateAndSubByCategoryName(String name) {
+
+        List<CateAndSub> cateAndSubList = new ArrayList<>();
+        List<Category> categoryList = categoryRepository.getCategoryByName(name);
+        for (Category category : categoryList) {
+            List<SubCategory> subCategories = subCategoryRepository.getSubCategoriesByCategory(category.getId());
+            cateAndSubList.add(new CateAndSub(category.getId(), category.getName(), category.getImage(), subCategories));
+        }
+        return cateAndSubList.size() != 0 ? cateAndSubList.get(0) : null;
+    }
 
 
 }

@@ -22,6 +22,20 @@ public class CategoryRepository {
 
         return list.size() != 0 ? list.get(0) : null;
     }
+    public List<Category> getCategoryByStatus(Boolean status) {
+        String sql = "select * from Categories where Category_Status = ?";
+
+        List<Category> list = jdbcTemplate.query(sql, CATEGORY_ROW_MAPPER, status);
+
+        return list.size() != 0 ? list : null;
+    }
+    public List<Category> getCategoryByName(String name) {
+        String sql = "select * from Categories where Category_Name = ?";
+
+        List<Category> list = jdbcTemplate.query(sql, CATEGORY_ROW_MAPPER, name);
+
+        return list.size() != 0 ? list : null;
+    }
     public Category getLastCategory() {
         List<Category> list = this.getCategories();
         return list.size() != 0 ? list.get(list.size()-1) : null;
@@ -35,10 +49,10 @@ public class CategoryRepository {
     }
 
     public boolean addCategory(Category category) {
-        String sql = "insert into dbo.Categories ([Category_Name], [Category_Image])\n" +
-                "values (?, ?)";
+        String sql = "insert into dbo.Categories ([Category_Name], [Category_Image], [Category_Status])\n" +
+                "values (?, ?, ?)";
 
-        int check = jdbcTemplate.update(sql, category.getName(), category.getImage());
+        int check = jdbcTemplate.update(sql, category.getName(), category.getImage(), true);
         return check != 0;
     }
 
@@ -50,4 +64,12 @@ public class CategoryRepository {
         int check = jdbcTemplate.update(sql, category.getName(), category.getImage(), id);
         return check != 0;
     }
+    public boolean deleteCategory(int id) {
+        String sql = "update dbo.Categories\n" +
+                "set Category_Status = ?\n" +
+                "where CategoryID = ?";
+        int check = jdbcTemplate.update(sql, false, id);
+        return check != 0;
+    }
+
 }
