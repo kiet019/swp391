@@ -42,8 +42,6 @@ public class CartRepository {
         int check = jdbcTemplate.update(sql, cart.getCartID(), getCurrentDate());
         return check != 0;
     }
-
-
     public boolean updateCart(int cartID , Carts cart) {
         String sql = "update dbo.Carts\n" +
                 "set Cart_Date_Create = ?\n" +
