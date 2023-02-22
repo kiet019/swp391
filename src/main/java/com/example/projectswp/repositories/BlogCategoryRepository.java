@@ -34,12 +34,12 @@ public class BlogCategoryRepository {
     }
     public int getLastBlogCategoryID() {
         List<BlogCategory> blogCategories = getBlogCategories();
-        return blogCategories.get( blogCategories.size()-1 ).getId();
+        return blogCategories.get( blogCategories.size()-1 ).getBlogCategoryId();
     }
 
     public boolean updateBlogCategory(int blogCategoryID, BlogCategory blogCategory) {
         String sql = "UPDATE dbo.BlogCategories SET Blog_Category_Name = ? WHERE Blog_CategoryID = ?";
-        int rowAffected = jdbcTemplate.update(sql, blogCategory.getName(), blogCategoryID);
+        int rowAffected = jdbcTemplate.update(sql, blogCategory.getBlogCateName(), blogCategoryID);
         return rowAffected > 0;
     }
 
