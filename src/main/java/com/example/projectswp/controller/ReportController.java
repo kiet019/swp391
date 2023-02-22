@@ -5,6 +5,7 @@ import com.example.projectswp.repositories.ReportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/reports")
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ReportController {
     @Autowired
     ReportRepository reportRepository;
@@ -40,10 +42,6 @@ public class ReportController {
         boolean result = reportRepository.updateReport(reportID, report);
         return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @DeleteMapping("/{reportID}")
-    public ResponseEntity<Images> deleteReport(@PathVariable int reportID){
-        boolean result = reportRepository.deleteReport(reportID);
-        return result ? ResponseEntity.accepted().build() : ResponseEntity.notFound().build();
-    }
+
 }
 
