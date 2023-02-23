@@ -15,7 +15,7 @@ import java.util.List;
 @Repository
 public class BlogRepository {
     private static final BlogRowMapper BLOG_ROW_MAPPER = new BlogRowMapper();
-    private static final boolean BLOG_STATUS = true;
+    private static final boolean BLOG_STATUS = false;
     @Autowired
     JdbcTemplate jdbcTemplate;
 
@@ -24,18 +24,21 @@ public class BlogRepository {
         List<Blog> blogs = jdbcTemplate.query(sql,BLOG_ROW_MAPPER);
         return blogs.size() != 0? blogs: null;
     }
-    public List<Blog> getBlogs(int userID) {
+    public List<Blog> getBlogs(final int userID) {
         String sql = "select * from Blogs where UserID = ?";
         List<Blog> blogs = jdbcTemplate.query(sql,BLOG_ROW_MAPPER, userID);
         return blogs.size() != 0? blogs: null;
     }
 
-    public Blog getBlog(int blogID){
+    public Blog getBlog(final int blogID){
         String sql = "select * from Blogs where BlogID = ?";
         List<Blog> blogs = jdbcTemplate.query(sql,BLOG_ROW_MAPPER, blogID);
         return blogs.size() != 0? blogs.get(0): null;
     }
     public boolean insertBlog(Blog blog) {
+        if(isExist(blog.getBlogId()) || blog == null){
+            return false;
+        }
         String sql = "INSERT INTO dbo.Blogs(Blog_CategoryID, UserID, Blog_Title, Blog_Description, Blog_Content, Blog_Date_Create, Blog_Status) values (?, ?, ?, ?, ?, ?, ?)";
         Date currentDate = Ultil.getCurrentDate();
         int rowAffected = jdbcTemplate.update(sql, blog.getBlogCategoryId(), blog.getUserId(), blog.getBlogTitle(),
@@ -48,7 +51,7 @@ public class BlogRepository {
     }
 
     public boolean updateBlog(Blog blog){
-        if(blog == null)
+        if(blog == null || !isExist(blog.getBlogId()))
             return false;
 
         updateBlogData(blog);
@@ -57,7 +60,7 @@ public class BlogRepository {
                 blog.getBlogTitle(), blog.getBlogDescription(), blog.getBlogContent(), Ultil.getCurrentDate(), blog.getBlogId());
         return rowAffected > 0;
     }
-    public void updateBlogData(Blog blog){
+    private void updateBlogData(Blog blog){
         Blog oldbBlog = getBlog(blog.getBlogId());
         if(oldbBlog == null)
             return;
@@ -79,20 +82,27 @@ public class BlogRepository {
         }
     }
     public boolean deleteBlog(int id){
+        if(!isExist(id)){
+            return false;
+        }
         String sql = "DELETE dbo.Blogs WHERE BlogID = ?";
         int rowAffected = jdbcTemplate.update(sql, id);
         return rowAffected > 0;
     }
 
-    public List<Blog> getBlogByUserId(int userID){
+    public List<Blog> getBlogByUserId(final int userID){
         String sql = "select * from Blogs where UserID = ?";
         List<Blog> blogs = jdbcTemplate.query(sql,BLOG_ROW_MAPPER, userID);
         return blogs.size() != 0? blogs: null;
     }
 
-    public boolean updateStatusToTrue(int blogId) {
+    public boolean updateStatusToTrue(final int blogId) {
         String sql = "UPDATE dbo.Blogs set Blog_Status = 1 WHERE BlogID = ?";
         int rowAffected = jdbcTemplate.update(sql, blogId);
         return rowAffected > 0;
+    }
+
+    private boolean isExist(int id){
+        return getBlog(id) != null;
     }
 }
