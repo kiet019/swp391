@@ -21,7 +21,7 @@ public class BlogCategoryController {
     @GetMapping("/all")
     public ResponseEntity<List<BlogCategory>> getBlogCategories() {
         List<BlogCategory> BlogCategories = blogCategoryRepository.getBlogCategories();
-        return BlogCategories != null ? ResponseEntity.ok(BlogCategories) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return BlogCategories != null? ResponseEntity.ok(BlogCategories) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @GetMapping("")
@@ -29,24 +29,7 @@ public class BlogCategoryController {
         BlogCategory blogCategory = blogCategoryRepository.getBlogCategory(BlogCategoryId);
         return blogCategory != null ? ResponseEntity.ok(blogCategory) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @PostMapping("")
-    public ResponseEntity<BlogCategory> createBlogCategory(@RequestBody BlogCategory blogCategory) {
-        boolean isCreated = blogCategoryRepository.insertBlogCategory(String.valueOf(blogCategory));
-        URI uri = URI.create("localhost:8080/api/blog-categories/" + blogCategoryRepository.getLastBlogCategoryID());
-        return isCreated ? ResponseEntity.created(uri).build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-    }
 
-    @PutMapping("/{blogCategoryId}")
-    public ResponseEntity<BlogCategory> updateBlogCategory(@PathVariable int blogCategoryId, @RequestBody BlogCategory blogCategory) {
-        boolean isUpdated = blogCategoryRepository.updateBlogCategory(blogCategoryId, blogCategory);
-        return isUpdated ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    }
-
-    @DeleteMapping("/{blogCategoryId}")
-    public ResponseEntity<BlogCategory> deleteBlogCategory(@PathVariable int blogCategoryId) {
-        boolean isDeleted = blogCategoryRepository.deleteBlogCategory(blogCategoryId);
-        return isDeleted ? ResponseEntity.accepted().build() : ResponseEntity.notFound().build();
-    }
     @PostMapping("/create")
     public ResponseEntity<BlogCategory> createBlogCategory(@RequestBody String blogCateName) {
         boolean isCreated = blogCategoryRepository.insertBlogCategory(blogCateName);
