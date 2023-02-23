@@ -49,5 +49,9 @@ public class CartDetailController {
         boolean result = cartDetailsRepository.deleteCartDetail(cartDetailID);
         return result ? ResponseEntity.accepted().build() : ResponseEntity.notFound().build();
     }
+    @PatchMapping("/accept")
+    public void accept(@RequestBody int cartDetailId ){
+
+    }
 
 }

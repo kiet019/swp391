@@ -60,11 +60,11 @@ public class ItemController {
         List<Items> item = itemsRepository.searchBriefItemBySubCategoryID(subcategoryID);
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-//    @GetMapping("/SearchBriefItemByCategoryID/{categoryID}")
-//    public ResponseEntity<List<Items>> searchBriefItemByCategoryID(@PathVariable int categoryID) {
-//        List<Items> item = itemsRepository.searchBriefItemByCategoryID(categoryID);
-//        return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//    }
+    @GetMapping("/SearchBriefItemByCategoryID/{categoryID}")
+    public ResponseEntity<List<Items>> searchBriefItemByCategoryID(@PathVariable int categoryID) {
+        List<Items> item = itemsRepository.searchBriefItemByCategoryID(categoryID);
+        return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
     @GetMapping("/GetAllBriefItemAndBriefRequestByUserID/{userID}&{share}")
     public ResponseEntity<List<Items>> searchBriefItemBySubCategoryID(@PathVariable int userID, @PathVariable boolean share) {
         List<Items> item = itemsRepository.getAllBriefItemAndBriefRequestByUserID(userID, share);
