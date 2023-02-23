@@ -13,14 +13,15 @@ public class BlogRowMapper implements RowMapper<Blog> {
     @Override
     public Blog mapRow(ResultSet rs, int rowNum) throws SQLException {
         Blog blog = new Blog();
-        blog.setID(rs.getInt("BlogID"));
-        blog.setCategoryID(rs.getInt("Blog_CategoryID"));
-        blog.setUserID(rs.getInt("UserID"));
-        blog.setTitle(rs.getString("Blog_Title"));
-        blog.setDescription(rs.getString("Blog_Description"));
-        blog.setContent(rs.getString("Blog_Content"));
-        blog.setDateCreated(rs.getDate("Blog_Date_Create"));
-        blog.setDateUpdated(rs.getDate("Blog_Date_Update"));
+        blog.setBlogId(rs.getInt("BlogID"));
+        blog.setBlogCategoryId(rs.getInt("Blog_CategoryID"));
+        blog.setUserId(rs.getInt("UserID"));
+        blog.setBlogTitle(rs.getString("Blog_Title"));
+        blog.setBlogDescription(rs.getString("Blog_Description"));
+        blog.setBlogContent(rs.getString("Blog_Content"));
+        blog.setBlogDateCreate(rs.getDate("Blog_Date_Create"));
+        blog.setBlogDateUpdate(rs.getDate("Blog_Date_Update"));
+        blog.setBlogStatus(rs.getBoolean("Blog_Status"));
         return blog;
     }
 }

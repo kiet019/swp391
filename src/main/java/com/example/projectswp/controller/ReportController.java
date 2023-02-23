@@ -42,6 +42,5 @@ public class ReportController {
         boolean result = reportRepository.updateReport(reportID, report);
         return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-
 }
 

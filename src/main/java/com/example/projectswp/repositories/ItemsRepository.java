@@ -56,11 +56,13 @@ public class ItemsRepository {
         List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, subcategoryID);
         return items.size() != 0? items: null;
     }
-//    public List<Items> searchBriefItemByCategoryID(int categoryID) {
-//        String sql = "Select * from Items where CategoryID = ?";
-//        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, categoryID);
-//        return items.size() != 0? items: null;
-//    }
+    public List<Items> searchBriefItemByCategoryID(int categoryID) {
+        String sql = "select *\n" +
+                "from dbo.Items item inner join dbo.SubCategories subcategory on item.Sub_CategoryID = subcategory.Sub_CategoryID\n" +
+                "where subcategory.CategoryID = ?";
+        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, categoryID);
+        return items.size() != 0? items: null;
+    }
     public List<Items> getAllBriefItemAndBriefRequestByUserID(int userID, boolean share) {
         String sql = "Select * from Items where UserID = ? and Share = ?";
         List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, userID ,share);
