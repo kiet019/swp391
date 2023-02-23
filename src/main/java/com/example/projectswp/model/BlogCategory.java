@@ -8,6 +8,6 @@ import lombok.*;
 @Setter
 @ToString
 public class BlogCategory {
-    private int blogCategoryId;
-    private String blogCategoryName;
+    private int BlogCategoryId;
+    private String blogCateName;
 }

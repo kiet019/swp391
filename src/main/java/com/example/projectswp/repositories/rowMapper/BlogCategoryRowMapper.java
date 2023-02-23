@@ -11,7 +11,7 @@ public class BlogCategoryRowMapper implements RowMapper<BlogCategory> {
     public BlogCategory mapRow(ResultSet rs, int rowNum) throws SQLException {
         BlogCategory blogCategory = new BlogCategory();
         blogCategory.setBlogCategoryId(rs.getInt("Blog_CategoryID"));
-        blogCategory.setBlogCategoryName(rs.getString("Blog_Category_Name"));
+        blogCategory.setBlogCateName(rs.getString("Blog_Category_Name"));
         return blogCategory;
     }
 }

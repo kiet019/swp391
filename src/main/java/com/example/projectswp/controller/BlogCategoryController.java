@@ -25,15 +25,15 @@ public class BlogCategoryController {
     }
 
     @GetMapping("")
-    public ResponseEntity<BlogCategory> getBlogCategory(@RequestParam int BlogCategoryId) {
+    public ResponseEntity<BlogCategory> getBlogCategory(@RequestBody int BlogCategoryId) {
         BlogCategory blogCategory = blogCategoryRepository.getBlogCategory(BlogCategoryId);
         return blogCategory != null ? ResponseEntity.ok(blogCategory) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @PostMapping("/create")
-    public ResponseEntity<BlogCategory> createBlogCategory(@RequestBody String blogCategoryName) {
-        boolean isCreated = blogCategoryRepository.insertBlogCategory(blogCategoryName);
-        URI uri = URI.create("localhost:8080/api/blogcategory?BlogCategoryId=/" + blogCategoryRepository.getLastBlogCategoryID() );
+    public ResponseEntity<BlogCategory> createBlogCategory(@RequestBody String blogCateName) {
+        boolean isCreated = blogCategoryRepository.insertBlogCategory(blogCateName);
+        URI uri = URI.create("localhost:8080/api/blog-categories/" + blogCategoryRepository.getLastBlogCategoryID() );
         return isCreated ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 }
