@@ -30,9 +30,9 @@ public class CategoryRepository {
         return list.size() != 0 ? list : null;
     }
     public List<Category> getCategoryByName(String name) {
-        String sql = "select * from Categories where Category_Name = ?";
+        String sql = "select * from Categories where Category_Name like ?";
 
-        List<Category> list = jdbcTemplate.query(sql, CATEGORY_ROW_MAPPER, name);
+        List<Category> list = jdbcTemplate.query(sql, CATEGORY_ROW_MAPPER, "%" +name + "%");
 
         return list.size() != 0 ? list : null;
     }

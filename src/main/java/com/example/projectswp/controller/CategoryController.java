@@ -31,7 +31,7 @@ public class CategoryController {
     }
 
     @GetMapping("SearchCategoryName/{name}")
-    public ResponseEntity<List<Category>> getCategoriesByStatus(@PathVariable String name) {
+    public ResponseEntity<List<Category>> getCategoriesByName(@PathVariable String name) {
         List<Category> list = categoryRepository.getCategoryByName(name);
         return list != null ? ResponseEntity.ok(list) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
@@ -39,13 +39,9 @@ public class CategoryController {
     @PostMapping("CreateCategory")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Category> insertCategory(@RequestBody Category addCategory) {
-        List<Category> list = categoryRepository.getCategoryByName(addCategory.getName());
-        if (list != null) {
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-        }
         boolean result = categoryRepository.addCategory(addCategory);
-        URI uri = URI.create("localhost:8080/api/category/" + categoryRepository.getLastCategory().getId());
-        return result ? ResponseEntity.created(uri).build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+//        URI uri = URI.create("localhost:8080/api/category/" + categoryRepository.getLastCategory().getId());
+        return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 
     @PutMapping("UpdateCategory")
