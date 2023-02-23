@@ -6,6 +6,7 @@ import com.example.projectswp.repositories.CartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +32,7 @@ public class CartController {
 //    }
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Carts> addCart(@RequestBody Carts addCart) {
         boolean result = cartRepository.addCart(addCart);
         URI uri = URI.create("localhost:8080/api/carts/" + cartRepository.getLastCart().getCartID());

@@ -5,6 +5,7 @@ import com.example.projectswp.repositories.ItemsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +31,7 @@ public class ItemController {
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
     @PostMapping("/CreateItem")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Items> createItem(@RequestBody Items addItems) {
         boolean result = itemsRepository.addItems(addItems);
         URI uri = URI.create("localhost:8080/api/items/" + itemsRepository.getLastItem().getID());
@@ -71,11 +73,13 @@ public class ItemController {
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
     @PutMapping("/UpdateItem/{itemID}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Items> updateItem(@PathVariable int itemID, @RequestBody Items item) {
         boolean result = itemsRepository.updateItems(itemID, item);
         return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
     @DeleteMapping("/DeleteItem/{itemID}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Items> deleteItem(@PathVariable int itemID){
         boolean result = itemsRepository.deleteImage(itemID);
         return result ? ResponseEntity.accepted().build() : ResponseEntity.notFound().build();
