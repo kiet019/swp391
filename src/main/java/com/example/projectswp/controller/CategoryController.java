@@ -24,15 +24,15 @@ public class CategoryController {
         return list != null ? ResponseEntity.ok(list) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    @GetMapping("GetStatus/{status}")
-    public ResponseEntity<List<Category>> getCategoriesByStatus(@PathVariable boolean status) {
-        List<Category> list = categoryRepository.getCategoryByStatus(status);
+    @GetMapping("GetStatus")
+    public ResponseEntity<List<Category>> getCategoriesByStatus(@RequestParam boolean categoryStatus) {
+        List<Category> list = categoryRepository.getCategoryByStatus(categoryStatus);
         return list != null ? ResponseEntity.ok(list) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    @GetMapping("SearchCategoryName/{name}")
-    public ResponseEntity<List<Category>> getCategoriesByName(@PathVariable String name) {
-        List<Category> list = categoryRepository.getCategoryByName(name);
+    @GetMapping("SearchCategoryName")
+    public ResponseEntity<List<Category>> getCategoriesByName(@RequestParam String categoryName) {
+        List<Category> list = categoryRepository.getCategoryByName(categoryName);
         return list != null ? ResponseEntity.ok(list) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
@@ -48,8 +48,8 @@ public class CategoryController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Category> updateCategory(@RequestBody Category updateCategory) {
         boolean result = false;
-        if (categoryRepository.getCategory(updateCategory.getId()) != null) {
-             result = categoryRepository.updateCategory(updateCategory.getId(), updateCategory);
+        if (categoryRepository.getCategory(updateCategory.getCategoryID()) != null) {
+             result = categoryRepository.updateCategory(updateCategory.getCategoryID(), updateCategory);
         }
         return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
@@ -58,8 +58,8 @@ public class CategoryController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Category> deleteCategory(@RequestBody Category deleteCategory) {
         boolean result = false;
-        if (categoryRepository.getCategory(deleteCategory.getId()) != null) {
-            result = categoryRepository.deleteCategory(deleteCategory.getId());
+        if (categoryRepository.getCategory(deleteCategory.getCategoryID()) != null) {
+            result = categoryRepository.deleteCategory(deleteCategory.getCategoryID());
         }
         return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }

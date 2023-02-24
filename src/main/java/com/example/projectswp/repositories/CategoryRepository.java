@@ -52,7 +52,7 @@ public class CategoryRepository {
         String sql = "insert into dbo.Categories ([Category_Name], [Category_Image], [Category_Status])\n" +
                 "values (?, ?, ?)";
 
-        int check = jdbcTemplate.update(sql, category.getName(), category.getImage(), true);
+        int check = jdbcTemplate.update(sql, category.getCategoryName(), category.getCategoryImage(), true);
         return check != 0;
     }
 
@@ -61,7 +61,7 @@ public class CategoryRepository {
                 "set Category_Name = ?,\n" +
                 "    Category_Image = ?\n" +
                 "where CategoryID = ?";
-        int check = jdbcTemplate.update(sql, category.getName(), category.getImage(), id);
+        int check = jdbcTemplate.update(sql, category.getCategoryName(), category.getCategoryImage(), id);
         return check != 0;
     }
     public boolean deleteCategory(int id) {

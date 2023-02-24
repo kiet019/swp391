@@ -3,6 +3,7 @@ package com.example.projectswp.config;
 import com.example.projectswp.repositories.UserAccountRepository;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseToken;
 import com.google.firebase.auth.UserRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,6 +25,8 @@ public class FirebaseAuthenticationFilter extends OncePerRequestFilter {
         String authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader != null) {
             try {
+//                FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(authorizationHeader);
+//                String uid = decodedToken.getUid();
                 UserRecord userRecord = FirebaseAuth.getInstance().getUser(authorizationHeader);
                 if (userRecord != null) {
                     String userCode = userRecord.getUid();

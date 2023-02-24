@@ -42,7 +42,7 @@ public class SubCategoryRepository {
         String sql = "insert into SubCategories([categoryID],[Sub_Category_Name], [Sub_Category_Status])\n" +
                 "values (?, ?, ?)";
 
-        int check = jdbcTemplate.update(sql, subCategory.getCategoryID(), subCategory.getName(), true);
+        int check = jdbcTemplate.update(sql, subCategory.getCategoryID(), subCategory.getSubCategoryName(), true);
         return check !=0 ? true : false;
     }
 
@@ -51,7 +51,7 @@ public class SubCategoryRepository {
                 "set CategoryID = ?,\n" +
                 "    Sub_Category_Name = ?\n" +
                 "where Sub_CategoryID = ?";
-        int check = jdbcTemplate.update(sql, subCategory.getCategoryID(), subCategory.getName(), subCategory.getId());
+        int check = jdbcTemplate.update(sql, subCategory.getCategoryID(), subCategory.getSubCategoryName(), subCategory.getSubCategoryID());
         return check !=0 ? true : false;
     }
 
@@ -59,7 +59,7 @@ public class SubCategoryRepository {
         String sql = "update dbo.SubCategories\n" +
                 "set Sub_Category_Status = ?\n" +
                 "where Sub_CategoryID = ?";
-        int check = jdbcTemplate.update(sql, false, subCategory.getId());
+        int check = jdbcTemplate.update(sql, false, subCategory.getSubCategoryID());
         return check !=0 ? true : false;
     }
 

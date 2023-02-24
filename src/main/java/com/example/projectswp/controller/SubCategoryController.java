@@ -1,6 +1,7 @@
 package com.example.projectswp.controller;
 
 import com.example.projectswp.model.SubCategory;
+import com.example.projectswp.repositories.CateAndSubRepository;
 import com.example.projectswp.repositories.SubCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,14 +22,14 @@ public class SubCategoryController {
     SubCategoryRepository subCategoryRepository;
 
     @GetMapping("/GetAllSubCategory")
-    public ResponseEntity<List<SubCategory>> getSubCategories() {
-        List<SubCategory> list = subCategoryRepository.getSubCategories();
+    public ResponseEntity<List<SubCategory>> getSubCategories(@RequestParam int categoryID) {
+        List<SubCategory> list = subCategoryRepository.getSubCategoriesByCategory(categoryID);
         return list != null ? ResponseEntity.ok(list) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @GetMapping("/SearchSubCategoryName")
-    public ResponseEntity<List<SubCategory>> getSubCategory(@RequestParam String name) {
-        List<SubCategory> list = subCategoryRepository.getSubCategoryByName(name);
+    public ResponseEntity<List<SubCategory>> getSubCategory(@RequestParam String subCategoryName) {
+        List<SubCategory> list = subCategoryRepository.getSubCategoryByName(subCategoryName);
         return list != null ? ResponseEntity.ok(list) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
@@ -43,7 +44,7 @@ public class SubCategoryController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<SubCategory> updateSubCategory(@RequestBody SubCategory subCategory) {
         boolean result = false;
-        if (subCategoryRepository.getSubCategory(subCategory.getId()) != null) {
+        if (subCategoryRepository.getSubCategory(subCategory.getSubCategoryID()) != null) {
             result = subCategoryRepository.updateSubCategory(subCategory);
         }
         return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
@@ -53,7 +54,7 @@ public class SubCategoryController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<SubCategory> deleteSubCategory(@RequestBody SubCategory subCategory) {
         boolean result = false;
-        if (subCategoryRepository.getSubCategory(subCategory.getId()) != null) {
+        if (subCategoryRepository.getSubCategory(subCategory.getSubCategoryID()) != null) {
             result = subCategoryRepository.deleteSubCategory(subCategory);
         }
         return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
