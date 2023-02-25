@@ -12,34 +12,27 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/reports")
+@RequestMapping("")
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ReportController {
     @Autowired
     ReportRepository reportRepository;
 
-    @GetMapping("/{reportID}")
-    public ResponseEntity<Reports> getReport(@PathVariable int reportID) {
-        Reports report = reportRepository.getReport(reportID);
-        return report != null ? ResponseEntity.ok(report) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    }
-
-    @GetMapping("")
-    public ResponseEntity<List<Reports>> getReports() {
-        List<Reports> report = reportRepository.getReports();
-        return report != null ? ResponseEntity.ok(report) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    }
-
-    @PostMapping("")
+    @PostMapping("/CreateReport")
     public ResponseEntity<Reports> createReport(@RequestBody Reports addReport) {
         boolean result = reportRepository.addReport(addReport);
-        URI uri = URI.create("localhost:8080/api/reports/" + reportRepository.getLastReport().getReportID());
-        return result ? ResponseEntity.created(uri).build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        //URI uri = URI.create("localhost:8080/api/reports/" + reportRepository.getLastReport().getReportID());
+        return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 
-    @PutMapping("/{reportID}")
-    public ResponseEntity<Reports> updateReport(@PathVariable int reportID,@RequestBody Reports report) {
-        boolean result = reportRepository.updateReport(reportID, report);
+    @PutMapping("/UpdateReport")
+    public ResponseEntity<Reports> updateReport(@RequestBody Reports report) {
+        boolean result = reportRepository.updateReport(report);
+        return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+    @PatchMapping("/DeleteReport")
+    public ResponseEntity<Reports> deleteReport(@RequestBody int reportID, @RequestBody int isApproved) {
+        boolean result = reportRepository.updateReportStatus(reportID);
         return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 }
