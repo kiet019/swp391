@@ -60,4 +60,19 @@ public class CartDetailsRepository {
         int check = jdbcTemplate.update(sql, cartDetailID);
         return check > 0;
     }
+    public boolean acceptStatus(int cartDetailID) {
+        String sql = "UPDATE dbo.CartDetails set Cart_Status = 2, Cart_Detail_Date_Update = ? WHERE Cart_DetailID = ?";
+        int rowAffected = jdbcTemplate.update(sql, getCurrentDate(), cartDetailID);
+        return rowAffected > 0;
+    }
+    public boolean cancelStatus(int cartDetailID) {
+        String sql = "UPDATE dbo.CartDetails set Cart_Status = 3, Cart_Detail_Date_Update = ? WHERE Cart_DetailID = ?";
+        int rowAffected = jdbcTemplate.update(sql, getCurrentDate(), cartDetailID);
+        return rowAffected > 0;
+    }
+    public boolean confirmStatus(int cartDetailID) {
+        String sql = "UPDATE dbo.CartDetails set Cart_Status = 3, Cart_Detail_Date_Update = ? WHERE Cart_DetailID = ?";
+        int rowAffected = jdbcTemplate.update(sql, getCurrentDate(), cartDetailID);
+        return rowAffected > 0;
+    }
 }
