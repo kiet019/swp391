@@ -13,7 +13,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/items")
+@RequestMapping("/api/Item")
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 
 public class ItemController {
