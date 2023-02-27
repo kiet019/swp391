@@ -20,8 +20,12 @@ public class CateAndSubController {
     CateAndSubRepository cateAndSubRepository;
     @GetMapping("")
     public ResponseEntity<List<CateAndSub>> getCateAndSub() {
-        List<CateAndSub> list = cateAndSubRepository.getCateAndSubs();
-        return list != null ? ResponseEntity.ok(list) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        try {
+            List<CateAndSub> list = cateAndSubRepository.getCateAndSubs();
+            return list != null ? ResponseEntity.ok(list) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
 }

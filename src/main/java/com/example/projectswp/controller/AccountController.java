@@ -23,7 +23,7 @@ public class AccountController {
     @Autowired
     UserAccountRepository userAccountRepository;
 
-    @PostMapping ("/login")
+    @PostMapping ("api/useraccount/login")
     public ResponseEntity<UserAccount> getUserAccount(HttpServletRequest request) throws FirebaseAuthException {
         String userUid = request.getHeader("Authorization");
         UserRecord userRecord = FirebaseAuth.getInstance().getUser(userUid);

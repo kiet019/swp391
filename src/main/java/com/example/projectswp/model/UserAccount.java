@@ -12,17 +12,17 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserAccount {
-    private int id;
-    private String code;
+    private int userId;
+    private String userCode;
     private int roleId;
-    private String name;
-    private String email;
-    private String address;
-    private String phone;
-    private boolean sex;
-    private Date birthDay;
-    private String information;
-    private String img;
+    private String userName;
+    private String userEmail;
+    private String userAddress;
+    private String userPhone;
+    private boolean userSex;
+    private Date userDateOfBirth;
+    private String userMoreInformation;
+    private String userImage;
     private boolean status;
     private Date created;
     private Date update;

@@ -23,40 +23,60 @@ public class SubCategoryController {
 
     @GetMapping("/GetAllSubCategory")
     public ResponseEntity<List<SubCategory>> getSubCategories(@RequestParam int categoryID) {
-        List<SubCategory> list = subCategoryRepository.getSubCategoriesByCategory(categoryID);
-        return list != null ? ResponseEntity.ok(list) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        try {
+            List<SubCategory> list = subCategoryRepository.getSubCategoriesByCategory(categoryID);
+            return list != null ? ResponseEntity.ok(list) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     @GetMapping("/SearchSubCategoryName")
     public ResponseEntity<List<SubCategory>> getSubCategory(@RequestParam String subCategoryName) {
-        List<SubCategory> list = subCategoryRepository.getSubCategoryByName(subCategoryName);
-        return list != null ? ResponseEntity.ok(list) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        try {
+            List<SubCategory> list = subCategoryRepository.getSubCategoryByName(subCategoryName);
+            return list != null ? ResponseEntity.ok(list) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     @PostMapping("/createSubCategory")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<SubCategory>> insertSubCategory(@RequestBody SubCategory addSubCategory) {
-        boolean result = subCategoryRepository.addSubCategory(addSubCategory);
-        return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        try {
+            boolean result = subCategoryRepository.addSubCategory(addSubCategory);
+            return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     @PutMapping("/updateSubCategory")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<SubCategory> updateSubCategory(@RequestBody SubCategory subCategory) {
-        boolean result = false;
-        if (subCategoryRepository.getSubCategory(subCategory.getSubCategoryID()) != null) {
-            result = subCategoryRepository.updateSubCategory(subCategory);
+        try {
+            boolean result = false;
+            if (subCategoryRepository.getSubCategory(subCategory.getSubCategoryID()) != null) {
+                result = subCategoryRepository.updateSubCategory(subCategory);
+            }
+            return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-        return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 
     @PutMapping("/DeleteCategory")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<SubCategory> deleteSubCategory(@RequestBody SubCategory subCategory) {
-        boolean result = false;
-        if (subCategoryRepository.getSubCategory(subCategory.getSubCategoryID()) != null) {
-            result = subCategoryRepository.deleteSubCategory(subCategory);
+        try {
+            boolean result = false;
+            if (subCategoryRepository.getSubCategory(subCategory.getSubCategoryID()) != null) {
+                result = subCategoryRepository.deleteSubCategory(subCategory);
+            }
+            return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-        return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 }

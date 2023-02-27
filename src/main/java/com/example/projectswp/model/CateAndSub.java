@@ -16,6 +16,6 @@ public class CateAndSub {
     private int categoryID;
     private String categoryName;
     private String categoryImage;
-    private List<SubCategory> subCategories;
+    private List<SubCategory> subCategoryList;
 
 }

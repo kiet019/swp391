@@ -20,47 +20,70 @@ public class CategoryController {
 
     @GetMapping("GetAllCategory")
     public ResponseEntity<List<Category>> getCategories() {
-        List<Category> list = categoryRepository.getCategories();
-        return list != null ? ResponseEntity.ok(list) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        try {
+            List<Category> list = categoryRepository.getCategories();
+            return list != null ? ResponseEntity.ok(list) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     @GetMapping("GetStatus")
     public ResponseEntity<List<Category>> getCategoriesByStatus(@RequestParam boolean categoryStatus) {
-        List<Category> list = categoryRepository.getCategoryByStatus(categoryStatus);
-        return list != null ? ResponseEntity.ok(list) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        try {
+            List<Category> list = categoryRepository.getCategoryByStatus(categoryStatus);
+            return list != null ? ResponseEntity.ok(list) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     @GetMapping("SearchCategoryName")
     public ResponseEntity<List<Category>> getCategoriesByName(@RequestParam String categoryName) {
-        List<Category> list = categoryRepository.getCategoryByName(categoryName);
-        return list != null ? ResponseEntity.ok(list) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        try {
+            List<Category> list = categoryRepository.getCategoryByName(categoryName);
+            return list != null ? ResponseEntity.ok(list) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     @PostMapping("CreateCategory")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Category> insertCategory(@RequestBody Category addCategory) {
-        boolean result = categoryRepository.addCategory(addCategory);
-//        URI uri = URI.create("localhost:8080/api/category/" + categoryRepository.getLastCategory().getId());
-        return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        try {
+            boolean result = categoryRepository.addCategory(addCategory);
+            return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     @PutMapping("UpdateCategory")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Category> updateCategory(@RequestBody Category updateCategory) {
-        boolean result = false;
-        if (categoryRepository.getCategory(updateCategory.getCategoryID()) != null) {
-             result = categoryRepository.updateCategory(updateCategory.getCategoryID(), updateCategory);
+        try {
+            boolean result = false;
+            if (categoryRepository.getCategory(updateCategory.getCategoryID()) != null) {
+                result = categoryRepository.updateCategory(updateCategory.getCategoryID(), updateCategory);
+            }
+            return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-        return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 
     @PutMapping("DeleteCategory")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Category> deleteCategory(@RequestBody Category deleteCategory) {
-        boolean result = false;
-        if (categoryRepository.getCategory(deleteCategory.getCategoryID()) != null) {
-            result = categoryRepository.deleteCategory(deleteCategory.getCategoryID());
+        try {
+            boolean result = false;
+            if (categoryRepository.getCategory(deleteCategory.getCategoryID()) != null) {
+                result = categoryRepository.deleteCategory(deleteCategory.getCategoryID());
+            }
+            return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-        return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 }
