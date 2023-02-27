@@ -13,7 +13,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/items")
+@RequestMapping("/api/Item")
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 
 public class ItemController {
@@ -52,9 +52,9 @@ public class ItemController {
         List<Items> item = itemsRepository.getBriefItemByUserId(userID);
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @GetMapping("/SearchBriefItemByUserId/{itemTitlle}")
-    public ResponseEntity<List<Items>> searchBriefItemByUserId(@PathVariable String itemTitlle) {
-        List<Items> item = itemsRepository.searchBriefItemByItemTitlle(itemTitlle);
+    @GetMapping("/SearchBriefItemByTitle/{itemTitle}")
+    public ResponseEntity<List<Items>> searchBriefItemByUserId(@PathVariable String itemTitle) {
+        List<Items> item = itemsRepository.searchBriefItemByItemTitle(itemTitle);
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
     @GetMapping("/SearchBriefItemBySubCategoryID/{subcategoryID}")

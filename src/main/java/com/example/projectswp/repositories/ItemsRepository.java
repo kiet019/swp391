@@ -46,9 +46,9 @@ public class ItemsRepository {
         List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, userID);
         return items.size() != 0? items: null;
     }
-    public List<Items> searchBriefItemByItemTitlle(String itemTitlle) {
+    public List<Items> searchBriefItemByItemTitle(String itemTitle) {
         String sql = "Select * from Items where Item_Title like ?";
-        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, itemTitlle);
+        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, itemTitle);
         return items.size() != 0? items: null;
     }
     public List<Items> searchBriefItemBySubCategoryID(int subcategoryID) {

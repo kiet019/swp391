@@ -16,8 +16,9 @@ public class ReportsRowMapper implements RowMapper<Reports> {
         report.setItemID(rs.getInt("ItemID"));
         report.setReportDateCreate(rs.getDate("Report_Date_Create"));
         report.setReportDateUpdate(rs.getDate("Report_Date_Update"));
-        report.setReportStatus(rs.getBoolean("Report_Status"));
-        report.setReportContent(rs.getString("Report_Content"));
+        report.setStatus(rs.getBoolean("Report_Status"));
+        report.setContent(rs.getString("Report_Content"));
+        report.setImage(rs.getString("Image"));
         return report;
     }
 
