@@ -43,23 +43,6 @@ public class CartDetailsRepository {
         int check = jdbcTemplate.update(sql, cartDetails.getCartDetailsID(), cartDetails.getCartID(), cartDetails.getItemID(), getCurrentDate(), null, cartDetails.getCartDetailItemQuantity());
         return check != 0;
     }
-
-    public boolean updateCartDetail(int cartDetailID, CartDetails cartDetails) {
-        String sql = "update dbo.CartDetails\n" +
-                "set CartID = ?,\n" +
-                "    ItemID = ?,\n" +
-                "    Cart_Detail_Date_Create = ?,\n" +
-                "    Cart_Detail_Date_Update = ?,\n" +
-                "    Cart_Detail_Item_Quantity = ?\n" +
-                "where Cart_DetailID = ?";
-        int check = jdbcTemplate.update(sql, cartDetails.getCartID(), cartDetails.getItemID(), cartDetails.getCartDetailDateCreate(), getCurrentDate(), cartDetails.getCartDetailItemQuantity(), cartDetailID);
-        return check != 0;
-    }
-    public boolean deleteCartDetail(int cartDetailID){
-        String sql = "DELETE dbo.CartDetails WHERE Cart_DetailID = ?";
-        int check = jdbcTemplate.update(sql, cartDetailID);
-        return check > 0;
-    }
     public boolean acceptStatus(int cartDetailID) {
         String sql = "UPDATE dbo.CartDetails set Cart_Status = 2, Cart_Detail_Date_Update = ? WHERE Cart_DetailID = ?";
         int rowAffected = jdbcTemplate.update(sql, getCurrentDate(), cartDetailID);
@@ -71,7 +54,7 @@ public class CartDetailsRepository {
         return rowAffected > 0;
     }
     public boolean confirmStatus(int cartDetailID) {
-        String sql = "UPDATE dbo.CartDetails set Cart_Status = 3, Cart_Detail_Date_Update = ? WHERE Cart_DetailID = ?";
+        String sql = "UPDATE dbo.CartDetails set Cart_Status = 4, Cart_Detail_Date_Update = ? WHERE Cart_DetailID = ?";
         int rowAffected = jdbcTemplate.update(sql, getCurrentDate(), cartDetailID);
         return rowAffected > 0;
     }
