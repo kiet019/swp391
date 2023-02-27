@@ -23,11 +23,11 @@ public class UserAccountRepository {
         return userAccounts.size() != 0 ? userAccounts.get(0) : null;
     }
 
-    public boolean addUserAccount(UserRecord userRecord) {
-        String sql = "insert [dbo].[UserAccounts]([User_Code],[RoleID],[User_Name],[User_Gmail],[User_Address],[User_Date_Of_Birth],[User_Image],[User_Status],[User_Date_Create])\n" +
+    public boolean addUserAccount(UserAccount userAccount, UserRecord userRecord) {
+        String sql = "insert [dbo].[UserAccounts]([User_Code],[RoleID],[User_Name],[User_Gmail],[User_Address], [User_Phone], [User_Sex],[User_Date_Of_Birth],[User_Image],[User_Status],[User_Date_Create])\n" +
                 "values ( ? , ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        int rowAffected = jdbcTemplate.update(sql, userRecord.getUid(), 2, userRecord.getEmail(), userRecord.getEmail(), " ", " ", " ", true, Ultil.getCurrentDate());
+        int rowAffected = jdbcTemplate.update(sql, userRecord.getUid(), 2, userRecord.getEmail(), userRecord.getEmail(), userAccount.getUserAddress(), userAccount.getUserPhone(), userAccount.isUserSex(),userAccount.getUserDateOfBirth(), " ", true, Ultil.getCurrentDate());
         return rowAffected > 0;
     }
 
