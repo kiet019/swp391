@@ -34,7 +34,7 @@ public class BlogCategoryRepository {
             return false;
 
         String sql = "INSERT INTO dbo.BlogCategories(Blog_Category_Name) VALUES(?)";
-        int rowAffected = jdbcTemplate.update(sql, blogCateName);
+        int rowAffected = jdbcTemplate.update(sql, blogCateName.trim());
         return rowAffected > 0;
     }
     public int getLastBlogCategoryID() {
@@ -56,6 +56,8 @@ public class BlogCategoryRepository {
     }
     public boolean isExistName(String name){
         var list = getBlogCategories();
+        if(list == null)
+            return false;
         for(BlogCategory blogCategory : list){
             if(blogCategory.getBlogCategoryName().equals(name)) {
                 return true;

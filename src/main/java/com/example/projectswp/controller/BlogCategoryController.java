@@ -1,8 +1,8 @@
 package com.example.projectswp.controller;
 
-import com.example.projectswp.data_view_model.BlogCategoryGetVM;
-import com.example.projectswp.data_view_model.CreateBlogCategoryVM;
-import com.example.projectswp.data_view_model.ReturnMessage;
+import com.example.projectswp.data_view_model.blogcategory.BlogCategoryGetVM;
+import com.example.projectswp.data_view_model.blogcategory.CreateBlogCategoryVM;
+import com.example.projectswp.data_view_model.blogcategory.ReturnMessage;
 import com.example.projectswp.model.BlogCategory;
 import com.example.projectswp.repositories.BlogCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController

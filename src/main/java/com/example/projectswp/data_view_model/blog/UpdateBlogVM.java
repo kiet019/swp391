@@ -1,4 +1,4 @@
-package com.example.projectswp.data_view_model;
+package com.example.projectswp.data_view_model.blog;
 
 import lombok.*;
 import org.springframework.web.bind.annotation.GetMapping;

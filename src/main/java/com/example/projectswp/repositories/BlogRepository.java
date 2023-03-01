@@ -1,17 +1,14 @@
 package com.example.projectswp.repositories;
 
-import com.example.projectswp.data_view_model.CreateBlogVM;
-import com.example.projectswp.data_view_model.UpdateBlogVM;
+import com.example.projectswp.data_view_model.blog.CreateBlogVM;
+import com.example.projectswp.data_view_model.blog.UpdateBlogVM;
 import com.example.projectswp.model.Blog;
 import com.example.projectswp.repositories.rowMapper.BlogRowMapper;
-import com.example.projectswp.repositories.ultil.Ultil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
 
 @Repository

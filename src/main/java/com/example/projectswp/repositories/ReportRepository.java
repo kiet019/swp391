@@ -1,5 +1,7 @@
 package com.example.projectswp.repositories;
 
+import com.example.projectswp.data_view_model.report.CreateReportVM;
+import com.example.projectswp.data_view_model.report.UpdateReportVM;
 import com.example.projectswp.model.Items;
 import com.example.projectswp.model.Reports;
 
@@ -15,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 @Repository
 public class ReportRepository {
+    private static final int UPDATE_REPORT_STATUS = 0;
     private static final ReportsRowMapper REPORT_ROW_MAPPER = new ReportsRowMapper();
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -33,24 +36,46 @@ public class ReportRepository {
         List<Reports> report = jdbcTemplate.query(sql,REPORT_ROW_MAPPER);
         return report.size() != 0? report: null;
     }
+
+    public List<Reports> getReportByStatus(int status) {
+        String sql = "Select * from Reports WHERE Report_Status = ?";
+        List<Reports> report = jdbcTemplate.query(sql,REPORT_ROW_MAPPER, status);
+        return report.size() != 0? report: null;
+    }
     public Reports getLastReport() {
         List<Reports> list = getReports();
         return list.size() != 0 ? list.get(list.size()-1) : null;
     }
-    public boolean addReport(Reports report) {
+    public boolean addReport(CreateReportVM createReportVM) {
         String sql = "insert into dbo.Reports ([ItemID], [Report_Date_Create], [Report_Date_Update], [Report_Status], [Report_Content], Image)\n" +
                 "values (?, ?, ?, ?, ?, ?)";
-        int rowAffected = jdbcTemplate.update(sql, report.getItemID(), Ultil.getCurrentDate(), null, report.isStatus(), report.getContent(), report.getImage());
+        int rowAffected = jdbcTemplate.update(sql, createReportVM.getItemID(), Ultil.getCurrentDate(), null,
+                UPDATE_REPORT_STATUS, createReportVM.getContent(), createReportVM.getImage());
         return rowAffected > 0;
     }
 
-    public boolean updateReport(Reports report) {
+    public boolean updateReport(UpdateReportVM updateReportVM) {
+        if(!isExistReport(updateReportVM.getReportID())){
+            return false;
+        }
+
         String sql = "update dbo.Reports\n" +
                 "set Image = ?,\n" +
                 "    Report_Date_Update = ?,\n" +
                 "    Report_Content = ?\n" +
                 "where ReportID = ?";
-        int rowAffected = jdbcTemplate.update(sql, report.getImage(), Ultil.getCurrentDate(), report.getContent(), report.getReportID());
+        int rowAffected = jdbcTemplate.update(sql, updateReportVM.getImage(), Ultil.getCurrentDate(), updateReportVM.getContent(), updateReportVM.getReportID());
+        return rowAffected > 0;
+    }
+    public boolean updateReportStatus(int id, int status) {
+        if(!isExistReport(id))
+            return false;
+
+        String sql = "update dbo.Reports\n" +
+                "    Report_Date_Update = ?,\n" +
+                "    Report_Status = ?\n" +
+                "where ReportID = ? and Report_Status = 0";
+        int rowAffected = jdbcTemplate.update(sql, Ultil.getCurrentDate(), status, id);
         return rowAffected > 0;
     }
     public boolean deleteReport(int reportID){
@@ -65,6 +90,9 @@ public class ReportRepository {
                 "where ReportID = ?";
         int rowAffected = jdbcTemplate.update(sql, reportID);
         return rowAffected > 0;
+    }
+    public boolean isExistReport(int id){
+        return getReport(id) != null;
     }
 
 }

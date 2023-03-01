@@ -1,4 +1,4 @@
-package com.example.projectswp.data_view_model;
+package com.example.projectswp.data_view_model.blogcategory;
 
 public class ReturnMessage {
     private String message;

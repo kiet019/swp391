@@ -1,28 +1,24 @@
 package com.example.projectswp.controller;
 
-import com.example.projectswp.data_view_model.BlogGetVM;
-import com.example.projectswp.data_view_model.BlogIdVM;
-import com.example.projectswp.data_view_model.CreateBlogVM;
-import com.example.projectswp.data_view_model.UpdateBlogVM;
+import com.example.projectswp.data_view_model.blog.BlogGetVM;
+import com.example.projectswp.data_view_model.blog.BlogIdVM;
+import com.example.projectswp.data_view_model.blog.CreateBlogVM;
+import com.example.projectswp.data_view_model.blog.UpdateBlogVM;
+import com.example.projectswp.data_view_model.blogcategory.ReturnMessage;
 import com.example.projectswp.model.Blog;
-import com.example.projectswp.model.UserAccount;
 import com.example.projectswp.repositories.BlogRepository;
 import com.example.projectswp.repositories.ultil.Ultil;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.UserRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("api")
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class BlogController {
     private static final int ACCEPT_STATUS = 1;
@@ -39,15 +35,13 @@ public class BlogController {
 
     @GetMapping("/useraccount/blog")
     public ResponseEntity<List<Blog>> getBlog() {
-
         int userID = Ultil.getUserId();
         List<Blog> blogs = blogRepository.getBlogByUserId(userID);
         return blogs != null ? ResponseEntity.ok(blogs) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    //TODO: test this function
     @GetMapping("")
-    public ResponseEntity<Object> getBlog(@RequestParam BlogGetVM blogGetVM) {
+    public ResponseEntity<Object> getBlog(@ModelAttribute BlogGetVM blogGetVM) {
         List<Blog> blogs;
         if(blogGetVM.getCategoryId() != 0){
             blogs = blogRepository.getBlogByCategoryId(blogGetVM.getCategoryId());
@@ -59,7 +53,7 @@ public class BlogController {
             Blog blog = blogRepository.getBlog(blogGetVM.getBlogId());
             return blog != null ? ResponseEntity.ok(blog) : ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok("there no field so no blog");
+        return ResponseEntity.ok(ReturnMessage.create("success"));
     }
 
     @PutMapping("")
@@ -93,13 +87,4 @@ public class BlogController {
         boolean isDeleted = blogRepository.updateStatus(blogIdVM.getBlogId(), DELETE_STATUS);
         return isDeleted ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-
-
-    //TODO: test this function
-    @PutMapping("/blog/test")
-    public String test(@RequestBody BlogIdVM blogIdVM){
-
-        return "" + blogIdVM.getBlogId();
-    }
-
 }
