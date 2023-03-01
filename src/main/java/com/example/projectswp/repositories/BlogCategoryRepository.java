@@ -45,6 +45,7 @@ public class BlogCategoryRepository {
     public boolean updateBlogCategory(int blogCategoryID, BlogCategory blogCategory) {
         String sql = "UPDATE dbo.BlogCategories SET Blog_Category_Name = ? WHERE Blog_CategoryID = ?";
         int rowAffected = jdbcTemplate.update(sql, blogCategory.getBlogCategoryName(), blogCategoryID);
+
         return rowAffected > 0;
     }
 

@@ -17,4 +17,5 @@ public class CartDetails {
     private Date cartDetailDateCreate;
     private Date cartDetailDateUpdate;
     private int cartDetailItemQuantity;
+    private int cartStatus;
 }

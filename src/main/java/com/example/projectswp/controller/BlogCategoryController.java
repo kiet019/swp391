@@ -17,7 +17,6 @@ import java.util.List;
 @RestController
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @RequestMapping("api/blogcategory")
-
 public class BlogCategoryController {
     @Autowired
     BlogCategoryRepository blogCategoryRepository;
@@ -49,5 +48,4 @@ public class BlogCategoryController {
     public String test(@RequestBody String blogCategoryName) {
         return blogCategoryName;
     }
-
 }

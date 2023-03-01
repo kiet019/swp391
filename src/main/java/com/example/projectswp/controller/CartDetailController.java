@@ -7,6 +7,7 @@ import com.example.projectswp.repositories.CartDetailsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +15,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/cart-details")
+@RequestMapping("/api/cartdetail")
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class CartDetailController {
     @Autowired
@@ -25,28 +26,33 @@ public class CartDetailController {
         CartDetails cartDetails = cartDetailsRepository.getCartDetail(cartDetailID);
         return cartDetails != null ? ResponseEntity.ok(cartDetails) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-
-    @GetMapping("")
+    @GetMapping("/api/useraccount/cartdetail/all")
     public ResponseEntity<List<CartDetails>> getCartDetails() {
         List<CartDetails> cartDetails = cartDetailsRepository.getCartDetails();
         return cartDetails != null ? ResponseEntity.ok(cartDetails) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-
-    @PostMapping("")
+    @PostMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CartDetails> createCartDetail(@RequestBody CartDetails addCartDetails) {
         boolean result = cartDetailsRepository.addCartDetails(addCartDetails);
-        URI uri = URI.create("localhost:8080/api/cart-details/" + cartDetailsRepository.getLastCartDetails().getCartDetailsID());
+        URI uri = URI.create("localhost:8080/api/cartdetail/" + cartDetailsRepository.getLastCartDetails().getCartDetailsID());
         return result ? ResponseEntity.created(uri).build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
+    @PatchMapping("/cartdetail/accept")
+    public ResponseEntity<CartDetails> cartDetailAccept(@RequestBody int cartDetailID){
+        boolean isUpdated = cartDetailsRepository.acceptStatus(cartDetailID);
+        return isUpdated ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+    @PatchMapping("/cartdetail/cancel")
+    public ResponseEntity<CartDetails> cartDetailCancel(@RequestBody int cartDetailID){
+        boolean isUpdated = cartDetailsRepository.cancelStatus(cartDetailID);
+        return isUpdated ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+    @PatchMapping("/cartdetail/confirm")
+    public ResponseEntity<CartDetails> cartDetailConfirm(@RequestBody int cartDetailID){
+        boolean isUpdated = cartDetailsRepository.confirmStatus(cartDetailID);
+        return isUpdated ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
 
-    @PutMapping("/{cartDetailID}")
-    public ResponseEntity<CartDetails> updateCartDetail(@PathVariable int cartDetailID, @RequestBody CartDetails cartDetail) {
-        boolean result = cartDetailsRepository.updateCartDetail(cartDetailID, cartDetail);
-        return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    }
-    @DeleteMapping("/{cartDetailID}")
-    public ResponseEntity<CartDetails> deleteCartDetail(@PathVariable int cartDetailID){
-        boolean result = cartDetailsRepository.deleteCartDetail(cartDetailID);
-        return result ? ResponseEntity.accepted().build() : ResponseEntity.notFound().build();
-    }
+
 }

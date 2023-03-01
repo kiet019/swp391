@@ -11,9 +11,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class SubCategory {
 
-    private int id;
+    private int subCategoryID;
     private int categoryID;
-    private String name;
-
-
+    private String subCategoryName;
+    private boolean status;
 }

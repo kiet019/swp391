@@ -1,6 +1,7 @@
 package com.example.projectswp.controller;
 
 import com.example.projectswp.model.SubCategory;
+import com.example.projectswp.repositories.CateAndSubRepository;
 import com.example.projectswp.repositories.SubCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
 
 @RestController
@@ -20,21 +22,61 @@ public class SubCategoryController {
     SubCategoryRepository subCategoryRepository;
 
     @GetMapping("/GetAllSubCategory")
-    public ResponseEntity<List<SubCategory>> getSubCategories() {
-        List<SubCategory> list = subCategoryRepository.getSubCategories();
-        return list != null ? ResponseEntity.ok(list) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    public ResponseEntity<List<SubCategory>> getSubCategories(@RequestParam int categoryID) {
+        try {
+            List<SubCategory> list = subCategoryRepository.getSubCategoriesByCategory(categoryID);
+            return list != null ? ResponseEntity.ok(list) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
-    @GetMapping("/SearchSubCategoryName/{name}")
-    public ResponseEntity<SubCategory> getSubCategory(@PathVariable String name) {
-        SubCategory subCategory = subCategoryRepository.getSubCategoryByName(name);
-        return subCategory != null ? ResponseEntity.ok(subCategory) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    @GetMapping("/SearchSubCategoryName")
+    public ResponseEntity<List<SubCategory>> getSubCategory(@RequestParam String subCategoryName) {
+        try {
+            List<SubCategory> list = subCategoryRepository.getSubCategoryByName(subCategoryName);
+            return list != null ? ResponseEntity.ok(list) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
-//    @PostMapping("CreateSubCategory")
-//    @PreAuthorize("hasRole('ADMIN')")
-//    public ResponseEntity<SubCategory> insertSubCategory(@RequestBody SubCategory insertSubcategory) {
-//        boolean result = false;
-//        if (subCategoryRepository.getSubCategoryByName(insertSubcategory))
-//    }
+    @PostMapping("/createSubCategory")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<SubCategory>> insertSubCategory(@RequestBody SubCategory addSubCategory) {
+        try {
+            boolean result = subCategoryRepository.addSubCategory(addSubCategory);
+            return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    @PutMapping("/updateSubCategory")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<SubCategory> updateSubCategory(@RequestBody SubCategory subCategory) {
+        try {
+            boolean result = false;
+            if (subCategoryRepository.getSubCategory(subCategory.getSubCategoryID()) != null) {
+                result = subCategoryRepository.updateSubCategory(subCategory);
+            }
+            return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    @PutMapping("/DeleteCategory")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<SubCategory> deleteSubCategory(@RequestBody SubCategory subCategory) {
+        try {
+            boolean result = false;
+            if (subCategoryRepository.getSubCategory(subCategory.getSubCategoryID()) != null) {
+                result = subCategoryRepository.deleteSubCategory(subCategory);
+            }
+            return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
 }

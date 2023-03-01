@@ -38,7 +38,6 @@ public class BlogRepository {
                 blogVM.getBlogDescription(), blogVM.getBlogContent(), LocalDateTime.now(), BLOG_STATUS);
         return rowAffected > 0;
     }
-
     public int getLastBlogId(){
         List<Blog> blogs = getBlogs();
         return (blogs != null) ? blogs.get(blogs.size() - 1).getBlogId() : -1;

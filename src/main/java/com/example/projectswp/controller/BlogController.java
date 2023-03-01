@@ -24,7 +24,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-
 public class BlogController {
     private static final int ACCEPT_STATUS = 1;
     private static final int DENY_STATUS = 2;
@@ -40,11 +39,13 @@ public class BlogController {
 
     @GetMapping("/useraccount/blog")
     public ResponseEntity<List<Blog>> getBlog() {
+
         int userID = Ultil.getUserId();
         List<Blog> blogs = blogRepository.getBlogByUserId(userID);
         return blogs != null ? ResponseEntity.ok(blogs) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
+    //TODO: test this function
     @GetMapping("")
     public ResponseEntity<Object> getBlog(@RequestParam BlogGetVM blogGetVM) {
         List<Blog> blogs;
@@ -100,6 +101,5 @@ public class BlogController {
 
         return "" + blogIdVM.getBlogId();
     }
-
 
 }

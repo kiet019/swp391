@@ -13,9 +13,9 @@ import java.util.List;
 @NoArgsConstructor
 public class CateAndSub {
 
-    private int categoryId;
+    private int categoryID;
     private String categoryName;
-    private String categoryImg;
-    private List<SubCategory> subCategories;
+    private String categoryImage;
+    private List<SubCategory> subCategoryList;
 
 }

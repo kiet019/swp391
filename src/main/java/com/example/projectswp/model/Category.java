@@ -10,8 +10,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Category {
-    private int id;
-    private String name;
-    private String image;
-    private boolean status;
+    private int categoryID;
+    private String categoryName;
+    private String categoryImage;
+    private boolean categoryStatus;
 }

@@ -23,18 +23,18 @@ public class UserAccountRepository {
         return userAccounts.size() != 0 ? userAccounts.get(0) : null;
     }
 
-    public boolean addUserAccount(UserRecord userRecord) {
-        String sql = "insert [dbo].[UserAccounts]([User_Code],[RoleID],[User_Name],[User_Gmail],[User_Address],[User_Date_Of_Birth],[User_Image],[User_Status],[User_Date_Create])\n" +
+    public boolean addUserAccount(UserAccount userAccount, UserRecord userRecord) {
+        String sql = "insert [dbo].[UserAccounts]([User_Code],[RoleID],[User_Name],[User_Gmail],[User_Address], [User_Phone], [User_Sex],[User_Date_Of_Birth],[User_Image],[User_Status],[User_Date_Create])\n" +
                 "values ( ? , ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        int rowAffected = jdbcTemplate.update(sql, userRecord.getUid(), 2, userRecord.getEmail(), userRecord.getEmail(), " ", " ", " ", true, Ultil.getCurrentDate());
+        int rowAffected = jdbcTemplate.update(sql, userRecord.getUid(), 2, userRecord.getEmail(), userRecord.getEmail(), userAccount.getUserAddress(), userAccount.getUserPhone(), userAccount.isUserSex(),userAccount.getUserDateOfBirth(), " ", true, Ultil.getCurrentDate());
         return rowAffected > 0;
     }
 
     public int getUserAccountId(String code) {
         String sql = "select * from UserAccounts where User_Code = ?";
         List<UserAccount> userAccounts = jdbcTemplate.query(sql, USER_ACCOUNT_ROW_MAPPER, code);
-        return userAccounts.size() != 0 ? userAccounts.get(0).getId() : 0;
+        return userAccounts.size() != 0 ? userAccounts.get(0).getUserId() : 0;
     }
 
     public int getUserAccountRole(String code) {

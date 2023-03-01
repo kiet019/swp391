@@ -12,6 +12,7 @@ public class Reports {
     private int itemID;
     private Date reportDateCreate;
     private Date reportDateUpdate;
-    private boolean reportStatus;
-    private String reportContent;
+    private boolean status;
+    private String content;
+    private String image;
 }
