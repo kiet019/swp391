@@ -1,11 +1,16 @@
 package com.example.projectswp.controller;
 
+import com.example.projectswp.data_view_model.blogcategory.ReturnMessage;
+import com.example.projectswp.data_view_model.user.UpdateUserVM;
+import com.example.projectswp.data_view_model.user.UserIdVM;
 import com.example.projectswp.model.UserAccount;
 import com.example.projectswp.repositories.UserAccountRepository;
+import com.example.projectswp.repositories.ultil.Ultil;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
 import com.google.firebase.auth.UserRecord;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/useraccount")
@@ -24,7 +30,7 @@ public class AccountController {
     @Autowired
     UserAccountRepository userAccountRepository;
 
-    @PostMapping ("login")
+    @PostMapping ("/login")
     public ResponseEntity<UserAccount> getUserAccount(HttpServletRequest request) throws FirebaseAuthException {
         try {
             //lay token
@@ -65,33 +71,42 @@ public class AccountController {
         return null;
     }
     @PutMapping("")
-    public ResponseEntity<UserAccount> updateAccount() {
-        return null;
+    public ResponseEntity<Object> updateAccount(@RequestBody UpdateUserVM updateUserVM) {
+        int uid = Ultil.getUserId();
+        boolean result = userAccountRepository.updateUser(uid, updateUserVM);
+        return result ? ResponseEntity.ok(ReturnMessage.create("update success")) : ResponseEntity.notFound().build();
     }
 
     @GetMapping("")
-    public ResponseEntity<UserAccount> getUserAccount() {
-        return null;
+    public ResponseEntity<UserAccount> getUserAccount(@RequestParam(name = "UserId ", required = true) int UserId) {
+        UserAccount userAccount = userAccountRepository.getUserAccountById(UserId);
+        return userAccount != null ? ResponseEntity.ok(userAccount) : ResponseEntity.notFound().build();
     }
 
     @PatchMapping("/ban")
-    public ResponseEntity<UserAccount> banAccount() {
-        return null;
+    public ResponseEntity<Object> banAccount(@RequestBody UserIdVM userIdVM) {
+        boolean result = userAccountRepository.updateUserStatus(userIdVM.getUserId(), true);
+        return result ? ResponseEntity.ok(ReturnMessage.create("unban success")) : ResponseEntity.notFound().build();
     }
 
     @PatchMapping("/unban")
-    public ResponseEntity<UserAccount> unbanAccount() {
-        return null;
+    public ResponseEntity<Object> unbanAccount(@RequestBody UserIdVM userIdVM) {
+        boolean result = userAccountRepository.updateUserStatus(userIdVM.getUserId(), false);
+        return result ? ResponseEntity.ok(ReturnMessage.create("unban success")) : ResponseEntity.notFound().build();
     }
 
     @GetMapping("/all")
-    public ResponseEntity<UserAccount> getAccounts() {
-        return null;
+    public ResponseEntity<List<UserAccount>> getAccounts() {
+        List<UserAccount> list = userAccountRepository.getUserAccounts();
+        return list != null ? ResponseEntity.ok(list) : ResponseEntity.notFound().build();
     }
 
-    @GetMapping("token")
+    @GetMapping("/token")
     public ResponseEntity<UserAccount> getAccountToken() {
-        return null;
+        String userCode = "";
+
+        UserAccount userAccount = userAccountRepository.getUserAccount(userCode);
+        return userAccount != null ? ResponseEntity.ok(userAccount) : ResponseEntity.notFound().build();
     }
 
 
