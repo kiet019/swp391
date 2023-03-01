@@ -2,6 +2,8 @@ package com.example.projectswp.repositories;
 
 import com.example.projectswp.model.BlogCategory;
 import com.example.projectswp.repositories.rowMapper.BlogCategoryRowMapper;
+import com.google.errorprone.annotations.Var;
+import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -28,6 +30,9 @@ public class BlogCategoryRepository {
     }
 
     public boolean insertBlogCategory(String blogCateName) {
+        if(blogCateName == null || blogCateName.trim().length() == 0)
+            return false;
+
         String sql = "INSERT INTO dbo.BlogCategories(Blog_Category_Name) VALUES(?)";
         int rowAffected = jdbcTemplate.update(sql, blogCateName);
         return rowAffected > 0;
@@ -39,7 +44,7 @@ public class BlogCategoryRepository {
 
     public boolean updateBlogCategory(int blogCategoryID, BlogCategory blogCategory) {
         String sql = "UPDATE dbo.BlogCategories SET Blog_Category_Name = ? WHERE Blog_CategoryID = ?";
-        int rowAffected = jdbcTemplate.update(sql, blogCategory.getBlogCateName(), blogCategoryID);
+        int rowAffected = jdbcTemplate.update(sql, blogCategory.getBlogCategoryName(), blogCategoryID);
         return rowAffected > 0;
     }
 
@@ -47,5 +52,14 @@ public class BlogCategoryRepository {
         String sql = "DELETE dbo.BlogCategories WHERE Blog_CategoryID = ?";
         int rowAffected = jdbcTemplate.update(sql ,blogCategoryId);
         return rowAffected > 0;
+    }
+    public boolean isExistName(String name){
+        var list = getBlogCategories();
+        for(BlogCategory blogCategory : list){
+            if(blogCategory.getBlogCategoryName().equals(name)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
