@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/useraccount")
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class AccountController {
     @Autowired
     UserAccountRepository userAccountRepository;
 
-    @PostMapping ("/useraccount/login")
+    @PostMapping ("/login")
     public ResponseEntity<UserAccount> getUserAccount(HttpServletRequest request) throws FirebaseAuthException {
         String userUid = request.getHeader("Authorization");
         UserRecord userRecord = FirebaseAuth.getInstance().getUser(userUid);
@@ -31,4 +31,41 @@ public class AccountController {
         }
         return ResponseEntity.ok(userAccount);
     }
+
+    @PostMapping("/create")
+    public ResponseEntity<UserAccount> createAccount() {
+        boolean result = false;
+        return null;
+    }
+    @PutMapping("")
+    public ResponseEntity<UserAccount> updateAccount() {
+        return null;
+    }
+
+    @GetMapping("")
+    public ResponseEntity<UserAccount> getUserAccount() {
+        return null;
+    }
+
+    @PatchMapping("/ban")
+    public ResponseEntity<UserAccount> banAccount() {
+        return null;
+    }
+
+    @PatchMapping("/unban")
+    public ResponseEntity<UserAccount> unbanAccount() {
+        return null;
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<UserAccount> getAccounts() {
+        return null;
+    }
+
+    @GetMapping("token")
+    public ResponseEntity<UserAccount> getAccountToken() {
+        return null;
+    }
+
+
 }
