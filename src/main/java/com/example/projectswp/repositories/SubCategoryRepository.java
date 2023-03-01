@@ -38,14 +38,6 @@ public class SubCategoryRepository {
         return list.size() != 0 ? list : null;
     }
 
-    public SubCategory getSubCategoryByName(String name) {
-        String sql = "select * from SubCategories where Sub_Category_Name = ?";
-
-        List<SubCategory> list = jdbcTemplate.query(sql, SUB_CATEGORY_ROW_MAPPER, name);
-
-        return list.size() != 0 ? list.get(0) : null;
-    }
-
     public boolean addSubCategory(SubCategory subCategory) {
         String sql = "insert into SubCategories([categoryID],[Sub_Category_Name], [Sub_Category_Status])\n" +
                 "values (?, ?, ?)";
