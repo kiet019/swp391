@@ -10,17 +10,14 @@ import com.sun.jndi.toolkit.url.Uri;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 
 @RestController
-@RequestMapping("api/useraccount")
+@RequestMapping("/api/useraccount")
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class AccountController {
     @Autowired
@@ -60,4 +57,41 @@ public class AccountController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
+
+    @PostMapping("/create")
+    public ResponseEntity<UserAccount> createAccount() {
+        boolean result = false;
+        return null;
+    }
+    @PutMapping("")
+    public ResponseEntity<UserAccount> updateAccount() {
+        return null;
+    }
+
+    @GetMapping("")
+    public ResponseEntity<UserAccount> getUserAccount() {
+        return null;
+    }
+
+    @PatchMapping("/ban")
+    public ResponseEntity<UserAccount> banAccount() {
+        return null;
+    }
+
+    @PatchMapping("/unban")
+    public ResponseEntity<UserAccount> unbanAccount() {
+        return null;
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<UserAccount> getAccounts() {
+        return null;
+    }
+
+    @GetMapping("token")
+    public ResponseEntity<UserAccount> getAccountToken() {
+        return null;
+    }
+
+
 }

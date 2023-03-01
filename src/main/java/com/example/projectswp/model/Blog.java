@@ -18,5 +18,5 @@ public class Blog {
     private String blogDescription;
     private Date blogDateCreate;
     private Date blogDateUpdate;
-    private boolean blogStatus;
+    private int blogStatus;
 }

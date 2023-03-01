@@ -59,6 +59,7 @@ public class CategoryController {
         }
     }
 
+
     @PutMapping("UpdateCategory")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Category> updateCategory(@RequestBody Category updateCategory) {

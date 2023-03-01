@@ -1,5 +1,7 @@
 package com.example.projectswp.repositories;
 
+import com.example.projectswp.data_view_model.CreateBlogVM;
+import com.example.projectswp.data_view_model.UpdateBlogVM;
 import com.example.projectswp.model.Blog;
 import com.example.projectswp.repositories.rowMapper.BlogRowMapper;
 import com.example.projectswp.repositories.ultil.Ultil;
@@ -15,7 +17,7 @@ import java.util.List;
 @Repository
 public class BlogRepository {
     private static final BlogRowMapper BLOG_ROW_MAPPER = new BlogRowMapper();
-    private static final boolean BLOG_STATUS = true;
+    private static final int BLOG_STATUS = 0;
     @Autowired
     JdbcTemplate jdbcTemplate;
 
@@ -24,22 +26,16 @@ public class BlogRepository {
         List<Blog> blogs = jdbcTemplate.query(sql,BLOG_ROW_MAPPER);
         return blogs.size() != 0? blogs: null;
     }
-    public List<Blog> getBlogs(int userID) {
-        String sql = "select * from Blogs where UserID = ?";
-        List<Blog> blogs = jdbcTemplate.query(sql,BLOG_ROW_MAPPER, userID);
-        return blogs.size() != 0? blogs: null;
-    }
 
     public Blog getBlog(int blogID){
         String sql = "select * from Blogs where BlogID = ?";
         List<Blog> blogs = jdbcTemplate.query(sql,BLOG_ROW_MAPPER, blogID);
         return blogs.size() != 0? blogs.get(0): null;
     }
-    public boolean insertBlog(Blog blog) {
+    public boolean insertBlog(int uid, CreateBlogVM blogVM) {
         String sql = "INSERT INTO dbo.Blogs(Blog_CategoryID, UserID, Blog_Title, Blog_Description, Blog_Content, Blog_Date_Create, Blog_Status) values (?, ?, ?, ?, ?, ?, ?)";
-        Date currentDate = Ultil.getCurrentDate();
-        int rowAffected = jdbcTemplate.update(sql, blog.getBlogCategoryId(), blog.getUserId(), blog.getBlogTitle(),
-                blog.getBlogDescription(), blog.getBlogContent(), Ultil.getCurrentDate(), BLOG_STATUS);
+        int rowAffected = jdbcTemplate.update(sql, blogVM.getBlogCategoryId(), uid, blogVM.getBlogTitle(),
+                blogVM.getBlogDescription(), blogVM.getBlogContent(), LocalDateTime.now(), BLOG_STATUS);
         return rowAffected > 0;
     }
     public int getLastBlogId(){
@@ -47,14 +43,14 @@ public class BlogRepository {
         return (blogs != null) ? blogs.get(blogs.size() - 1).getBlogId() : -1;
     }
 
-    public boolean updateBlog(Blog blog){
-        if(blog == null)
+    public boolean updateBlog(int uid, UpdateBlogVM blogVM){
+        Blog blog = getBlog(uid);
+        if(blog == null || blog.getBlogStatus() == 3)
             return false;
 
-        updateBlogData(blog);
-        String sql = "UPDATE dbo.Blogs set Blog_CategoryID = ?, Blog_Title = ?, Blog_Description = ?, Blog_Content = ?, Blog_Date_Update = ? WHERE BlogID = ?";
-        int rowAffected = jdbcTemplate.update(sql, blog.getBlogCategoryId(),
-                blog.getBlogTitle(), blog.getBlogDescription(), blog.getBlogContent(), Ultil.getCurrentDate(), blog.getBlogId());
+        String sql = "UPDATE dbo.Blogs set Blog_CategoryID = ?, Blog_Title = ?, Blog_Description = ?, Blog_Content = ?, Blog_Date_Update = ?, Blog_Status = ? WHERE BlogID = ?";
+        int rowAffected = jdbcTemplate.update(sql, blogVM.getBlogCategoryId(),
+                blogVM.getBlogTitle(), blogVM.getBlogDescription(), blogVM.getBlogContent(), LocalDateTime.now(), BLOG_STATUS, uid);
         return rowAffected > 0;
     }
     public void updateBlogData(Blog blog){
@@ -78,11 +74,6 @@ public class BlogRepository {
             blog.setBlogContent(oldbBlog.getBlogContent());
         }
     }
-    public boolean deleteBlog(int id){
-        String sql = "DELETE dbo.Blogs WHERE BlogID = ?";
-        int rowAffected = jdbcTemplate.update(sql, id);
-        return rowAffected > 0;
-    }
 
     public List<Blog> getBlogByUserId(int userID){
         String sql = "select * from Blogs where UserID = ?";
@@ -90,9 +81,18 @@ public class BlogRepository {
         return blogs.size() != 0? blogs: null;
     }
 
-    public boolean updateStatusToTrue(int blogId) {
-        String sql = "UPDATE dbo.Blogs set Blog_Status = 1 WHERE BlogID = ?";
-        int rowAffected = jdbcTemplate.update(sql, blogId);
+    public List<Blog> getBlogByCategoryId(int blogcategoryId){
+        String sql = "select * from Blogs where Blog_CategoryID = ?";
+        List<Blog> blogs = jdbcTemplate.query(sql,BLOG_ROW_MAPPER, blogcategoryId);
+        return blogs.size() != 0 ? blogs: null;
+    }
+
+    public boolean updateStatus(int blogId, int status) {
+        if(getBlog(blogId) == null)
+            return false;
+
+        String sql = "UPDATE dbo.Blogs set Blog_Status = ? WHERE BlogID = ?";
+        int rowAffected = jdbcTemplate.update(sql, status, blogId);
         return rowAffected > 0;
     }
 }

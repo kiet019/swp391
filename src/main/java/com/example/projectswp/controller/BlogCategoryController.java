@@ -1,5 +1,8 @@
 package com.example.projectswp.controller;
 
+import com.example.projectswp.data_view_model.BlogCategoryGetVM;
+import com.example.projectswp.data_view_model.CreateBlogCategoryVM;
+import com.example.projectswp.data_view_model.ReturnMessage;
 import com.example.projectswp.model.BlogCategory;
 import com.example.projectswp.repositories.BlogCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,15 +28,24 @@ public class BlogCategoryController {
     }
 
     @GetMapping("")
-    public ResponseEntity<BlogCategory> getBlogCategory(@RequestBody int BlogCategoryId) {
-        BlogCategory blogCategory = blogCategoryRepository.getBlogCategory(BlogCategoryId);
-        return blogCategory != null ? ResponseEntity.ok(blogCategory) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    public ResponseEntity<String> getBlogCategory(@ModelAttribute BlogCategoryGetVM blogCategoryGetVM) {
+        BlogCategory blogCategory = blogCategoryRepository.getBlogCategory(blogCategoryGetVM.getBlogCategoryId());
+        return blogCategory != null ? ResponseEntity.ok(blogCategory.getBlogCategoryName()) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @PostMapping("/create")
-    public ResponseEntity<BlogCategory> createBlogCategory(@RequestBody String blogCateName) {
-        boolean isCreated = blogCategoryRepository.insertBlogCategory(blogCateName);
-        URI uri = URI.create("localhost:8080/api/blog-categories/" + blogCategoryRepository.getLastBlogCategoryID() );
-        return isCreated ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+    public ResponseEntity<Object> createBlogCategory(@RequestBody CreateBlogCategoryVM blogCategoryNameVM) {
+        if(blogCategoryRepository.isExistName(blogCategoryNameVM.getBlogCategoryName())) {
+            return ResponseEntity.badRequest().body(ReturnMessage.create("this name already existed"));
+        }else{
+            boolean isCreated = blogCategoryRepository.insertBlogCategory(blogCategoryNameVM.getBlogCategoryName());
+            return isCreated ? ResponseEntity.ok().body(ReturnMessage.create("success")) : ResponseEntity.badRequest().body(ReturnMessage.create("error at create Blog Category"));
+        }
+
+    }
+
+    @PostMapping("/test")
+    public String test(@RequestBody String blogCategoryName) {
+        return blogCategoryName;
     }
 }

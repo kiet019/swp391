@@ -48,6 +48,22 @@ public class CategoryRepository {
         return list.size() != 0 ? list : null;
     }
 
+    public List<Category> getCategoriesByStatus(boolean status) {
+        String sql = "select * from Categories where Category_Status = ?";
+
+        List<Category> list = jdbcTemplate.query(sql, CATEGORY_ROW_MAPPER, status);
+
+        return list.size() != 0 ? list : null;
+    }
+
+    public List<Category> getCategoriesByName(String name) {
+        String sql = "select * from Categories where Category_Name = ?";
+
+        List<Category> list = jdbcTemplate.query(sql, CATEGORY_ROW_MAPPER, name);
+
+        return list.size() != 0 ? list : null;
+    }
+
     public boolean addCategory(Category category) {
         String sql = "insert into dbo.Categories ([Category_Name], [Category_Image], [Category_Status])\n" +
                 "values (?, ?, ?)";

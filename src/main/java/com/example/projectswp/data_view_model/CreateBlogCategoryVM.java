@@ -1,4 +1,4 @@
-package com.example.projectswp.model;
+package com.example.projectswp.data_view_model;
 
 import lombok.*;
 
@@ -7,7 +7,6 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-public class BlogCategory {
-    private int blogCategoryId;
+public class CreateBlogCategoryVM {
     private String blogCategoryName;
 }
