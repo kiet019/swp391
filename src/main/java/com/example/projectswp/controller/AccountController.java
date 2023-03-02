@@ -14,6 +14,7 @@ import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -53,17 +54,17 @@ public class AccountController {
         }
     }
 
-//    @PostMapping("create")
-//    public ResponseEntity<UserAccount> createUser(@RequestBody UserAccount userAccount) throws FirebaseAuthException {
-//        try {
-//            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//            UserRecord userRecord = FirebaseAuth.getInstance().getUser(authentication.getPrincipal().toString());
-//            boolean result = userAccountRepository.addUserAccount(userAccount, userRecord);
-//            return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-//        }
-//    }
+    @PostMapping("create")
+    public ResponseEntity<UserAccount> createUser(@RequestBody UserAccount userAccount) throws FirebaseAuthException {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            UserRecord userRecord = FirebaseAuth.getInstance().getUser(authentication.getPrincipal().toString());
+            boolean result = userAccountRepository.addUserAccount(userAccount, userRecord);
+            return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
 
     @PostMapping("/create")
     public ResponseEntity<UserAccount> createAccount() {
@@ -102,10 +103,10 @@ public class AccountController {
     }
 
     @GetMapping("/token")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<UserAccount> getAccountToken() {
-        String userCode = "";
-
-        UserAccount userAccount = userAccountRepository.getUserAccount(userCode);
+        int uid = Ultil.getUserId();
+        UserAccount userAccount = userAccountRepository.getUserAccountById(uid);
         return userAccount != null ? ResponseEntity.ok(userAccount) : ResponseEntity.notFound().build();
     }
 

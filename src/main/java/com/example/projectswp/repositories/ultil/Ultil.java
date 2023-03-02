@@ -18,9 +18,8 @@ public class Ultil {
     }
 
     public static int getUserId(){
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        return authentication.getPrincipal();
-        return 1;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return (int)authentication.getPrincipal();
     }
     public static String getUserCode() {
         return null;
