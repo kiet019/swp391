@@ -8,9 +8,7 @@ import com.example.projectswp.repositories.UserAccountRepository;
 import com.example.projectswp.repositories.ultil.Ultil;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
-import com.google.firebase.auth.FirebaseToken;
 import com.google.firebase.auth.UserRecord;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,22 +30,22 @@ public class AccountController {
     UserAccountRepository userAccountRepository;
 
     @PostMapping ("/login")
-    public ResponseEntity<UserAccount> getUserAccount(HttpServletRequest request) throws FirebaseAuthException {
+    public ResponseEntity<String> getUserAccount(HttpServletRequest request) throws FirebaseAuthException {
         try {
             //lay token
             String code = request.getHeader("Authorization");
             //tim tren firebase token
-            FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(code);
-            //lay uid
-            String uid = decodedToken.getUid();
+//            FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(code);
+//            //lay uid
+//            String uid = decodedToken.getUid();
             //lay thong tin trong db
-            UserAccount userAccount = userAccountRepository.getUserAccount(uid);
+            System.out.println(code);
+            UserAccount userAccount = userAccountRepository.getUserAccount(code);
+            URI uri = URI.create("");
             if (userAccount != null) {
-                URI uri = new URI("User Existed");
-                return ResponseEntity.created(uri).build();
+                return ResponseEntity.created(uri).body("User Exist");
             } else {
-                URI uri = new URI("New User");
-                return ResponseEntity.created(uri).build();
+                return ResponseEntity.created(uri).body("New User");
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -66,11 +64,11 @@ public class AccountController {
         }
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<UserAccount> createAccount() {
-        boolean result = false;
-        return null;
-    }
+//    @PostMapping("/create")
+//    public ResponseEntity<UserAccount> createAccount() {
+//        boolean result = false;
+//        return null;
+//    }
     @PutMapping("")
     public ResponseEntity<Object> updateAccount(@RequestBody UpdateUserVM updateUserVM) {
         int uid = Ultil.getUserId();
