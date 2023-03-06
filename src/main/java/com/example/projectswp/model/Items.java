@@ -29,5 +29,5 @@ public class Items {
     private Date dateUpdate;
     private boolean status;
     private boolean share;
-    private String imageID;
+    private String image;
 }
