@@ -31,7 +31,7 @@ public class ItemsRowMapper implements RowMapper<Items> {
         items.setDateUpdate(rs.getDate("Item_Date_Update"));
         items.setStatus(rs.getBoolean("Item_Status"));
         items.setShare(rs.getBoolean("Share"));
-        items.setImageID(rs.getString("ImageID"));
+        items.setImage(rs.getString("Image"));
         return items;
     }
 }
