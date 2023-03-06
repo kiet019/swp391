@@ -18,7 +18,7 @@ public class Items {
     private String itemDetailedDescription;
     private double mass;
     private boolean size;
-    private String status;
+    private String quanlity;
     private double value;
     private double price;
     private int amount;
@@ -27,5 +27,7 @@ public class Items {
     private String address;
     private Date dateCreated;
     private Date dateUpdate;
-    private int imageID;
+    private boolean status;
+    private boolean share;
+    private String imageID;
 }

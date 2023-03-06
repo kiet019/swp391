@@ -20,7 +20,7 @@ public class ItemsRowMapper implements RowMapper<Items> {
         items.setItemDetailedDescription(rs.getString("Item_Detailed_Description"));
         items.setMass(rs.getDouble("Item_Mass"));
         items.setSize(rs.getBoolean("Item_Size"));
-        items.setStatus(rs.getString("Item_Status"));
+        items.setQuanlity(rs.getString("Item_Quanlity"));
         items.setValue(rs.getDouble("Item_Estimate_Value"));
         items.setPrice(rs.getDouble("Item_Sale_Price"));
         items.setAmount(rs.getInt("Item_Share_Amount"));
@@ -29,7 +29,9 @@ public class ItemsRowMapper implements RowMapper<Items> {
         items.setAddress(rs.getString("Item_Shipping_Address"));
         items.setDateCreated(rs.getDate("Item_Date_Created"));
         items.setDateUpdate(rs.getDate("Item_Date_Update"));
-        items.setImageID(rs.getInt("ImageID"));
+        items.setStatus(rs.getBoolean("Item_Status"));
+        items.setShare(rs.getBoolean("Share"));
+        items.setImageID(rs.getString("ImageID"));
         return items;
     }
 }
