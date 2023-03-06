@@ -75,7 +75,7 @@ public class ItemsRepository {
     public boolean addItems(Items item) {
         String sql = "insert into dbo.Items ([Item_Code], [UserID], [Sub_CategoryID], [Item_Title], [Item_Detailed_Description], [Item_Mass], [Item_Size], [Item_Quanlity], [Item_Estimate_Value], [Item_Sale_Price], [Item_Share_Amount], [Item_Sponsored_Order_Shipping_Fee], [Item_Expired_Time], [Item_Shipping_Address], [Item_Date_Created], [Item_Date_Update],[Item_Status],[Share], [Image])\n" +
                 "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        int check = jdbcTemplate.update(sql, item.getItemCode(), item.getUserID(), item.getSubCategoryID(), item.getItemTitle(), item.getItemDetailedDescription(), item.getMass(), item.isSize(),  item.getQuanlity(), item.getValue(), item.getPrice(), item.getAmount(), item.isSponsoredOrderShippingFee(), item.getTime(), item.getAddress(), getCurrentDate(), null,item.isStatus(),item.isShare(), item.getImage());
+        int check = jdbcTemplate.update(sql, item.getItemCode(), item.getUserId(), item.getSubCategoryId(), item.getItemTitle(), item.getItemDetailedDescription(), item.getItemMass(), item.isItemSize(),  item.getItemQuanlity(), item.getItemEstimateValue(), item.getItemSalePrice(), item.getItemShareAmount(), item.isItemSponsoredOrderShippingFee(), item.getStringDateTimeExpired(), item.getItemShippingAddress(), getCurrentDate(), null,item.isStatus(),item.isShare(), item.getImage());
         return check != 0;
     }
 
@@ -101,7 +101,7 @@ public class ItemsRepository {
                 "    Share = ?,\n" +
                 "    Image = ?\n" +
                 "where ItemID = ?";
-        int check = jdbcTemplate.update(sql, item.getItemCode(), item.getUserID(), item.getSubCategoryID(), item.getItemTitle(), item.getItemDetailedDescription(), item.getMass(), item.isSize(),  item.getQuanlity(), item.getValue(), item.getPrice(), item.getAmount(), item.isSponsoredOrderShippingFee(), item.getTime(), item.getAddress(), item.getDateCreated(), getCurrentDate(), item.isStatus(),item.isShare(),item.getImage(), itemID);
+        int check = jdbcTemplate.update(sql, item.getItemCode(), item.getUserId(), item.getSubCategoryId(), item.getItemTitle(), item.getItemDetailedDescription(), item.getItemMass(), item.isItemSize(),  item.getItemQuanlity(), item.getItemEstimateValue(), item.getItemSalePrice(), item.getItemShareAmount(), item.isItemSponsoredOrderShippingFee(), item.getStringDateTimeExpired(), item.getItemShippingAddress(), item.getDateCreated(), getCurrentDate(), item.isStatus(),item.isShare(),item.getImage(), itemID);
         return check != 0;
     }
     public boolean deleteImage(int itemID){
