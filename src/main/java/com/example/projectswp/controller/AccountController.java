@@ -36,7 +36,7 @@ public class AccountController {
             String code = request.getHeader("Authorization");
             //tim tren firebase token
 //            FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(code);
-//            //lay uid
+//            lay uid
 //            String uid = decodedToken.getUid();
             //lay thong tin trong db
             System.out.println(code);
@@ -53,7 +53,6 @@ public class AccountController {
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Object> createUser(@RequestBody UserAccount userAccount) throws FirebaseAuthException {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -66,12 +65,8 @@ public class AccountController {
         }
     }
 
-//    @PostMapping("/create")
-//    public ResponseEntity<UserAccount> createAccount() {
-//        boolean result = false;
-//        return null;
-//    }
     @PutMapping("")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Object> updateAccount(@RequestBody UpdateUserVM updateUserVM) {
         int uid = Ultil.getUserId();
         boolean result = userAccountRepository.updateUser(uid, updateUserVM);
@@ -79,24 +74,27 @@ public class AccountController {
     }
 
     @GetMapping("")
-    public ResponseEntity<UserAccount> getUserAccount(@RequestParam(name = "UserId ", required = true) int UserId) {
+    public ResponseEntity<UserAccount> getUserAccount(@RequestParam int UserId) {
         UserAccount userAccount = userAccountRepository.getUserAccountById(UserId);
         return userAccount != null ? ResponseEntity.ok(userAccount) : ResponseEntity.notFound().build();
     }
 
     @PatchMapping("/ban")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Object> banAccount(@RequestBody UserIdVM userIdVM) {
+        boolean result = userAccountRepository.updateUserStatus(userIdVM.getUserId(), false);
+        return result ? ResponseEntity.ok(ReturnMessage.create("ban success")) : ResponseEntity.notFound().build();
+    }
+
+    @PatchMapping("/unban")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Object> unbanAccount(@RequestBody UserIdVM userIdVM) {
         boolean result = userAccountRepository.updateUserStatus(userIdVM.getUserId(), true);
         return result ? ResponseEntity.ok(ReturnMessage.create("unban success")) : ResponseEntity.notFound().build();
     }
 
-    @PatchMapping("/unban")
-    public ResponseEntity<Object> unbanAccount(@RequestBody UserIdVM userIdVM) {
-        boolean result = userAccountRepository.updateUserStatus(userIdVM.getUserId(), false);
-        return result ? ResponseEntity.ok(ReturnMessage.create("unban success")) : ResponseEntity.notFound().build();
-    }
-
     @GetMapping("/all")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserAccount>> getAccounts() {
         List<UserAccount> list = userAccountRepository.getUserAccounts();
         return list != null ? ResponseEntity.ok(list) : ResponseEntity.notFound().build();

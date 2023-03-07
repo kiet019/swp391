@@ -69,7 +69,7 @@ public class UserAccountRepository {
         String sql = "UPDATE dbo.UserAccounts " +
                 "SET User_Name = ?, User_Image = ?, User_Address = ?, User_Phone = ?, User_Sex = ?, " +
                 "User_Date_Of_Birth = ?, User_More_Information = ?, User_Date_Update = ? " +
-                "WHERE UserID";
+                "WHERE UserID = ?";
         int rowAffected = jdbcTemplate.update(sql, user.getUserName(), user.getUserImage(), user.getUserAddress(),
                 user.getUserPhone(), user.isUserSex(), user.getUserDateOfBirth(), user.getUserMoreInformation(), Ultil.getCurrentDate(), userId);
         return rowAffected > 0;
