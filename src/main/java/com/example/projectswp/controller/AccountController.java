@@ -36,7 +36,7 @@ public class AccountController {
             String code = request.getHeader("Authorization");
             //tim tren firebase token
 //            FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(code);
-//            lay uid
+//            //lay uid
 //            String uid = decodedToken.getUid();
             //lay thong tin trong db
             System.out.println(code);
@@ -66,7 +66,6 @@ public class AccountController {
     }
 
     @PutMapping("")
-    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Object> updateAccount(@RequestBody UpdateUserVM updateUserVM) {
         int uid = Ultil.getUserId();
         boolean result = userAccountRepository.updateUser(uid, updateUserVM);
@@ -74,6 +73,7 @@ public class AccountController {
     }
 
     @GetMapping("")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserAccount> getUserAccount(@RequestParam int UserId) {
         UserAccount userAccount = userAccountRepository.getUserAccountById(UserId);
         return userAccount != null ? ResponseEntity.ok(userAccount) : ResponseEntity.notFound().build();
@@ -101,7 +101,6 @@ public class AccountController {
     }
 
     @GetMapping("/token")
-    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<UserAccount> getAccountToken() {
         int uid = Ultil.getUserId();
         UserAccount userAccount = userAccountRepository.getUserAccountById(uid);

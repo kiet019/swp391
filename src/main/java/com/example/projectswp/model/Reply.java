@@ -10,10 +10,10 @@ import java.util.Date;
 @Setter
 @ToString
 public class Reply {
-    private int relyID;
-    private String commentID;
+    private int replyId;
+    private int commentId;
     private int userID;
     private Date dateCreate;
     private Date dateUpdate;
-    private String relyContent;
+    private String replyContent;
 }

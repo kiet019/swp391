@@ -9,6 +9,15 @@ import java.sql.SQLException;
 public class ReplyRowMapper implements RowMapper<Reply> {
     @Override
     public Reply mapRow(ResultSet rs, int rowNum) throws SQLException {
-        return null;
+        Reply reply = new Reply();
+
+        reply.setReplyId(rs.getInt("ReplyID"));
+        reply.setCommentId(rs.getInt("CommentID"));
+        reply.setUserID(rs.getInt("UserID"));
+        reply.setDateCreate(rs.getDate("DateCreate"));
+        reply.setDateUpdate(rs.getDate("DateUpdate"));
+        reply.setReplyContent(rs.getString("ReplyContent"));
+
+        return reply;
     }
 }
