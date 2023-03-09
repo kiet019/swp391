@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 public class Ultil {
     public static Date getCurrentDate() {
@@ -31,13 +32,9 @@ public class Ultil {
         return userCode;
     }
 
-    public static String generateRandomString(int length) {
-        final String CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-        final Random RANDOM = new Random();
-        StringBuilder sb = new StringBuilder(length);
-        for (int i = 0; i < length; i++) {
-            sb.append(CHARACTERS.charAt(RANDOM.nextInt(CHARACTERS.length())));
-        }
-        return sb.toString();
+    public static String getUUID() {
+        UUID uuid = UUID.randomUUID();
+        return uuid.toString();
     }
+
 }
