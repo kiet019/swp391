@@ -3,6 +3,7 @@ package com.example.projectswp.model;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 
 @NoArgsConstructor
@@ -18,4 +19,5 @@ public class Comment {
     private Date dateCreate;
     private Date dateUpdate;
     private String commentContent;
+    private List<Reply> listReply;
 }

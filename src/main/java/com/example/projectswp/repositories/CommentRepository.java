@@ -4,6 +4,7 @@ import com.example.projectswp.data_view_model.comment.CommentCreateVM;
 import com.example.projectswp.data_view_model.comment.CommentIdVM;
 import com.example.projectswp.data_view_model.comment.CommentUpdateVM;
 import com.example.projectswp.model.Comment;
+import com.example.projectswp.model.Reply;
 import com.example.projectswp.repositories.rowMapper.BlogCategoryRowMapper;
 import com.example.projectswp.repositories.rowMapper.CommentRowMapper;
 import com.example.projectswp.repositories.ultil.Ultil;
@@ -53,5 +54,9 @@ public class CommentRepository {
         String sql = "DELETE dbo.Comments WHERE  UserID = ? and CommentID = ?";
         int rowAffected = jdbcTemplate.update(sql, uid, commentId);
         return rowAffected > 0;
+    }
+    public List<Reply> getRepylistByCommentId(int id){
+        ReplyRepository replyRepository = new ReplyRepository();
+        return replyRepository.getReplyByCommentID(id);
     }
 }

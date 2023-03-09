@@ -1,9 +1,6 @@
 package com.example.projectswp.controller;
 
-import com.example.projectswp.data_view_model.blog.BlogGetVM;
-import com.example.projectswp.data_view_model.blog.BlogIdVM;
-import com.example.projectswp.data_view_model.blog.CreateBlogVM;
-import com.example.projectswp.data_view_model.blog.UpdateBlogVM;
+import com.example.projectswp.data_view_model.blog.*;
 import com.example.projectswp.data_view_model.blogcategory.ReturnMessage;
 import com.example.projectswp.model.Blog;
 import com.example.projectswp.repositories.BlogRepository;
@@ -22,7 +19,7 @@ import java.util.List;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class BlogController {
     private static final int ACCEPT_STATUS = 1;
-    private static final int DENY_STATUS = 2;
+
     private static final int DELETE_STATUS = 3;
     @Autowired
     BlogRepository blogRepository;
@@ -77,8 +74,8 @@ public class BlogController {
         return isUpdated ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
     @PatchMapping("/blog/deny")
-    public ResponseEntity<Blog> blogDeny(@RequestBody BlogIdVM blogIdVM){
-        boolean isDeleted = blogRepository.updateStatus(blogIdVM.getBlogId(), DENY_STATUS);
+    public ResponseEntity<Blog> blogDeny(@RequestBody BlogDenyVM blogDenyVM){
+        boolean isDeleted = blogRepository.denyBlog(blogDenyVM);
         return isDeleted ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 

@@ -1,5 +1,6 @@
 package com.example.projectswp.repositories;
 
+import com.example.projectswp.data_view_model.blog.BlogDenyVM;
 import com.example.projectswp.data_view_model.blog.CreateBlogVM;
 import com.example.projectswp.data_view_model.blog.UpdateBlogVM;
 import com.example.projectswp.model.Blog;
@@ -15,6 +16,7 @@ import java.util.List;
 public class BlogRepository {
     private static final BlogRowMapper BLOG_ROW_MAPPER = new BlogRowMapper();
     private static final int BLOG_STATUS = 0;
+    private static final int DENY_STATUS = 2;
     @Autowired
     JdbcTemplate jdbcTemplate;
 
@@ -48,6 +50,14 @@ public class BlogRepository {
         String sql = "UPDATE dbo.Blogs set Blog_CategoryID = ?, Blog_Title = ?, Blog_Description = ?, Blog_Content = ?, Blog_Date_Update = ?, Blog_Status = ? WHERE BlogID = ?";
         int rowAffected = jdbcTemplate.update(sql, blogVM.getBlogCategoryId(),
                 blogVM.getBlogTitle(), blogVM.getBlogDescription(), blogVM.getBlogContent(), LocalDateTime.now(), BLOG_STATUS, uid);
+        return rowAffected > 0;
+    }
+    public boolean denyBlog(BlogDenyVM blogDenyVM) {
+        if(getBlog(blogDenyVM.getBlogId()) == null)
+            return false;
+
+        String sql = "UPDATE dbo.Blogs set Blog_Status = ?, Reason_Deny = ? WHERE BlogID = ?";
+        int rowAffected = jdbcTemplate.update(sql, DENY_STATUS, blogDenyVM.getReason(),blogDenyVM.getBlogId());
         return rowAffected > 0;
     }
     public void updateBlogData(Blog blog){
