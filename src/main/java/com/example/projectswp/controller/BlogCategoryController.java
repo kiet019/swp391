@@ -33,18 +33,13 @@ public class BlogCategoryController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Object> createBlogCategory(@RequestBody CreateBlogCategoryVM blogCategoryNameVM) {
+    public ResponseEntity<ReturnMessage> createBlogCategory(@RequestBody CreateBlogCategoryVM blogCategoryNameVM) {
         if(blogCategoryRepository.isExistName(blogCategoryNameVM.getBlogCategoryName())) {
             return ResponseEntity.badRequest().body(ReturnMessage.create("this name already existed"));
         }else{
             boolean isCreated = blogCategoryRepository.insertBlogCategory(blogCategoryNameVM.getBlogCategoryName());
             return isCreated ? ResponseEntity.ok().body(ReturnMessage.create("success")) : ResponseEntity.badRequest().body(ReturnMessage.create("error at create Blog Category"));
         }
-
     }
 
-    @PostMapping("/test")
-    public String test(@RequestBody String blogCategoryName) {
-        return blogCategoryName;
-    }
 }

@@ -37,8 +37,8 @@ public class BlogController {
         return blogs != null ? ResponseEntity.ok(blogs) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    @GetMapping("")
-    public ResponseEntity<Object> getBlog(@ModelAttribute BlogGetVM blogGetVM) {
+    @GetMapping("/blog")
+    public ResponseEntity<?> getBlog(@ModelAttribute BlogGetVM blogGetVM) {
         List<Blog> blogs;
         if(blogGetVM.getCategoryId() != 0){
             blogs = blogRepository.getBlogByCategoryId(blogGetVM.getCategoryId());
@@ -53,35 +53,35 @@ public class BlogController {
         return ResponseEntity.badRequest().body(ReturnMessage.create("fail at get blogs"));
     }
 
-    @PutMapping("")
-    public ResponseEntity<Blog> updateBlog(@RequestBody UpdateBlogVM blogVM){
+    @PutMapping("/blog")
+    public ResponseEntity<ReturnMessage> updateBlog(@RequestBody UpdateBlogVM blogVM){
         int uid = Ultil.getUserId();
         boolean isUpdated = blogRepository.updateBlog(uid, blogVM);
-        return isUpdated ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return isUpdated ? ResponseEntity.ok(ReturnMessage.create("success")) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @PostMapping("/blog/create")
-    public ResponseEntity<Blog> createBlog(@RequestBody CreateBlogVM blogVM){
+    public ResponseEntity<ReturnMessage> createBlog(@RequestBody CreateBlogVM blogVM){
         int uid = Ultil.getUserId();
         boolean result = blogRepository.insertBlog(uid, blogVM);
-        URI uri = URI.create("localhost:8080/api/blogs/" + blogRepository.getLastBlogId() );
-        return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();//Todo: add return message
+        return result ? ResponseEntity.ok(ReturnMessage.create("success")) : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 
     @PatchMapping("/blog/accept")
-    public ResponseEntity<Blog> blogAccept(@RequestBody BlogIdVM blogIdVM){
+    public ResponseEntity<?> blogAccept(@RequestBody BlogIdVM blogIdVM){
         boolean isUpdated = blogRepository.updateStatus(blogIdVM.getBlogId(), ACCEPT_STATUS);
-        return isUpdated ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return isUpdated ? ResponseEntity.ok(ReturnMessage.create("success")) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
+
     @PatchMapping("/blog/deny")
-    public ResponseEntity<Blog> blogDeny(@RequestBody BlogDenyVM blogDenyVM){
+    public ResponseEntity<ReturnMessage> blogDeny(@RequestBody BlogDenyVM blogDenyVM){
         boolean isDeleted = blogRepository.denyBlog(blogDenyVM);
-        return isDeleted ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return isDeleted ? ResponseEntity.ok(ReturnMessage.create("success")) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @PatchMapping("/blog/delete")
-    public ResponseEntity<Blog> deleteBlog(@RequestBody BlogIdVM blogIdVM){
+    public ResponseEntity<ReturnMessage> deleteBlog(@RequestBody BlogIdVM blogIdVM){
         boolean isDeleted = blogRepository.updateStatus(blogIdVM.getBlogId(), DELETE_STATUS);
-        return isDeleted ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return isDeleted ? ResponseEntity.ok(ReturnMessage.create("success")) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 }
