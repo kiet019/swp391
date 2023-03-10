@@ -68,7 +68,7 @@ public class BlogController {
     }
 
     @PatchMapping("/blog/accept")
-    public ResponseEntity<?> blogAccept(@RequestBody BlogIdVM blogIdVM){
+    public ResponseEntity<ReturnMessage> blogAccept(@RequestBody BlogIdVM blogIdVM){
         boolean isUpdated = blogRepository.updateStatus(blogIdVM.getBlogId(), ACCEPT_STATUS);
         return isUpdated ? ResponseEntity.ok(ReturnMessage.create("success")) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
