@@ -50,7 +50,7 @@ public class BlogController {
             Blog blog = blogRepository.getBlog(blogGetVM.getBlogId());
             return blog != null ? ResponseEntity.ok(blog) : ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(ReturnMessage.create("success"));
+        return ResponseEntity.badRequest().body(ReturnMessage.create("fail at get blogs"));
     }
 
     @PutMapping("")
