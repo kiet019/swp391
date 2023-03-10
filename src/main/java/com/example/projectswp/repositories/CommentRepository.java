@@ -19,21 +19,32 @@ public class CommentRepository {
     private static final CommentRowMapper COMMENT_ROW_MAPPER = new CommentRowMapper();
     @Autowired
     JdbcTemplate jdbcTemplate;
+    @Autowired
+    ReplyRepository replyRepository;
 
     public List<Comment> getComments() {
         String sql = "SELECT * FROM dbo.Comments";
-        List<Comment> listComment = jdbcTemplate.query(sql,COMMENT_ROW_MAPPER);
+        List<Comment> listComment = jdbcTemplate.query(sql, COMMENT_ROW_MAPPER);
+        for (Comment comment : listComment){
+            comment.setListReply(replyRepository.getReplyByCommentID(comment.getCommentID()));
+        }
         return  listComment.size() > 0 ? listComment: null;
     }
     public List<Comment> getCommentByBlogId(int blogId) {
         String sql = "SELECT * FROM dbo.Comments c WHERE c.BlogID = ?";
         List<Comment> listComment = jdbcTemplate.query(sql,COMMENT_ROW_MAPPER, blogId);
+        for (Comment comment : listComment){
+            comment.setListReply(replyRepository.getReplyByCommentID(comment.getCommentID()));
+        }
         return  listComment.size() > 0 ? listComment: null;
     }
 
     public List<Comment> getCommentByItemId(int itemID) {
         String sql = "SELECT * FROM dbo.Comments c WHERE c.ItemID = ?";
         List<Comment> listComment = jdbcTemplate.query(sql,COMMENT_ROW_MAPPER, itemID);
+        for (Comment comment : listComment){
+            comment.setListReply(replyRepository.getReplyByCommentID(comment.getCommentID()));
+        }
         return  listComment.size() > 0 ? listComment: null;
     }
 
@@ -49,14 +60,9 @@ public class CommentRepository {
                 cmt.getItemId() != 0 ? cmt.getItemId() : null, Ultil.getCurrentDate(), cmt.getCommentContent());
         return rowAffected > 0;
     }
-
     public boolean deleteComment(int uid, int commentId) {
         String sql = "DELETE dbo.Comments WHERE  UserID = ? and CommentID = ?";
         int rowAffected = jdbcTemplate.update(sql, uid, commentId);
         return rowAffected > 0;
-    }
-    public List<Reply> getRepylistByCommentId(int id){
-        ReplyRepository replyRepository = new ReplyRepository();
-        return replyRepository.getReplyByCommentID(id);
     }
 }

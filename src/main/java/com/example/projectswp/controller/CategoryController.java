@@ -17,14 +17,11 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 public class CategoryController {
     @Autowired
     CategoryRepository categoryRepository;
-    @Autowired
-    BusinessService businessService;
 
     @GetMapping("GetAllCategory")
     public ResponseEntity<List<Category>> getCategories() {
         try {
             List<Category> list = categoryRepository.getCategories();
-            businessService.sendEmail();
             return list != null ? ResponseEntity.ok(list) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

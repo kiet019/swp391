@@ -66,6 +66,7 @@ public class AccountController {
     }
 
     @PutMapping("")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<Object> updateAccount(@RequestBody UpdateUserVM updateUserVM) {
         int uid = Ultil.getUserId();
         boolean result = userAccountRepository.updateUser(uid, updateUserVM);
