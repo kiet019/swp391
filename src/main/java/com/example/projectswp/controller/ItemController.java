@@ -20,11 +20,6 @@ public class ItemController {
     @Autowired
     ItemsRepository itemsRepository;
     @GetMapping("")
-    public ResponseEntity<Items> getItem(@PathVariable int itemID) {
-        Items items = itemsRepository.getItem(itemID);
-        return items != null ? ResponseEntity.ok(items) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    }
-    @GetMapping("")
     public ResponseEntity<List<Items>> getItems() {
         List<Items> item = itemsRepository.getItems();
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
