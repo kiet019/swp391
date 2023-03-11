@@ -56,36 +56,38 @@ public class ItemController {
         List<Items> item = itemsRepository.getBriefItemByAndBriefRequestUserID(userID, status, share);
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @GetMapping("/SearchBriefItemByTitle/{itemTitle}")
-    public ResponseEntity<List<Items>> searchBriefItemByUserId(@PathVariable String itemTitle) {
-        List<Items> item = itemsRepository.searchBriefItemByItemTitle(itemTitle);
+    @GetMapping("/Item/SearchBriefItemByTitle")
+    public ResponseEntity<List<Items>> searchBriefItemByUserId(@PathVariable String itemTitle,@PathVariable boolean status) {
+        List<Items> item = itemsRepository.searchBriefItemByItemTitle(itemTitle, status);
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @GetMapping("/SearchBriefItemBySubCategoryID/{subcategoryID}")
-    public ResponseEntity<List<Items>> searchBriefItemBySubCategoryID(@PathVariable int subcategoryID) {
-        List<Items> item = itemsRepository.searchBriefItemBySubCategoryID(subcategoryID);
+    @GetMapping("/Item/SearchBriefItemBySubCategoryID")
+    public ResponseEntity<List<Items>> searchBriefItemBySubCategoryID(@PathVariable int subcategoryID, @PathVariable boolean status) {
+        List<Items> item = itemsRepository.searchBriefItemBySubCategoryID(subcategoryID, status);
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @GetMapping("/SearchBriefItemByCategoryID/{categoryID}")
-    public ResponseEntity<List<Items>> searchBriefItemByCategoryID(@PathVariable int categoryID) {
-        List<Items> item = itemsRepository.searchBriefItemByCategoryID(categoryID);
+    @GetMapping("/Item/SearchBriefItemByCategoryID")
+        public ResponseEntity<List<Items>> searchBriefItemByCategoryID(@PathVariable int categoryID, @PathVariable boolean status, @PathVariable boolean share) {
+        List<Items> item = itemsRepository.searchBriefItemByCategoryID(categoryID, status, share);
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @GetMapping("/GetAllMyBriefItemAndBriefRequest/{userID}&{share}")
-    public ResponseEntity<List<Items>> searchBriefItemBySubCategoryID(@PathVariable int userID, @PathVariable boolean share) {
-        List<Items> item = itemsRepository.getAllBriefItemAndBriefRequestByUserID(userID, share);
-        return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    }
-    @PutMapping("/UpdateItem/{itemID}")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<Items> updateItem(@PathVariable int itemID, @RequestBody Items item) {
-        boolean result = itemsRepository.updateItems(itemID, item);
-        return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-    }
-    @DeleteMapping("/DeleteItem/{itemID}")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<Items> deleteItem(@PathVariable int itemID){
-        boolean result = itemsRepository.deleteImage(itemID);
+    @PatchMapping("/Item/DeleteItem/")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public ResponseEntity<Items> deleteItem(@RequestBody int itemID){
+        boolean result = itemsRepository.deleteItem(itemID);
         return result ? ResponseEntity.accepted().build() : ResponseEntity.notFound().build();
+    }
+    @PutMapping("/Item/UpdateItem/")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<Items> updateItem(@RequestBody Items item) {
+        try {
+            boolean result = false;
+            if (itemsRepository.getItem(item.getID()) != null) {
+                result = itemsRepository.updateItems(item);
+            }
+            return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 }

@@ -46,21 +46,21 @@ public class ItemsRepository {
         List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, userID, status, share);
         return items.size() != 0? items: null;
     }
-    public List<Items> searchBriefItemByItemTitle(String itemTitle) {
-        String sql = "Select * from Items where Item_Title like ?";
-        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, itemTitle);
+    public List<Items> searchBriefItemByItemTitle(String itemTitle, boolean status) {
+        String sql = "Select * from Items where Item_Title like ? and Item_Status = ?";
+        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, itemTitle, status);
         return items.size() != 0? items: null;
     }
-    public List<Items> searchBriefItemBySubCategoryID(int subcategoryID) {
-        String sql = "Select * from Items where Sub_CategoryID = ?";
-        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, subcategoryID);
+    public List<Items> searchBriefItemBySubCategoryID(int subcategoryID, boolean status) {
+        String sql = "Select * from Items where Sub_CategoryID = ? and Item_Status = ?";
+        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, subcategoryID, status);
         return items.size() != 0? items: null;
     }
-    public List<Items> searchBriefItemByCategoryID(int categoryID) {
+    public List<Items> searchBriefItemByCategoryID(int categoryID, boolean status, boolean share) {
         String sql = "select *\n" +
                 "from dbo.Items item inner join dbo.SubCategories subcategory on item.Sub_CategoryID = subcategory.Sub_CategoryID\n" +
-                "where subcategory.CategoryID = ?";
-        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, categoryID);
+                "where subcategory.CategoryID = ? and Item_Status =? and Share=?";
+        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, categoryID, status, share);
         return items.size() != 0? items: null;
     }
     public List<Items> getAllBriefItemAndBriefRequestByUserID(int userID, boolean share) {
@@ -79,10 +79,10 @@ public class ItemsRepository {
         return check != 0;
     }
 
-    public boolean updateItems(int itemID,Items item) {
+    public boolean updateItems(Items item) {
         String sql = "update dbo.Items\n" +
-                "set Item_Code = ?,\n" +
-                "    UserID = ?,\n" +
+                "set UserID = ?,\n" +
+                "    ItemID = ?,\n" +
                 "    Sub_CategoryID = ?,\n" +
                 "    Item_Title = ?,\n" +
                 "    Item_Detailed_Description = ?,\n" +
@@ -93,18 +93,24 @@ public class ItemsRepository {
                 "    Item_Sale_Price = ?,\n" +
                 "    Item_Share_Amount = ?,\n" +
                 "    Item_Sponsored_Order_Shipping_Fee = ?,\n" +
-                "    Item_Expired_Time = ?,\n" +
                 "    Item_Shipping_Address = ?,\n" +
-                "    Item_Date_Created = ?,\n" +
-                "    Item_Date_Update = ?,\n" +
-                "    Item_Status = ?,\n" +
-                "    Share = ?,\n" +
                 "    Image = ?\n" +
+                "    Item_Expired_Time = ?,\n" +
+                "    Share = ?,\n" +
+                "    Item_Date_Update = ?,\n" +
                 "where ItemID = ?";
-        int check = jdbcTemplate.update(sql, item.getItemCode(), item.getUserId(), item.getSubCategoryId(), item.getItemTitle(), item.getItemDetailedDescription(), item.getItemMass(), item.isItemSize(),  item.getItemQuanlity(), item.getItemEstimateValue(), item.getItemSalePrice(), item.getItemShareAmount(), item.isItemSponsoredOrderShippingFee(), item.getStringDateTimeExpired(), item.getItemShippingAddress(), item.getDateCreated(), getCurrentDate(), item.isStatus(),item.isShare(),item.getImage(), itemID);
+        int check = jdbcTemplate.update(sql,item.getUserId(),
+                item.getSubCategoryId(), item.getItemTitle(),
+                item.getItemDetailedDescription(), item.getItemMass(),
+                item.isItemSize(),  item.getItemQuanlity(),
+                item.getItemEstimateValue(), item.getItemSalePrice(),
+                item.getItemShareAmount(), item.isItemSponsoredOrderShippingFee(),
+                item.getItemShippingAddress(),item.getImage(),
+                item.getStringDateTimeExpired(), item.isShare(),
+                getCurrentDate(), item.getID());
         return check != 0;
     }
-    public boolean deleteImage(int itemID){
+    public boolean deleteItem(int itemID){
         String sql = "DELETE dbo.Items WHERE ItemID = ?";
         int check = jdbcTemplate.update(sql, itemID);
         return check > 0;
