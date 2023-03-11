@@ -36,14 +36,14 @@ public class ItemsRepository {
         List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER);
         return items.size() != 0? items: null;
     }
-    public List<Items> getAllBriefItemAndBriefRequest(boolean share) {
-        String sql = "Select * from Items where Share =?";
-        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, share);
+    public List<Items> getAllBriefItemAndBriefRequest(boolean share , boolean status) {
+        String sql = "Select * from Items where Share =? and Item_Status=?";
+        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, share, status);
         return items.size() != 0? items: null;
     }
-    public List<Items> getBriefItemByUserId(int userID) {
-        String sql = "Select * from Items where UserID =?";
-        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, userID);
+    public List<Items> getBriefItemByAndBriefRequestUserID(int userID, boolean status, boolean share) {
+        String sql = "Select * from Items where UserID =? and Item_Status=? and Share=?";
+        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, userID, status, share);
         return items.size() != 0? items: null;
     }
     public List<Items> searchBriefItemByItemTitle(String itemTitle) {

@@ -19,7 +19,7 @@ import java.util.List;
 public class ItemController {
     @Autowired
     ItemsRepository itemsRepository;
-    @GetMapping("/{itemID}")
+    @GetMapping("")
     public ResponseEntity<Items> getItem(@PathVariable int itemID) {
         Items items = itemsRepository.getItem(itemID);
         return items != null ? ResponseEntity.ok(items) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -29,26 +29,31 @@ public class ItemController {
         List<Items> item = itemsRepository.getItems();
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @PostMapping("/CreateItem")
+    @PostMapping("/Item/CreateItem")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Items> createItem(@RequestBody Items addItems) {
         boolean result = itemsRepository.addItems(addItems);
         URI uri = URI.create("localhost:8080/api/Item/" + itemsRepository.getLastItem().getID());
         return result ? ResponseEntity.created(uri).build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
-    @GetMapping("/GetAllBriefItemAndBriefRequest/{share}")
-    public ResponseEntity<List<Items>> getAllBriefItemAndBriefRequest(@PathVariable boolean share) {
-        List<Items> item = itemsRepository.getAllBriefItemAndBriefRequest(share);
+    @GetMapping("/GetAllBriefItemAndBriefRequest")
+        public ResponseEntity<List<Items>> getAllBriefItemAndBriefRequest(@PathVariable boolean share, @PathVariable boolean status) {
+        List<Items> item = itemsRepository.getAllBriefItemAndBriefRequest(share, status);
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @GetMapping("/GetItemDetail/{itemID}")
+    @GetMapping("/Item/GetItemDetail")
     public ResponseEntity<Items> getItemDetail(@PathVariable int itemID) {
         Items items = itemsRepository.getItemDetail(itemID);
         return items != null ? ResponseEntity.ok(items) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @GetMapping("/GetBriefItemByAndBriefRequestUserID/{userID}")
-    public ResponseEntity<List<Items>> getBriefItemByUserId(@PathVariable int userID) {
-        List<Items> item = itemsRepository.getBriefItemByUserId(userID);
+    @GetMapping("/Item/GetRequestDetail")
+    public ResponseEntity<Items> getRequestDetail(@PathVariable int itemID) {
+        Items items = itemsRepository.getItemDetail(itemID);
+        return items != null ? ResponseEntity.ok(items) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+    @GetMapping("/Item/GetBriefItemByAndBriefRequestUserID")
+    public ResponseEntity<List<Items>> getBriefItemByUserId(@PathVariable int userID, @PathVariable boolean status, @PathVariable boolean share) {
+        List<Items> item = itemsRepository.getBriefItemByAndBriefRequestUserID(userID, status, share);
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
     @GetMapping("/SearchBriefItemByTitle/{itemTitle}")
