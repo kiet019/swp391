@@ -38,11 +38,11 @@ public class WebSecurityConFig extends WebSecurityConfigurerAdapter {
                 .cors();
     }
 
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().mvcMatchers(HttpMethod.OPTIONS, "/**");
-        web.ignoring().mvcMatchers("/swagger-ui.html/**", "/configuration/**", "/swagger-resources/**", "/v2/api-docs","/webjars/**");
-    }
+//    @Override
+//    public void configure(WebSecurity web) throws Exception {
+//        web.ignoring().mvcMatchers(HttpMethod.OPTIONS, "/**");
+//        web.ignoring().mvcMatchers("/swagger-ui.html/**", "/configuration/**", "/swagger-resources/**", "/v2/api-docs","/webjars/**");
+//    }
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

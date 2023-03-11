@@ -6,6 +6,7 @@ import com.example.projectswp.data_view_model.user.UserIdVM;
 import com.example.projectswp.model.UserAccount;
 import com.example.projectswp.repositories.UserAccountRepository;
 import com.example.projectswp.repositories.ultil.Ultil;
+import com.example.projectswp.service.Gmail;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
@@ -28,7 +29,6 @@ import java.util.List;
 public class AccountController {
     @Autowired
     UserAccountRepository userAccountRepository;
-
     @PostMapping ("/login")
     public ResponseEntity<String> getUserAccount(HttpServletRequest request) throws FirebaseAuthException {
         try {
@@ -58,6 +58,7 @@ public class AccountController {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             UserRecord userRecord = FirebaseAuth.getInstance().getUser(authentication.getPrincipal().toString());
             boolean result = userAccountRepository.addUserAccount(userAccount, userRecord);
+            Gmail.sendMessage("Create Account", "Welcome to Moby shop", userRecord.getEmail());
             return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         } catch (Exception e) {
 //            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
