@@ -58,7 +58,8 @@ public class AccountController {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             UserRecord userRecord = FirebaseAuth.getInstance().getUser(authentication.getPrincipal().toString());
             boolean result = userAccountRepository.addUserAccount(userAccount, userRecord);
-            Gmail.sendMessage("Create Account", "Welcome to Moby shop", userRecord.getEmail());
+            Gmail gmail = new Gmail();
+            gmail.sendMessage("Create account", "Welcome to Moby shop", userRecord.getEmail());
             return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         } catch (Exception e) {
 //            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

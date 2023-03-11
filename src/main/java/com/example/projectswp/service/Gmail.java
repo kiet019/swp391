@@ -77,7 +77,7 @@ public class Gmail {
         return credential;
     }
 
-    public static void sendMessage(String subject, String message, String to) throws MessagingException, IOException {
+    public void sendMessage(String subject, String message, String to) throws MessagingException, IOException {
 
 
         // Encode as MIME message
