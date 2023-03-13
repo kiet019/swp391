@@ -28,7 +28,7 @@ public class ItemController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Items> createItem(@RequestBody Items addItems) {
         boolean result = itemsRepository.addItems(addItems);
-        URI uri = URI.create("localhost:8080/api/Item/" + itemsRepository.getLastItem().getID());
+        URI uri = URI.create("localhost:8080/api/Item/" + itemsRepository.getLastItem().getItemID());
         return result ? ResponseEntity.created(uri).build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
     @GetMapping("/GetAllBriefItemAndBriefRequest")
@@ -77,7 +77,7 @@ public class ItemController {
     public ResponseEntity<Items> updateItem(@RequestBody Items item) {
         try {
             boolean result = false;
-            if (itemsRepository.getItem(item.getID()) != null) {
+            if (itemsRepository.getItem(item.getItemID()) != null) {
                 result = itemsRepository.updateItems(item);
             }
             return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
