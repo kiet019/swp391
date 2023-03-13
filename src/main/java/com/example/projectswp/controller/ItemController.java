@@ -24,7 +24,7 @@ public class ItemController {
         List<Items> item = itemsRepository.getItems();
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @PostMapping("/Item/CreateItem")
+    @PostMapping("/CreateItem")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Items> createItem(@RequestBody Items addItems) {
         boolean result = itemsRepository.addItems(addItems);
