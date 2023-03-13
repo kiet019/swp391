@@ -13,7 +13,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/Item")
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 
 public class ItemController {
@@ -24,7 +24,7 @@ public class ItemController {
         List<Items> item = itemsRepository.getItems();
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @PostMapping("/Item/CreateItem")
+    @PostMapping("/CreateItem")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Items> createItem(@RequestBody Items addItems) {
         boolean result = itemsRepository.addItems(addItems);
@@ -36,43 +36,43 @@ public class ItemController {
         List<Items> item = itemsRepository.getAllBriefItemAndBriefRequest(share, status);
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @GetMapping("/Item/GetItemDetail")
+    @GetMapping("/GetItemDetail")
     public ResponseEntity<Items> getItemDetail(@PathVariable int itemID) {
         Items items = itemsRepository.getItemDetail(itemID);
         return items != null ? ResponseEntity.ok(items) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @GetMapping("/Item/GetRequestDetail")
+    @GetMapping("/GetRequestDetail")
     public ResponseEntity<Items> getRequestDetail(@PathVariable int itemID) {
         Items items = itemsRepository.getItemDetail(itemID);
         return items != null ? ResponseEntity.ok(items) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @GetMapping("/Item/GetBriefItemByAndBriefRequestUserID")
+    @GetMapping("/GetBriefItemByAndBriefRequestUserID")
     public ResponseEntity<List<Items>> getBriefItemByUserId(@PathVariable int userID, @PathVariable boolean status, @PathVariable boolean share) {
         List<Items> item = itemsRepository.getBriefItemByAndBriefRequestUserID(userID, status, share);
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @GetMapping("/Item/SearchBriefItemByTitle")
+    @GetMapping("/SearchBriefItemByTitle")
     public ResponseEntity<List<Items>> searchBriefItemByUserId(@PathVariable String itemTitle,@PathVariable boolean status) {
         List<Items> item = itemsRepository.searchBriefItemByItemTitle(itemTitle, status);
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @GetMapping("/Item/SearchBriefItemBySubCategoryID")
+    @GetMapping("/SearchBriefItemBySubCategoryID")
     public ResponseEntity<List<Items>> searchBriefItemBySubCategoryID(@PathVariable int subcategoryID, @PathVariable boolean status) {
         List<Items> item = itemsRepository.searchBriefItemBySubCategoryID(subcategoryID, status);
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @GetMapping("/Item/SearchBriefItemByCategoryID")
+    @GetMapping("/SearchBriefItemByCategoryID")
         public ResponseEntity<List<Items>> searchBriefItemByCategoryID(@PathVariable int categoryID, @PathVariable boolean status, @PathVariable boolean share) {
         List<Items> item = itemsRepository.searchBriefItemByCategoryID(categoryID, status, share);
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @PatchMapping("/Item/DeleteItem/")
+    @PatchMapping("/DeleteItem/")
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<Items> deleteItem(@RequestBody int itemID){
         boolean result = itemsRepository.deleteItem(itemID);
         return result ? ResponseEntity.accepted().build() : ResponseEntity.notFound().build();
     }
-    @PutMapping("/Item/UpdateItem/")
+    @PutMapping("/UpdateItem/")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Items> updateItem(@RequestBody Items item) {
         try {
