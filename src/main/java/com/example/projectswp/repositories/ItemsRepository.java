@@ -81,7 +81,7 @@ public class ItemsRepository {
                 "[Item_Shipping_Address], [Item_Date_Created], [Item_Date_Update]," +
                 "[Item_Status],[Share], [Image])\n" +
                 "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        int check = jdbcTemplate.update(sql, Ultil.getUUID(), item.getUserId(), item.getSubCategoryId(), item.getItemTitle(),
+        int check = jdbcTemplate.update(sql, Ultil.getUUID(), Ultil.getUserId(), item.getSubCategoryId(), item.getItemTitle(),
                 item.getItemDetailedDescription(), item.getItemMass(), item.isItemSize(),  item.getItemQuanlity(),
                 item.getItemEstimateValue(), item.getItemSalePrice(), item.getItemShareAmount(), item.isItemSponsoredOrderShippingFee(),
                 item.getStringDateTimeExpired(), item.getItemShippingAddress(), getCurrentDate(), null,item.isStatus(),item.isShare(),
