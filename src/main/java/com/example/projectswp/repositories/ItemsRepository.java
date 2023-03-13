@@ -2,6 +2,7 @@ package com.example.projectswp.repositories;
 
 import com.example.projectswp.model.Items;
 import com.example.projectswp.repositories.rowMapper.ItemsRowMapper;
+import com.example.projectswp.repositories.ultil.Ultil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -73,9 +74,18 @@ public class ItemsRepository {
         return list.size() != 0 ? list.get(list.size()-1) : null;
     }
     public boolean addItems(Items item) {
-        String sql = "insert into dbo.Items ([Item_Code], [UserID], [Sub_CategoryID], [Item_Title], [Item_Detailed_Description], [Item_Mass], [Item_Size], [Item_Quanlity], [Item_Estimate_Value], [Item_Sale_Price], [Item_Share_Amount], [Item_Sponsored_Order_Shipping_Fee], [Item_Expired_Time], [Item_Shipping_Address], [Item_Date_Created], [Item_Date_Update],[Item_Status],[Share], [Image])\n" +
-                "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        int check = jdbcTemplate.update(sql, item.getItemCode(), item.getUserId(), item.getSubCategoryId(), item.getItemTitle(), item.getItemDetailedDescription(), item.getItemMass(), item.isItemSize(),  item.getItemQuanlity(), item.getItemEstimateValue(), item.getItemSalePrice(), item.getItemShareAmount(), item.isItemSponsoredOrderShippingFee(), item.getStringDateTimeExpired(), item.getItemShippingAddress(), getCurrentDate(), null,item.isStatus(),item.isShare(), item.getImage());
+        String sql = "insert into dbo.Items ([Item_Code], [UserID], [Sub_CategoryID], " +
+                "[Item_Title], [Item_Detailed_Description], [Item_Mass], " +
+                "[Item_Size], [Item_Quanlity], [Item_Estimate_Value], [Item_Sale_Price], " +
+                "[Item_Share_Amount], [Item_Sponsored_Order_Shipping_Fee], [Item_Expired_Time], " +
+                "[Item_Shipping_Address], [Item_Date_Created], [Item_Date_Update]," +
+                "[Item_Status],[Share], [Image])\n" +
+                "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        int check = jdbcTemplate.update(sql, Ultil.getUUID(), item.getUserId(), item.getSubCategoryId(), item.getItemTitle(),
+                item.getItemDetailedDescription(), item.getItemMass(), item.isItemSize(),  item.getItemQuanlity(),
+                item.getItemEstimateValue(), item.getItemSalePrice(), item.getItemShareAmount(), item.isItemSponsoredOrderShippingFee(),
+                item.getStringDateTimeExpired(), item.getItemShippingAddress(), getCurrentDate(), null,item.isStatus(),item.isShare(),
+                item.getImage());
         return check != 0;
     }
 

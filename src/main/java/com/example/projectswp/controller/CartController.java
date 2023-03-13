@@ -20,6 +20,7 @@ public class CartController {
     @Autowired
     CartRepository cartRepository;
     @RequestMapping("/api/useraccount/cart")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("")
     public ResponseEntity<List<Carts>> getCarts() {
         List<Carts> cart = cartRepository.getCarts();

@@ -27,11 +27,12 @@ public class CartDetailController {
         return cartDetails != null ? ResponseEntity.ok(cartDetails) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
     @GetMapping("/api/useraccount/cartdetail/all")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<List<CartDetails>> getCartDetails() {
         List<CartDetails> cartDetails = cartDetailsRepository.getCartDetails();
         return cartDetails != null ? ResponseEntity.ok(cartDetails) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @PostMapping("/create")
+    @PostMapping("/cartdetail/create")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CartDetails> createCartDetail(@RequestBody CartDetails addCartDetails) {
         boolean result = cartDetailsRepository.addCartDetails(addCartDetails);
@@ -52,6 +53,12 @@ public class CartDetailController {
     public ResponseEntity<CartDetails> cartDetailConfirm(@RequestBody int cartDetailID){
         boolean isUpdated = cartDetailsRepository.confirmStatus(cartDetailID);
         return isUpdated ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+    @DeleteMapping("")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public ResponseEntity<Items> deleteItem(@RequestBody int cartDetailId){
+        boolean result = cartDetailsRepository.deleteCartDetail(cartDetailId);
+        return result ? ResponseEntity.accepted().build() : ResponseEntity.notFound().build();
     }
 
 

@@ -58,4 +58,9 @@ public class CartDetailsRepository {
         int rowAffected = jdbcTemplate.update(sql, getCurrentDate(), cartDetailID);
         return rowAffected > 0;
     }
+    public boolean deleteCartDetail(int ID){
+        String sql = "DELETE dbo.CartDetails WHERE Cart_DetailID = ?";
+        int check = jdbcTemplate.update(sql, ID);
+        return check > 0;
+    }
 }
