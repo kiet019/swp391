@@ -117,7 +117,7 @@ public class ItemsRepository {
                 item.getItemShareAmount(), item.isItemSponsoredOrderShippingFee(),
                 item.getItemShippingAddress(),item.getImage(),
                 item.getStringDateTimeExpired(), item.isShare(),
-                getCurrentDate(), item.getID());
+                getCurrentDate(), item.getItemID());
         return check != 0;
     }
     public boolean deleteItem(int itemID){

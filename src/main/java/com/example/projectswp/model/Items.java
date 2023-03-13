@@ -10,7 +10,7 @@ import java.util.Date;
 
 
 public class Items {
-    private int ID;
+    private int itemID;
     private String itemCode;
     private int userId;
     private int subCategoryId;
