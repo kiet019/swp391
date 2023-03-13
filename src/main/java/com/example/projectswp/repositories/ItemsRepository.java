@@ -1,5 +1,6 @@
 package com.example.projectswp.repositories;
 
+import com.example.projectswp.data_view_model.Item.ItemDeleteVM;
 import com.example.projectswp.model.Items;
 import com.example.projectswp.repositories.rowMapper.ItemsRowMapper;
 import com.example.projectswp.repositories.ultil.Ultil;
@@ -28,7 +29,7 @@ public class ItemsRepository {
         return items.size() != 0? items.get(0): null;
     }
     public Items getItemDetail(int itemID) {
-        String sql = "select Item_Detailed_Description from Items where ItemID = ?";
+        String sql = "select * from Items where ItemID = ?";
         List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, itemID);
         return items.size() != 0? items.get(0): null;
     }
@@ -49,7 +50,7 @@ public class ItemsRepository {
     }
     public List<Items> searchBriefItemByItemTitle(String itemTitle, boolean status) {
         String sql = "Select * from Items where Item_Title like ? and Item_Status = ?";
-        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, itemTitle, status);
+        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, "%" +itemTitle + "%", status);
         return items.size() != 0? items: null;
     }
     public List<Items> searchBriefItemBySubCategoryID(int subcategoryID, boolean status) {
@@ -92,7 +93,6 @@ public class ItemsRepository {
     public boolean updateItems(Items item) {
         String sql = "update dbo.Items\n" +
                 "set UserID = ?,\n" +
-                "    ItemID = ?,\n" +
                 "    Sub_CategoryID = ?,\n" +
                 "    Item_Title = ?,\n" +
                 "    Item_Detailed_Description = ?,\n" +
@@ -120,9 +120,9 @@ public class ItemsRepository {
                 getCurrentDate(), item.getItemID());
         return check != 0;
     }
-    public boolean deleteItem(int itemID){
-        String sql = "DELETE dbo.Items WHERE ItemID = ?";
-        int check = jdbcTemplate.update(sql, itemID);
+    public boolean deleteItem(ItemDeleteVM itemDeleteVM){
+        String sql = "update dbo.Items set Item_Status = ? where ItemID=?";
+        int check = jdbcTemplate.update(sql, false, itemDeleteVM.getItemID());
         return check > 0;
     }
 

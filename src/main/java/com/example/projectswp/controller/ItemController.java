@@ -1,5 +1,8 @@
 package com.example.projectswp.controller;
 
+import com.example.projectswp.data_view_model.Item.ItemDeleteVM;
+import com.example.projectswp.data_view_model.blog.BlogDenyVM;
+import com.example.projectswp.data_view_model.blogcategory.ReturnMessage;
 import com.example.projectswp.model.Items;
 import com.example.projectswp.repositories.ItemsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,37 +45,37 @@ public class ItemController {
         return items != null ? ResponseEntity.ok(items) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
     @GetMapping("/GetRequestDetail")
-    public ResponseEntity<Items> getRequestDetail(@PathVariable int itemID) {
+    public ResponseEntity<Items> getRequestDetail(@RequestParam int itemID) {
         Items items = itemsRepository.getItemDetail(itemID);
         return items != null ? ResponseEntity.ok(items) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
     @GetMapping("/GetBriefItemByAndBriefRequestUserID")
-    public ResponseEntity<List<Items>> getBriefItemByUserId(@PathVariable int userID, @PathVariable boolean status, @PathVariable boolean share) {
+    public ResponseEntity<List<Items>> getBriefItemByUserId(@RequestParam int userID, @RequestParam boolean status, @RequestParam boolean share) {
         List<Items> item = itemsRepository.getBriefItemByAndBriefRequestUserID(userID, status, share);
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
     @GetMapping("/SearchBriefItemByTitle")
-    public ResponseEntity<List<Items>> searchBriefItemByUserId(@PathVariable String itemTitle,@PathVariable boolean status) {
+    public ResponseEntity<List<Items>> searchBriefItemByUserId(@RequestParam String itemTitle,@RequestParam boolean status) {
         List<Items> item = itemsRepository.searchBriefItemByItemTitle(itemTitle, status);
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
     @GetMapping("/SearchBriefItemBySubCategoryID")
-    public ResponseEntity<List<Items>> searchBriefItemBySubCategoryID(@PathVariable int subcategoryID, @PathVariable boolean status) {
+    public ResponseEntity<List<Items>> searchBriefItemBySubCategoryID(@RequestParam int subcategoryID, @RequestParam boolean status) {
         List<Items> item = itemsRepository.searchBriefItemBySubCategoryID(subcategoryID, status);
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
     @GetMapping("/SearchBriefItemByCategoryID")
-        public ResponseEntity<List<Items>> searchBriefItemByCategoryID(@PathVariable int categoryID, @PathVariable boolean status, @PathVariable boolean share) {
+        public ResponseEntity<List<Items>> searchBriefItemByCategoryID(@RequestParam int categoryID, @RequestParam boolean status, @RequestParam boolean share) {
         List<Items> item = itemsRepository.searchBriefItemByCategoryID(categoryID, status, share);
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @PatchMapping("/DeleteItem/")
+    @PatchMapping("/DeleteItem")
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    public ResponseEntity<Items> deleteItem(@RequestBody int itemID){
-        boolean result = itemsRepository.deleteItem(itemID);
-        return result ? ResponseEntity.accepted().build() : ResponseEntity.notFound().build();
+    public ResponseEntity<ReturnMessage> blogDeny(@RequestBody ItemDeleteVM itemDeleteVM){
+        boolean isDeleted = itemsRepository.deleteItem(itemDeleteVM);
+        return isDeleted ? ResponseEntity.ok(ReturnMessage.create("success")) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @PutMapping("/UpdateItem/")
+    @PutMapping("/UpdateItem")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Items> updateItem(@RequestBody Items item) {
         try {
