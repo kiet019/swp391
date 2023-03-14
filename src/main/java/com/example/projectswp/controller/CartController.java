@@ -19,9 +19,8 @@ import java.util.List;
 public class CartController {
     @Autowired
     CartRepository cartRepository;
-    @RequestMapping("/api/useraccount/cart")
+    @GetMapping("/useraccount/cart")
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    @GetMapping("")
     public ResponseEntity<List<Carts>> getCarts() {
         List<Carts> cart = cartRepository.getCarts();
         return cart != null ? ResponseEntity.ok(cart) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();

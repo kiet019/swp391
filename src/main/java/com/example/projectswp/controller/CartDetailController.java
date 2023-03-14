@@ -26,20 +26,20 @@ public class CartDetailController {
         CartDetails cartDetails = cartDetailsRepository.getCartDetail(cartDetailID);
         return cartDetails != null ? ResponseEntity.ok(cartDetails) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @GetMapping("/api/useraccount/cartdetail/all")
+    @GetMapping("/useraccount/cartdetail/all")
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<List<CartDetails>> getCartDetails() {
         List<CartDetails> cartDetails = cartDetailsRepository.getCartDetails();
         return cartDetails != null ? ResponseEntity.ok(cartDetails) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @PostMapping("/cartdetail/create")
+    @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CartDetails> createCartDetail(@RequestBody CartDetails addCartDetails) {
         boolean result = cartDetailsRepository.addCartDetails(addCartDetails);
         URI uri = URI.create("localhost:8080/api/cartdetail/" + cartDetailsRepository.getLastCartDetails().getCartDetailsID());
         return result ? ResponseEntity.created(uri).build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
-    @PatchMapping("/cartdetail/accept")
+    @PatchMapping("/accept")
     public ResponseEntity<CartDetails> cartDetailAccept(@RequestBody int cartDetailID){
         boolean isUpdated = cartDetailsRepository.acceptStatus(cartDetailID);
         return isUpdated ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();

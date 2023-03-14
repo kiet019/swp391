@@ -38,14 +38,22 @@ public class ItemsRepository {
         List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER);
         return items.size() != 0? items: null;
     }
-    public List<Items> getAllBriefItemAndBriefRequest(boolean share , boolean status) {
-        String sql = "Select * from Items where Share =? and Item_Status=?";
-        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, share, status);
+    public List<Items> getAllBriefItemAndBriefRequest(boolean share , boolean status, int pageNumber, int pageSize) {
+        int itemsToSkip = 0;
+        if(pageNumber !=0){
+            itemsToSkip = (pageNumber - 1) * pageSize;
+        }
+        String sql = "SELECT * FROM Items WHERE Share = ? and Item_Status = ? ORDER BY ItemID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, share, status, itemsToSkip, pageSize);
         return items.size() != 0? items: null;
     }
-    public List<Items> getBriefItemByAndBriefRequestUserID(int userID, boolean status, boolean share) {
-        String sql = "Select * from Items where UserID =? and Item_Status=? and Share=?";
-        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, userID, status, share);
+    public List<Items> getBriefItemByOrBriefRequestUserID(int userID, boolean status, boolean share, int pageNumber, int pageSize) {
+        int itemsToSkip = 0;
+        if(pageNumber !=0){
+            itemsToSkip = (pageNumber - 1) * pageSize;
+        }
+        String sql = "Select * from Items where UserID =? and Item_Status=? and Share=? ORDER BY ItemID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, userID, status, share, itemsToSkip, pageSize);
         return items.size() != 0? items: null;
     }
     public List<Items> searchBriefItemByItemTitle(String itemTitle, boolean status) {
@@ -58,18 +66,18 @@ public class ItemsRepository {
         List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, subcategoryID, status);
         return items.size() != 0? items: null;
     }
-    public List<Items> searchBriefItemByCategoryID(int categoryID, boolean status, boolean share) {
+    public List<Items> searchBriefItemByCategoryID(int categoryID, boolean status, boolean share, int pageNumber, int pageSize) {
+        int itemsToSkip = 0;
+        if(pageNumber !=0){
+            itemsToSkip = (pageNumber - 1) * pageSize;
+        }
         String sql = "select *\n" +
                 "from dbo.Items item inner join dbo.SubCategories subcategory on item.Sub_CategoryID = subcategory.Sub_CategoryID\n" +
-                "where subcategory.CategoryID = ? and Item_Status =? and Share=?";
-        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, categoryID, status, share);
+                "where subcategory.CategoryID = ? and Item_Status =? and Share=? ORDER BY ItemID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, categoryID, status, share, itemsToSkip, pageSize);
         return items.size() != 0? items: null;
     }
-    public List<Items> getAllBriefItemAndBriefRequestByUserID(int userID, boolean share) {
-        String sql = "Select * from Items where UserID = ? and Share = ?";
-        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, userID ,share);
-        return items.size() != 0? items: null;
-    }
+
     public Items getLastItem() {
         List<Items> list = getItems();
         return list.size() != 0 ? list.get(list.size()-1) : null;
@@ -124,6 +132,47 @@ public class ItemsRepository {
         String sql = "update dbo.Items set Item_Status = ? where ItemID=?";
         int check = jdbcTemplate.update(sql, false, itemDeleteVM.getItemID());
         return check > 0;
+    }
+    public List<Items> getAllBriefItemAndBriefRequestByUserID(int userID, boolean share) {
+        String sql = "Select * from Items where UserID = ? and Share = ?";
+        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, userID ,share);
+        return items.size() != 0? items: null;
+    }
+    public List<Items> getAllShareRecently(int pageNumber, int pageSize, int userID) {
+        int itemsToSkip = 0;
+        if(pageNumber !=0){
+            itemsToSkip = (pageNumber - 1) * pageSize;
+        }
+        String sql = "Select * from Items where UserID = ? ORDER BY ItemID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, userID ,itemsToSkip, pageSize);
+        return items.size() != 0? items: null;
+    }
+    public List<Items> getAllShareFree(int pageNumber, int pageSize, int userID) {
+        int itemsToSkip = 0;
+        if(pageNumber !=0){
+            itemsToSkip = (pageNumber - 1) * pageSize;
+        }
+        String sql = "Select * from Items where UserID = ? and Item_Sale_Price = 0 ORDER BY ItemID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, userID ,itemsToSkip, pageSize);
+        return items.size() != 0? items: null;
+    }
+    public List<Items> getAllMyShareAndRequest(boolean share, boolean status, int pageNumber, int pageSize) {
+        int itemsToSkip = 0;
+        if(pageNumber !=0){
+            itemsToSkip = (pageNumber - 1) * pageSize;
+        }
+        String sql = "Select * from Items where UserID = ? and Share = ? and Item_Status = ? ORDER BY ItemID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, Ultil.getUserId() ,share , status,itemsToSkip, pageSize);
+        return items.size() != 0? items: null;
+    }
+    public List<Items> getAllShareNearYou(int pageNumber, int pageSize) {
+        int itemsToSkip = 0;
+        if(pageNumber !=0){
+            itemsToSkip = (pageNumber - 1) * pageSize;
+        }
+        String sql = "Select * from Items where Item_Shipping_Address like and Item_Status = ? ORDER BY ItemID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, Ultil.getUserId() ,share , status,itemsToSkip, pageSize);
+        return items.size() != 0? items: null;
     }
 
 }
