@@ -108,10 +108,15 @@ public class ItemController {
         List<Items> item = itemsRepository.getAllMyShareAndRequest(share, status, pageNumber, pageSize);
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-//    @GetMapping("/GetAllShareNearYou")
-//    public ResponseEntity<List<Items>> getAllShareNearYou(@RequestParam int pageNumber, @RequestParam int pageSize) {
-//        List<Items> item = itemsRepository.getAllShareNearYou(pageNumber, pageSize);
-//        return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//    }
+    @GetMapping("/GetListAllOtherPersonRequestItem")
+    public ResponseEntity<List<Items>> getListAllOtherPersonRequestItem(@RequestParam boolean share, @RequestParam boolean status, @RequestParam int pageNumber, @RequestParam int pageSize) {
+        List<Items> item = itemsRepository.getListAllOtherPersonRequestItem(share, status, pageNumber, pageSize);
+        return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+    @GetMapping("/GetListAllMyRequestItem")
+    public ResponseEntity<List<Items>> getListAllMyRequestItem(@RequestParam boolean share, @RequestParam boolean status, @RequestParam int pageNumber, @RequestParam int pageSize) {
+        List<Items> item = itemsRepository.getListAllMyRequestItem(share, status, pageNumber, pageSize);
+        return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
 
 }

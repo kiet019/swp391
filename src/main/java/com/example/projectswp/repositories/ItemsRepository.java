@@ -165,14 +165,24 @@ public class ItemsRepository {
         List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, Ultil.getUserId() ,share , status,itemsToSkip, pageSize);
         return items.size() != 0? items: null;
     }
-//    public List<Items> getAllShareNearYou(int pageNumber, int pageSize) {
-//        int itemsToSkip = 0;
-//        if(pageNumber !=0){
-//            itemsToSkip = (pageNumber - 1) * pageSize;
-//        }
-//        String sql = "Select * from Items where Item_Shipping_Address like and Item_Status = ? ORDER BY ItemID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
-//        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, Ultil.getUserId() ,share , status,itemsToSkip, pageSize);
-//        return items.size() != 0? items: null;
-//    }
+    public List<Items> getListAllOtherPersonRequestItem(boolean share, boolean status, int pageNumber, int pageSize) {
+        int itemsToSkip = 0;
+        if(pageNumber !=0){
+            itemsToSkip = (pageNumber - 1) * pageSize;
+        }
+        String sql = "Select * from Items where UserID = ? and Share = ? and Item_Status = ? ORDER BY ItemID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, Ultil.getUserId() ,share , status, itemsToSkip, pageSize);
+        return items.size() != 0? items: null;
+    }
+    public List<Items> getListAllMyRequestItem(boolean share, boolean status, int pageNumber, int pageSize) {
+        int itemsToSkip = 0;
+        if(pageNumber !=0){
+            itemsToSkip = (pageNumber - 1) * pageSize;
+        }
+        String sql = "Select * from Items where UserID = ? and Share = ? and Item_Status = ? ORDER BY ItemID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, Ultil.getUserId() ,share , status, itemsToSkip, pageSize);
+        return items.size() != 0? items: null;
+    }
+
 
 }
