@@ -2,6 +2,7 @@ package com.example.projectswp.repositories;
 
 import com.example.projectswp.model.CartDetails;
 import com.example.projectswp.model.Carts;
+import com.example.projectswp.model.Items;
 import com.example.projectswp.repositories.rowMapper.CartDetailsRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -43,24 +44,17 @@ public class CartDetailsRepository {
         int check = jdbcTemplate.update(sql, cartDetails.getCartDetailsID(), cartDetails.getCartID(), cartDetails.getItemID(), getCurrentDate(), null, cartDetails.getCartDetailItemQuantity());
         return check != 0;
     }
-    public boolean acceptStatus(int cartDetailID) {
-        String sql = "UPDATE dbo.CartDetails set Cart_Status = 2, Cart_Detail_Date_Update = ? WHERE Cart_DetailID = ?";
-        int rowAffected = jdbcTemplate.update(sql, getCurrentDate(), cartDetailID);
-        return rowAffected > 0;
+    public boolean updateCartDetail(CartDetails cartDetails) {
+        String sql = "update dbo.Items\n" +
+                "set Cart_Detail_Item_Quantity = ?,\n" +
+                "    Cart_Detail_Date_Update = ?,\n" +
+                "where Cart_DetailID = ?";
+        int check = jdbcTemplate.update(sql,cartDetails.getCartDetailItemQuantity(), getCurrentDate(), cartDetails.getCartDetailsID() );
+        return check != 0;
     }
-    public boolean cancelStatus(int cartDetailID) {
-        String sql = "UPDATE dbo.CartDetails set Cart_Status = 3, Cart_Detail_Date_Update = ? WHERE Cart_DetailID = ?";
-        int rowAffected = jdbcTemplate.update(sql, getCurrentDate(), cartDetailID);
-        return rowAffected > 0;
-    }
-    public boolean confirmStatus(int cartDetailID) {
-        String sql = "UPDATE dbo.CartDetails set Cart_Status = 4, Cart_Detail_Date_Update = ? WHERE Cart_DetailID = ?";
-        int rowAffected = jdbcTemplate.update(sql, getCurrentDate(), cartDetailID);
-        return rowAffected > 0;
-    }
-    public boolean deleteCartDetail(int ID){
+    public boolean deleteCartDetail(CartDetails cartDetails){
         String sql = "DELETE dbo.CartDetails WHERE Cart_DetailID = ?";
-        int check = jdbcTemplate.update(sql, ID);
+        int check = jdbcTemplate.update(sql, cartDetails.getCartDetailsID());
         return check > 0;
     }
 }

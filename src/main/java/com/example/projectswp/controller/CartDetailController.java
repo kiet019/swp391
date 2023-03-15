@@ -15,49 +15,44 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/cartdetail")
+@RequestMapping("/api")
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class CartDetailController {
     @Autowired
     CartDetailsRepository cartDetailsRepository;
 
-    @GetMapping("/{cartDetailID}")
-    public ResponseEntity<CartDetails> getCartDetail(@PathVariable int cartDetailID) {
-        CartDetails cartDetails = cartDetailsRepository.getCartDetail(cartDetailID);
-        return cartDetails != null ? ResponseEntity.ok(cartDetails) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    }
+
     @GetMapping("/useraccount/cartdetail/all")
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<List<CartDetails>> getCartDetails() {
         List<CartDetails> cartDetails = cartDetailsRepository.getCartDetails();
         return cartDetails != null ? ResponseEntity.ok(cartDetails) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @PostMapping("/create")
+    @PostMapping("/cartdetail/create")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CartDetails> createCartDetail(@RequestBody CartDetails addCartDetails) {
         boolean result = cartDetailsRepository.addCartDetails(addCartDetails);
         URI uri = URI.create("localhost:8080/api/cartdetail/" + cartDetailsRepository.getLastCartDetails().getCartDetailsID());
         return result ? ResponseEntity.created(uri).build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
-    @PatchMapping("/accept")
-    public ResponseEntity<CartDetails> cartDetailAccept(@RequestBody int cartDetailID){
-        boolean isUpdated = cartDetailsRepository.acceptStatus(cartDetailID);
-        return isUpdated ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+    @PutMapping("/cartdetail")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<Items> updateCartDetail(@RequestBody CartDetails cartDetails) {
+        try {
+            boolean result = false;
+            if (cartDetailsRepository.getCartDetail(cartDetails.getCartDetailsID()) != null) {
+                result = cartDetailsRepository.updateCartDetail(cartDetails);
+            }
+            return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
-    @PatchMapping("/cartdetail/cancel")
-    public ResponseEntity<CartDetails> cartDetailCancel(@RequestBody int cartDetailID){
-        boolean isUpdated = cartDetailsRepository.cancelStatus(cartDetailID);
-        return isUpdated ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    }
-    @PatchMapping("/cartdetail/confirm")
-    public ResponseEntity<CartDetails> cartDetailConfirm(@RequestBody int cartDetailID){
-        boolean isUpdated = cartDetailsRepository.confirmStatus(cartDetailID);
-        return isUpdated ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    }
-    @DeleteMapping("")
+    @DeleteMapping("/cartdetail")
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    public ResponseEntity<Items> deleteItem(@RequestBody int cartDetailId){
-        boolean result = cartDetailsRepository.deleteCartDetail(cartDetailId);
+    public ResponseEntity<Items> deleteItem(@RequestBody CartDetails cartDetailsDelete){
+        boolean result = cartDetailsRepository.deleteCartDetail(cartDetailsDelete);
         return result ? ResponseEntity.accepted().build() : ResponseEntity.notFound().build();
     }
 

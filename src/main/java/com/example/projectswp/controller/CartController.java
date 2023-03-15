@@ -14,7 +14,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/cart")
+@RequestMapping("/api")
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class CartController {
     @Autowired
@@ -25,11 +25,11 @@ public class CartController {
         List<Carts> cart = cartRepository.getCarts();
         return cart != null ? ResponseEntity.ok(cart) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @PostMapping("/create")
+    @PostMapping("/cart/create")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Carts> addCart(@RequestBody Carts addCart) {
         boolean result = cartRepository.addCart(addCart);
-        URI uri = URI.create("localhost:8080/api/carts/" + cartRepository.getLastCart().getCartID());
+        URI uri = URI.create("localhost:8080/api/cart/" + cartRepository.getLastCart().getCartID());
         return result ? ResponseEntity.created(uri).build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 }

@@ -10,6 +10,6 @@ import java.util.Date;
 
 public class Carts {
     private int cartID;
-    private Date cartDateCreate;
+    private int userID;
 }
 
