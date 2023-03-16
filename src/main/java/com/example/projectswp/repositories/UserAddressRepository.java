@@ -13,20 +13,20 @@ public class UserAddressRepository {
     private static final UserAddressRowMapper USER_ADDRESS_ROW_MAPPER = new UserAddressRowMapper();
     @Autowired
     JdbcTemplate jdbcTemplate;
-    public UserAddress getUserAddress() {
-        String sql = "";
+    public UserAddress getUserAddress(int uid) {
+        String sql = "SELECT * FROM dbo.UserAddress WHERE UserID = ?";
         List<UserAddress> userAddress= jdbcTemplate.query(sql, USER_ADDRESS_ROW_MAPPER);
         return userAddress != null ? userAddress.get(0) : null;
     }
 
-    public boolean createAddress() {
-        String sql = "";
-        int rowAffected = jdbcTemplate.update(sql);
+    public boolean createAddress(int uid, String address) {
+        String sql = "INSERT INTO dbo.UserAddress(UserID, Address) VALUES(?, ?)";
+        int rowAffected = jdbcTemplate.update(sql, uid, address);
         return rowAffected > 0;
     }
-    public boolean deleteAddress() {
-        String sql = "";
-        int rowAffected = jdbcTemplate.update(sql);
+    public boolean deleteAddress(int uid, String location) {
+        String sql = "DELETE dbo.UserAddress WHERE UserID = ? and Address = ?";
+        int rowAffected = jdbcTemplate.update(sql, uid, location);
         return rowAffected > 0;
     }
 }
