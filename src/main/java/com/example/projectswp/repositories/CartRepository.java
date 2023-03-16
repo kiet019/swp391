@@ -28,10 +28,10 @@ public class CartRepository {
         List<Carts> list = getCarts();
         return list.size() != 0 ? list.get(list.size()-1) : null;
     }
-    public boolean addCart(Carts cart) {
+    public boolean addCart(int userID) {
         String sql = "insert into dbo.Carts ([UserID])\n" +
                 "values (?)";
-        int check = jdbcTemplate.update(sql, cart.getUserID());
+        int check = jdbcTemplate.update(sql, userID);
         return check != 0;
     }
 }
