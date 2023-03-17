@@ -6,9 +6,9 @@ import com.example.projectswp.data_view_model.user.UserIdVM;
 import com.example.projectswp.model.UserAccount;
 import com.example.projectswp.repositories.UserAccountRepository;
 import com.example.projectswp.repositories.ultil.Ultil;
-import com.example.projectswp.service.Gmail;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseToken;
 import com.google.firebase.auth.UserRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,12 +34,13 @@ public class AccountController {
         try {
             //lay token
             String code = request.getHeader("Authorization");
-            //tim tren firebase token
+//            System.out.println(code);
+//            //tim tren firebase token
 //            FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(code);
 //            //lay uid
 //            String uid = decodedToken.getUid();
-            //lay thong tin trong db
-            System.out.println(code);
+//            //lay thong tin trong db
+//            System.out.println(uid);
             UserAccount userAccount = userAccountRepository.getUserAccount(code);
             URI uri = URI.create("");
             if (userAccount != null) {
