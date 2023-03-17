@@ -10,6 +10,7 @@ import lombok.*;
 @ToString
 public class CreateBlogVM {
     private int blogCategoryId;
+    private String image;
     private String blogTitle;
     private String blogDescription;
     private String blogContent;

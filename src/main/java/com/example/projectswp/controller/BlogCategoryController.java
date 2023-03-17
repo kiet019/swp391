@@ -28,31 +28,30 @@ public class BlogCategoryController {
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ReturnMessage.create(ex.getMessage()));
         }
-
     }
 
     @GetMapping("")
-    public ResponseEntity<?> getBlogCategory(@RequestParam(name = "BlogCategoryId",required = true) int blogCategoryId) {
+    public ResponseEntity<?> getBlogCategory(@RequestParam(name = "BlogCategoryId", required = true) int blogCategoryId) {
         try {
             BlogCategory blogCategory = blogCategoryRepository.getBlogCategory(blogCategoryId);
             return ResponseEntity.ok(blogCategory);
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ReturnMessage.create(ex.getMessage()));
         }
-
     }
 
     @PostMapping("/create")
     public ResponseEntity<ReturnMessage> createBlogCategory(@RequestBody CreateBlogCategoryVM blogCategoryNameVM) {
         try {
-
-            if (blogCategoryRepository.isExistName(blogCategoryNameVM.getBlogCategoryName())) {
+            String blogCategoryName = blogCategoryNameVM.getBlogCategoryName();
+            if (blogCategoryRepository.isExistName(blogCategoryName)) {
                 return ResponseEntity.badRequest().body(ReturnMessage.create("this name already existed"));
-            } else {
-                boolean isCreated = blogCategoryRepository.insertBlogCategory(blogCategoryNameVM.getBlogCategoryName());
-                return isCreated ? ResponseEntity.ok().body(ReturnMessage.create("created success")) : ResponseEntity.badRequest().body(ReturnMessage.create("error at create Blog Category"));
             }
-
+            boolean isCreated = blogCategoryRepository.insertBlogCategory(blogCategoryName);
+            if(isCreated) {
+                return ResponseEntity.ok().body(ReturnMessage.create("created success"));
+            }
+            return ResponseEntity.badRequest().body(ReturnMessage.create("error at create Blog Category"));
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ReturnMessage.create(ex.getMessage()));
         }
