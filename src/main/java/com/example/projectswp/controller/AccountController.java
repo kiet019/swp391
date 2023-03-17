@@ -57,9 +57,8 @@ public class AccountController {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             UserRecord userRecord = FirebaseAuth.getInstance().getUser(authentication.getPrincipal().toString());
-            boolean result = userAccountRepository.addUserAccount(userAccount, userRecord);
-            Gmail gmail = new Gmail();
-            gmail.sendMessage("Create account", "Welcome to Moby shop", userRecord.getEmail());
+            boolean result = userAccountRepository.addUserAccount(userAccount, userRecord, 50);
+            Ultil.sendMail("Create Accounnt", "Create account success, welcome to MOBY shop", userRecord.getEmail());
             return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         } catch (Exception e) {
 //            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -98,8 +97,10 @@ public class AccountController {
 
     @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<UserAccount>> getAccounts() {
-        List<UserAccount> list = userAccountRepository.getUserAccounts();
+    public ResponseEntity<List<UserAccount>> getAccounts( @RequestParam int pageNumber, @RequestParam int pageSize) {
+        int skip = (pageNumber-1)*5;
+        int getNumber = pageSize;
+        List<UserAccount> list = userAccountRepository.getUserAccounts(skip, getNumber);
         return list != null ? ResponseEntity.ok(list) : ResponseEntity.notFound().build();
     }
 
