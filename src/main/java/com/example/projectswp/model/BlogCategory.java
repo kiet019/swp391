@@ -1,5 +1,6 @@
 package com.example.projectswp.model;
 
+import com.example.projectswp.data_view_model.blog.BlogForBlogCategory;
 import lombok.*;
 
 import java.util.List;
@@ -12,5 +13,5 @@ import java.util.List;
 public class BlogCategory {
     private int blogCategoryId;
     private String blogCategoryName;
-    private List<Blog> blogList;
+    private List<BlogForBlogCategory> blogList;
 }

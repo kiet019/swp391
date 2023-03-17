@@ -1,15 +1,18 @@
 package com.example.projectswp.repositories;
 
 import com.example.projectswp.data_view_model.blog.BlogDenyVM;
+import com.example.projectswp.data_view_model.blog.BlogForBlogCategory;
 import com.example.projectswp.data_view_model.blog.CreateBlogVM;
 import com.example.projectswp.data_view_model.blog.UpdateBlogVM;
 import com.example.projectswp.model.Blog;
+import com.example.projectswp.model.BlogCategory;
 import com.example.projectswp.repositories.rowMapper.BlogRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -113,6 +116,16 @@ public class BlogRepository {
         for(Blog blog: blogs) {
             blog.setListComment(commentRepository.getCommentByBlogId(blog.getBlogId()));
         }
+    }
+    public List<BlogForBlogCategory> blogListForBlogCategory(int blogcategoryId) {
+        List<Blog> blogList = getBlogByCategoryId(blogcategoryId);
+        List<BlogForBlogCategory> blogListForCategory = new ArrayList<>();
+        if (blogList != null) {
+            for(Blog blog : blogList) {
+                blogListForCategory.add(BlogForBlogCategory.create(blog));
+            }
+        }
+        return blogListForCategory;
     }
 
 }

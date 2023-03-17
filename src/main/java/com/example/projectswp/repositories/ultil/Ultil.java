@@ -37,11 +37,11 @@ public class Ultil {
         UUID uuid = UUID.randomUUID();
         return uuid.toString();
     }
-//
-//     public static void sendMail(String subject, String message, String email) throws GeneralSecurityException, IOException, MessagingException {
-//         Gmail gmail = new Gmail();
-//         gmail.sendMessage(subject, message, email);
-//     }
+
+     public static void sendMail(String subject, String message, String email) throws GeneralSecurityException, IOException, MessagingException {
+         Gmail gmail = new Gmail();
+         gmail.sendMessage(subject, message, email);
+     }
 
     public static <T> List<T> getSubListByPage(List<T> list, int pageNumber, int pageSize) {
         if(list == null || pageNumber < 1 || pageSize < 1)
