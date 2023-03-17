@@ -26,4 +26,5 @@ public class UserAccount {
     private boolean status;
     private Date created;
     private Date update;
+    private int reputation;
 }
