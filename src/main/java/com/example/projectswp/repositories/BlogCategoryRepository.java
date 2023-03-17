@@ -61,7 +61,7 @@ public class BlogCategoryRepository {
         return false;
     }
     private void addBlogListToBlogCategory(List<BlogCategory> blogCategories) {
-        if(blogCategories == null)
+        if(blogCategories == null || blogCategories.size() == 0)
             return;
         for(BlogCategory blogCategory : blogCategories) {
             int blogCategoryId = blogCategory.getBlogCategoryId();
