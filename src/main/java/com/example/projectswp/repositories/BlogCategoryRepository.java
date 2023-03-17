@@ -1,5 +1,6 @@
 package com.example.projectswp.repositories;
 
+import com.example.projectswp.model.Blog;
 import com.example.projectswp.model.BlogCategory;
 import com.example.projectswp.repositories.rowMapper.BlogCategoryRowMapper;
 import com.google.errorprone.annotations.Var;
@@ -16,6 +17,8 @@ public class BlogCategoryRepository {
     private static final BlogCategoryRowMapper BLOG_CATEGORY_ROW_MAPPER = new BlogCategoryRowMapper();
     @Autowired
     JdbcTemplate jdbcTemplate;
+    @Autowired
+    BlogRepository blogRepository;
 
     public List<BlogCategory> getBlogCategories() {
         String sql = "select * from BlogCategories";
@@ -64,5 +67,11 @@ public class BlogCategoryRepository {
             }
         }
         return false;
+    }
+    private void addBlogListToBlogCategory(List<BlogCategory> blogCategories) {
+        if(blogCategories == null)
+            return;
+        for(BlogCategory blogCategory : blogCategories) {
+        }
     }
 }

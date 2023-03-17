@@ -3,6 +3,7 @@ package com.example.projectswp.model;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,4 +20,5 @@ public class Blog {
     private Date blogDateCreate;
     private Date blogDateUpdate;
     private int blogStatus;
+    private List<Comment> listComment;
 }

@@ -1,6 +1,5 @@
 package com.example.projectswp.data_view_model.blog;
 
-
 import lombok.*;
 
 @NoArgsConstructor
@@ -8,12 +7,7 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-public class BlogGetVM {
-
-    private int categoryId;
-    private int userId;
-    private int BlogId;
+public class BlogPage {
     private int pageNumber;
     private int pageSize;
-
 }

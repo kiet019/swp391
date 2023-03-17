@@ -9,10 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 public class Ultil {
     public static Date getCurrentDate() {
@@ -35,6 +32,18 @@ public class Ultil {
     public static String getUUID() {
         UUID uuid = UUID.randomUUID();
         return uuid.toString();
+    }
+
+    public static <T> List<T> getSubListByPage(List<T> list, int pageNumber, int pageSize) {
+        if(list == null || pageNumber < 1 || pageSize < 1)
+            throw new IllegalArgumentException("Invalid input parameters.");
+
+        int startIndex = (pageNumber- 1) * pageSize;
+        if(startIndex >= list.size()) {
+            return Collections.emptyList();
+        }
+        int endIndex = Math.min(startIndex + pageSize, list.size());
+        return list.subList(startIndex, endIndex);
     }
 
 }

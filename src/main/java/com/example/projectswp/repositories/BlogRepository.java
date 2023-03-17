@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 @Repository
@@ -19,16 +20,20 @@ public class BlogRepository {
     private static final int DENY_STATUS = 2;
     @Autowired
     JdbcTemplate jdbcTemplate;
+    @Autowired
+    CommentRepository commentRepository;
 
     public List<Blog> getBlogs() {
         String sql = "Select * from Blogs";
         List<Blog> blogs = jdbcTemplate.query(sql,BLOG_ROW_MAPPER);
+        addCommentToBlogList(blogs);
         return blogs.size() != 0? blogs: null;
     }
 
     public Blog getBlog(int blogID){
         String sql = "select * from Blogs where BlogID = ?";
         List<Blog> blogs = jdbcTemplate.query(sql,BLOG_ROW_MAPPER, blogID);
+        addCommentToBlogList(blogs);
         return blogs.size() != 0? blogs.get(0): null;
     }
     public boolean insertBlog(int uid, CreateBlogVM blogVM) {
@@ -36,10 +41,6 @@ public class BlogRepository {
         int rowAffected = jdbcTemplate.update(sql, blogVM.getBlogCategoryId(), uid, blogVM.getBlogTitle(),
                 blogVM.getBlogDescription(), blogVM.getBlogContent(), LocalDateTime.now(), BLOG_STATUS);
         return rowAffected > 0;
-    }
-    public int getLastBlogId(){
-        List<Blog> blogs = getBlogs();
-        return (blogs != null) ? blogs.get(blogs.size() - 1).getBlogId() : -1;
     }
 
     public boolean updateBlog(int uid, UpdateBlogVM blogVM){
@@ -85,12 +86,14 @@ public class BlogRepository {
     public List<Blog> getBlogByUserId(int userID){
         String sql = "select * from Blogs where UserID = ?";
         List<Blog> blogs = jdbcTemplate.query(sql,BLOG_ROW_MAPPER, userID);
+        addCommentToBlogList(blogs);
         return blogs.size() != 0? blogs: null;
     }
 
     public List<Blog> getBlogByCategoryId(int blogcategoryId){
         String sql = "select * from Blogs where Blog_CategoryID = ?";
         List<Blog> blogs = jdbcTemplate.query(sql,BLOG_ROW_MAPPER, blogcategoryId);
+        addCommentToBlogList(blogs);
         return blogs.size() != 0 ? blogs: null;
     }
 
@@ -102,4 +105,14 @@ public class BlogRepository {
         int rowAffected = jdbcTemplate.update(sql, status, blogId);
         return rowAffected > 0;
     }
+
+    private void addCommentToBlogList(List<Blog> blogs) {
+        if(blogs == null)
+            return;
+
+        for(Blog blog: blogs) {
+            blog.setListComment(commentRepository.getCommentByBlogId(blog.getBlogId()));
+        }
+    }
+
 }
