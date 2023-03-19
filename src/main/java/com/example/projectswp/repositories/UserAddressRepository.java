@@ -2,6 +2,7 @@ package com.example.projectswp.repositories;
 
 import com.example.projectswp.model.UserAddress;
 import com.example.projectswp.repositories.rowMapper.UserAddressRowMapper;
+import com.example.projectswp.repositories.ultil.Ultil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -15,8 +16,8 @@ public class UserAddressRepository {
     JdbcTemplate jdbcTemplate;
     public UserAddress getUserAddress(int uid) {
         String sql = "SELECT * FROM dbo.UserAddress WHERE UserID = ?";
-        List<UserAddress> userAddress= jdbcTemplate.query(sql, USER_ADDRESS_ROW_MAPPER);
-        return userAddress != null ? userAddress.get(0) : null;
+        List<UserAddress> userAddress= jdbcTemplate.query(sql, USER_ADDRESS_ROW_MAPPER, uid);
+        return userAddress.size() > 0 ? userAddress.get(0) : null;
     }
 
     public boolean createAddress(int uid, String address) {

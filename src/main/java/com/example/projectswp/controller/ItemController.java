@@ -77,7 +77,7 @@ public class ItemController {
     }
     @PutMapping("/UpdateItem")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<Items> updateItem(@RequestBody Items item) {
+    public ResponseEntity<Object> updateItem(@RequestBody Items item) {
         try {
             boolean result = false;
             if (itemsRepository.getItem(item.getItemID()) != null) {
@@ -85,7 +85,7 @@ public class ItemController {
             }
             return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.toString());
         }
     }
     @GetMapping("/GetAllMyBriefItemAndBriefRequest")
