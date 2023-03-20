@@ -26,7 +26,7 @@ public class BlogController {
     @GetMapping("/blog/all")
     public ResponseEntity<?> getBlogs(@ModelAttribute BlogPage blogPage) {
         try {
-            List<Blog> blogs = blogRepository.getBlogs();
+            List<Blog> blogs = blogRepository.getBlogs(1);
             BlogListVM blogListVM = BlogListVM.create(blogs, blogPage.getPageNumber(), blogPage.getPageSize());
             return ResponseEntity.ok(blogListVM);
         } catch (Exception ex) {

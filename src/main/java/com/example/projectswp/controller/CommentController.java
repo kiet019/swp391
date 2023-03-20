@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/comment")
+    @RequestMapping("/api/comment")
 //@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class CommentController {
     @Autowired

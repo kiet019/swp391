@@ -1,15 +1,16 @@
 package com.example.projectswp.repositories;
 
 import com.example.projectswp.data_view_model.Item.ItemDeleteVM;
+import com.example.projectswp.data_view_model.Item.DynamicFilterVM;
 import com.example.projectswp.model.Items;
 import com.example.projectswp.repositories.rowMapper.ItemsRowMapper;
 import com.example.projectswp.repositories.ultil.Ultil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -33,6 +34,11 @@ public class ItemsRepository {
         List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, itemID);
         return items.size() != 0? items.get(0): null;
     }
+//    public Items getRequestDetail(int requestID) {
+//        String sql = "select * from Items where ItemID = ?";
+//        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, itemID);
+//        return items.size() != 0? items.get(0): null;
+//    }
     public List<Items> getItems() {
         String sql = "Select * from Items";
         List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER);
@@ -100,7 +106,7 @@ public class ItemsRepository {
 
     public boolean updateItems(Items item) {
         String sql = "update dbo.Items\n" +
-                "set UserID = ?,\n" +
+                "set \n" +
                 "    Sub_CategoryID = ?,\n" +
                 "    Item_Title = ?,\n" +
                 "    Item_Detailed_Description = ?,\n" +
@@ -112,11 +118,12 @@ public class ItemsRepository {
                 "    Item_Share_Amount = ?,\n" +
                 "    Item_Sponsored_Order_Shipping_Fee = ?,\n" +
                 "    Item_Shipping_Address = ?,\n" +
-                "    Image = ?\n" +
+                "    Image = ?,\n" +
                 "    Item_Expired_Time = ?,\n" +
                 "    Share = ?,\n" +
                 "    Item_Date_Update = ?,\n" +
-                "where ItemID = ?";
+                "where ItemID = ? and UserID =?";
+
         int check = jdbcTemplate.update(sql,item.getUserId(),
                 item.getSubCategoryId(), item.getItemTitle(),
                 item.getItemDetailedDescription(), item.getItemMass(),
@@ -125,7 +132,7 @@ public class ItemsRepository {
                 item.getItemShareAmount(), item.isItemSponsoredOrderShippingFee(),
                 item.getItemShippingAddress(),item.getImage(),
                 item.getStringDateTimeExpired(), item.isShare(),
-                getCurrentDate(), item.getItemID());
+                getCurrentDate(), item.getItemID(),Ultil.getUserId());
         return check != 0;
     }
     public boolean deleteItem(ItemDeleteVM itemDeleteVM){
@@ -183,6 +190,43 @@ public class ItemsRepository {
         List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, Ultil.getUserId() ,share , status, itemsToSkip, pageSize);
         return items.size() != 0? items: null;
     }
+    public List<Items> getItemDynamicFilters(int pageNumber, int pageSize, DynamicFilterVM dynamicFilterVM) {
+        int itemsToSkip = 0;
+        if(pageNumber !=0){
+            itemsToSkip = (pageNumber - 1) * pageSize;
+        }
+        String sql =  "Select * from Items";
+        int count= 0;
+        if(dynamicFilterVM.getCategoryID() !=0 && count == 0){
+            sql = sql + " Where CategoryID = " + String.valueOf(dynamicFilterVM.getCategoryID());
+            count = 1;
+        }
+        if(dynamicFilterVM.getTitleName() != null && count == 0) {
+            sql = sql + " Where Item_Title = "  + "'" + String.valueOf(dynamicFilterVM.getTitleName() +"%") +"'";
+            count = 1;
+        }
+        if(dynamicFilterVM.getTitleName() != null && count == 1){
+            sql = sql + " And Item_Title like "  + "'" + String.valueOf(dynamicFilterVM.getTitleName() +"%") +"'";
+        }
+        //////////////////////////////////////
+        if(dynamicFilterVM.getMaxPrice() >= dynamicFilterVM.getMinPrice() && count == 0) {
+            sql = sql + " Where Item_Sale_Price <= " +String.valueOf(dynamicFilterVM.getMaxPrice()) +"and Item_Sale_Price >="
+                    + String.valueOf(dynamicFilterVM.getMaxPrice());
+            count = 1;
+        }
+        if(dynamicFilterVM.getMaxPrice() >= dynamicFilterVM.getMinPrice() && count == 1){
+            sql = sql + " And Item_Sale_Price <= " +String.valueOf(dynamicFilterVM.getMaxPrice()) +"and Item_Sale_Price >="
+                    + String.valueOf(dynamicFilterVM.getMaxPrice());
+        }
+        sql = sql + " Where Item_Estimate_Value <= " +String.valueOf(dynamicFilterVM.getMaxUsable()) +"and Item_Estimate_Value >="
+                + String.valueOf(dynamicFilterVM.getMinUsable());
+
+        sql = sql + "ORDER BY ItemID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+
+        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, itemsToSkip, pageSize);
+        return items.size() != 0? items: null;
+    }
+
 
 
 }

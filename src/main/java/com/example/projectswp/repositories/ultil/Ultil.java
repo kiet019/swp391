@@ -23,8 +23,9 @@ public class Ultil {
     }
 
     public static int getUserId(){
+        int userId = 0;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        int userId = Integer.parseInt(authentication.getCredentials().toString());
+        userId = Integer.parseInt(authentication.getCredentials().toString());
         return userId;
     }
     public static String getUserCode() {
