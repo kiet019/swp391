@@ -56,10 +56,11 @@ public class AccountController {
     @PostMapping("/create")
     public ResponseEntity<Object> createUser(@RequestBody UserAccount userAccount) throws FirebaseAuthException {
         try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            UserRecord userRecord = FirebaseAuth.getInstance().getUser(authentication.getPrincipal().toString());
-            boolean result = userAccountRepository.addUserAccount(userAccount, userRecord, 50);
-            Ultil.sendMail("Create Accounnt", "Create account success, welcome to MOBY shop", userRecord.getEmail());
+            boolean result = false;
+            UserRecord userRecord = FirebaseAuth.getInstance().getUser(Ultil.getUserCode());
+            if (Ultil.getUserId() == 0)
+            result = userAccountRepository.addUserAccount(userAccount, userRecord, 50);
+//            Ultil.sendMail("Create Accounnt", "Create account success, welcome to MOBY shop", userRecord.getEmail());
             return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         } catch (Exception e) {
 //            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
