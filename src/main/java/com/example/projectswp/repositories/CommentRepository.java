@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -25,26 +26,20 @@ public class CommentRepository {
     public List<Comment> getComments() {
         String sql = "SELECT * FROM dbo.Comments";
         List<Comment> listComment = jdbcTemplate.query(sql, COMMENT_ROW_MAPPER);
-        for (Comment comment : listComment){
-            comment.setListReply(replyRepository.getReplyByCommentID(comment.getCommentID()));
-        }
+        addReplyToCommentList(listComment);
         return  listComment.size() > 0 ? listComment: null;
     }
     public List<Comment> getCommentByBlogId(int blogId) {
         String sql = "SELECT * FROM dbo.Comments c WHERE c.BlogID = ?";
         List<Comment> listComment = jdbcTemplate.query(sql,COMMENT_ROW_MAPPER, blogId);
-        for (Comment comment : listComment){
-            comment.setListReply(replyRepository.getReplyByCommentID(comment.getCommentID()));
-        }
+        addReplyToCommentList(listComment);
         return  listComment.size() > 0 ? listComment: null;
     }
 
     public List<Comment> getCommentByItemId(int itemID) {
         String sql = "SELECT * FROM dbo.Comments c WHERE c.ItemID = ?";
         List<Comment> listComment = jdbcTemplate.query(sql,COMMENT_ROW_MAPPER, itemID);
-        for (Comment comment : listComment){
-            comment.setListReply(replyRepository.getReplyByCommentID(comment.getCommentID()));
-        }
+        addReplyToCommentList(listComment);
         return  listComment.size() > 0 ? listComment: null;
     }
 
@@ -64,5 +59,20 @@ public class CommentRepository {
         String sql = "DELETE dbo.Comments WHERE  UserID = ? and CommentID = ?";
         int rowAffected = jdbcTemplate.update(sql, uid, commentId);
         return rowAffected > 0;
+    }
+
+    public void addReplyToCommentList(List<Comment> commentList) {
+        if(commentList == null)
+            return;
+
+        for (Comment comment : commentList) {
+            int commentId = comment.getCommentID();
+            List<Reply> replyList = replyRepository.getReplyByCommentID(commentId);
+            if(replyList != null) {
+                comment.setListReply(replyList);
+            }else {
+                comment.setListReply(new ArrayList<>());
+            }
+        }
     }
 }

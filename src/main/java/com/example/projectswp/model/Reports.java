@@ -10,9 +10,12 @@ import java.util.Date;
 public class Reports {
     private int reportID;
     private int itemID;
+    private int orderID;
+    private int userID;
     private Date reportDateCreate;
     private Date reportDateUpdate;
     private boolean status;
     private String content;
     private String image;
+    private String reasonDeny;
 }

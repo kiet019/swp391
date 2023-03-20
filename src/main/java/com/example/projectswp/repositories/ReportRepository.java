@@ -42,10 +42,7 @@ public class ReportRepository {
         List<Reports> report = jdbcTemplate.query(sql,REPORT_ROW_MAPPER, status);
         return report.size() != 0? report: null;
     }
-    public Reports getLastReport() {
-        List<Reports> list = getReports();
-        return list.size() != 0 ? list.get(list.size()-1) : null;
-    }
+
     public boolean addReport(CreateReportVM createReportVM) {
         String sql = "insert into dbo.Reports ([ItemID], [Report_Date_Create], [Report_Date_Update], [Report_Status], [Report_Content], Image)\n" +
                 "values (?, ?, ?, ?, ?, ?)";
@@ -78,12 +75,6 @@ public class ReportRepository {
         int rowAffected = jdbcTemplate.update(sql, Ultil.getCurrentDate(), status, id);
         return rowAffected > 0;
     }
-    public boolean deleteReport(int reportID){
-        String sql = "DELETE dbo.Reports WHERE ReportID = ?";
-        int check = jdbcTemplate.update(sql, reportID);
-        return check > 0;
-    }
-
     public boolean updateReportStatus(int reportID) {
         String sql = "update dbo.Reports\n" +
                 "set Report_Status = 0\n" +
