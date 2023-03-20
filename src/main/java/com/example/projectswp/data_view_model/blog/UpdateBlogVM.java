@@ -13,6 +13,7 @@ public class UpdateBlogVM {
     private int blogId;
     private int blogCategoryId;
     private String blogTitle;
+    private String image;
     private String blogDescription;
     private String blogContent;
 

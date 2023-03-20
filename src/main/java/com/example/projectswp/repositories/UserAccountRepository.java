@@ -18,9 +18,9 @@ public class UserAccountRepository {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    public List<UserAccount> getUserAccounts(){
-        String sql = "select * from UserAccounts";
-        List<UserAccount> userAccounts = jdbcTemplate.query(sql, USER_ACCOUNT_ROW_MAPPER);
+    public List<UserAccount> getUserAccounts(int skip, int getNumber){
+        String sql = "select * from UserAccounts ORDER BY UserID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        List<UserAccount> userAccounts = jdbcTemplate.query(sql, USER_ACCOUNT_ROW_MAPPER, skip, getNumber);
         return userAccounts.size() != 0 ? userAccounts : null;
     }
     public UserAccount getUserAccount(String code) {
@@ -34,11 +34,11 @@ public class UserAccountRepository {
         return userAccounts.size() != 0 ? userAccounts.get(0) : null;
     }
 
-    public boolean addUserAccount(UserAccount userAccount, UserRecord userRecord) {
-        String sql = "insert [dbo].[UserAccounts]([User_Code],[RoleID],[User_Name],[User_Gmail],[User_Address], [User_Phone], [User_Sex],[User_Date_Of_Birth],[User_Image],[User_Status],[User_Date_Create])\n" +
-                "values ( ? , ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    public boolean addUserAccount(UserAccount userAccount, UserRecord userRecord, int reputaion) {
+        String sql = "insert [dbo].[UserAccounts]([User_Code],[RoleID],[User_Name],[User_Gmail],[User_Address], [User_Phone], [User_Sex],[User_Date_Of_Birth],[User_Image],[User_Status],[User_Date_Create], [Reputation])\n" +
+                "values ( ? , ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        int rowAffected = jdbcTemplate.update(sql, userRecord.getUid(), 2, userRecord.getEmail(), userRecord.getEmail(), userAccount.getUserAddress(), userAccount.getUserPhone(), userAccount.isUserSex(),userAccount.getUserDateOfBirth(), " ", true, Ultil.getCurrentDate());
+        int rowAffected = jdbcTemplate.update(sql, userRecord.getUid(), 2, userRecord.getEmail(), userRecord.getEmail(), userAccount.getUserAddress(), userAccount.getUserPhone(), userAccount.isUserSex(),userAccount.getUserDateOfBirth(), " ", true, Ultil.getCurrentDate(), reputaion);
         return rowAffected > 0;
     }
 

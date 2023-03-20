@@ -6,9 +6,9 @@ import com.example.projectswp.data_view_model.user.UserIdVM;
 import com.example.projectswp.model.UserAccount;
 import com.example.projectswp.repositories.UserAccountRepository;
 import com.example.projectswp.repositories.ultil.Ultil;
-import com.example.projectswp.service.Gmail;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseToken;
 import com.google.firebase.auth.UserRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,12 +34,13 @@ public class AccountController {
         try {
             //lay token
             String code = request.getHeader("Authorization");
-            //tim tren firebase token
+//            System.out.println(code);
+//            //tim tren firebase token
 //            FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(code);
 //            //lay uid
 //            String uid = decodedToken.getUid();
-            //lay thong tin trong db
-            System.out.println(code);
+//            //lay thong tin trong db
+//            System.out.println(uid);
             UserAccount userAccount = userAccountRepository.getUserAccount(code);
             URI uri = URI.create("");
             if (userAccount != null) {
@@ -55,11 +56,11 @@ public class AccountController {
     @PostMapping("/create")
     public ResponseEntity<Object> createUser(@RequestBody UserAccount userAccount) throws FirebaseAuthException {
         try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            UserRecord userRecord = FirebaseAuth.getInstance().getUser(authentication.getPrincipal().toString());
-            boolean result = userAccountRepository.addUserAccount(userAccount, userRecord);
-            Gmail gmail = new Gmail();
-            gmail.sendMessage("Create account", "Welcome to Moby shop", userRecord.getEmail());
+            boolean result = false;
+            UserRecord userRecord = FirebaseAuth.getInstance().getUser(Ultil.getUserCode());
+            if (Ultil.getUserId() == 0)
+            result = userAccountRepository.addUserAccount(userAccount, userRecord, 50);
+//            Ultil.sendMail("Create Accounnt", "Create account success, welcome to MOBY shop", userRecord.getEmail());
             return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         } catch (Exception e) {
 //            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -98,8 +99,10 @@ public class AccountController {
 
     @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<UserAccount>> getAccounts() {
-        List<UserAccount> list = userAccountRepository.getUserAccounts();
+    public ResponseEntity<List<UserAccount>> getAccounts( @RequestParam int pageNumber, @RequestParam int pageSize) {
+        int skip = (pageNumber-1)*5;
+        int getNumber = pageSize;
+        List<UserAccount> list = userAccountRepository.getUserAccounts(skip, getNumber);
         return list != null ? ResponseEntity.ok(list) : ResponseEntity.notFound().build();
     }
 

@@ -55,7 +55,7 @@ public class CommentRepository {
     }
 
     public boolean createComment(int uid, CommentCreateVM cmt) {
-        String sql = "INSERT INTO dbo.Comments(UserID, BlogID, ItemID, DateCreate, CommentContent) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO dbo.Comments(UserID, BlogID, ItemID, DateCreate, CommentContent) VALUES (?, ?, ?, ?, ?)";
         int rowAffected = jdbcTemplate.update(sql, uid, cmt.getBlogId() != 0 ? cmt.getBlogId() : null,
                 cmt.getItemId() != 0 ? cmt.getItemId() : null, Ultil.getCurrentDate(), cmt.getCommentContent());
         return rowAffected > 0;

@@ -112,12 +112,18 @@ public class ItemsRepository {
                 "    Item_Share_Amount = ?,\n" +
                 "    Item_Sponsored_Order_Shipping_Fee = ?,\n" +
                 "    Item_Shipping_Address = ?,\n" +
-                "    Image = ?\n" +
+                "    Image = ?,\n" +
                 "    Item_Expired_Time = ?,\n" +
                 "    Share = ?,\n" +
+<<<<<<< HEAD
                 "    Item_Date_Update = ?,\n" +
                 "where ItemID = ? and UserID =?";
         int check = jdbcTemplate.update(sql,
+=======
+                "    Item_Date_Update = ?\n" +
+                "where ItemID = ?";
+        int check = jdbcTemplate.update(sql,item.getUserId(),
+>>>>>>> 9477bae3de515705e807f50540e15dac90fcd797
                 item.getSubCategoryId(), item.getItemTitle(),
                 item.getItemDetailedDescription(), item.getItemMass(),
                 item.isItemSize(),  item.getItemQuanlity(),

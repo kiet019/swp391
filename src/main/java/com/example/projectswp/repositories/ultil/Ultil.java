@@ -1,18 +1,19 @@
 package com.example.projectswp.repositories.ultil;
 
 import com.example.projectswp.model.UserAccount;
+import com.example.projectswp.service.Gmail;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserRecord;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import javax.mail.MessagingException;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 public class Ultil {
     public static Date getCurrentDate() {
@@ -22,8 +23,9 @@ public class Ultil {
     }
 
     public static int getUserId(){
+        int userId = 0;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        int userId = Integer.parseInt(authentication.getCredentials().toString());
+        userId = Integer.parseInt(authentication.getCredentials().toString());
         return userId;
     }
     public static String getUserCode() {
@@ -35,6 +37,23 @@ public class Ultil {
     public static String getUUID() {
         UUID uuid = UUID.randomUUID();
         return uuid.toString();
+    }
+
+     public static void sendMail(String subject, String message, String email) throws GeneralSecurityException, IOException, MessagingException {
+         Gmail gmail = new Gmail();
+         gmail.sendMessage(subject, message, email);
+     }
+
+    public static <T> List<T> getSubListByPage(List<T> list, int pageNumber, int pageSize) {
+        if(list == null || pageNumber < 1 || pageSize < 1)
+            throw new IllegalArgumentException("Invalid input parameters.");
+
+        int startIndex = (pageNumber- 1) * pageSize;
+        if(startIndex >= list.size()) {
+            return Collections.emptyList();
+        }
+        int endIndex = Math.min(startIndex + pageSize, list.size());
+        return list.subList(startIndex, endIndex);
     }
 
 }
