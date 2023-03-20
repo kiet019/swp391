@@ -1,13 +1,13 @@
 package com.example.projectswp.repositories;
 
 import com.example.projectswp.data_view_model.Item.ItemDeleteVM;
+import com.example.projectswp.data_view_model.Item.DynamicFilterVM;
 import com.example.projectswp.model.Items;
 import com.example.projectswp.repositories.rowMapper.ItemsRowMapper;
 import com.example.projectswp.repositories.ultil.Ultil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -100,7 +100,7 @@ public class ItemsRepository {
 
     public boolean updateItems(Items item) {
         String sql = "update dbo.Items\n" +
-                "set UserID = ?,\n" +
+                "set \n" +
                 "    Sub_CategoryID = ?,\n" +
                 "    Item_Title = ?,\n" +
                 "    Item_Detailed_Description = ?,\n" +
@@ -116,8 +116,8 @@ public class ItemsRepository {
                 "    Item_Expired_Time = ?,\n" +
                 "    Share = ?,\n" +
                 "    Item_Date_Update = ?,\n" +
-                "where ItemID = ?";
-        int check = jdbcTemplate.update(sql,item.getUserId(),
+                "where ItemID = ? and UserID =?";
+        int check = jdbcTemplate.update(sql,
                 item.getSubCategoryId(), item.getItemTitle(),
                 item.getItemDetailedDescription(), item.getItemMass(),
                 item.isItemSize(),  item.getItemQuanlity(),
@@ -125,7 +125,7 @@ public class ItemsRepository {
                 item.getItemShareAmount(), item.isItemSponsoredOrderShippingFee(),
                 item.getItemShippingAddress(),item.getImage(),
                 item.getStringDateTimeExpired(), item.isShare(),
-                getCurrentDate(), item.getItemID());
+                getCurrentDate(), item.getItemID(),Ultil.getUserId());
         return check != 0;
     }
     public boolean deleteItem(ItemDeleteVM itemDeleteVM){
@@ -183,6 +183,19 @@ public class ItemsRepository {
         List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, Ultil.getUserId() ,share , status, itemsToSkip, pageSize);
         return items.size() != 0? items: null;
     }
+    public List<Items> getItemDynamicFilters(int pageNumber, int pageSize, DynamicFilterVM dynamicFilterVM) {
+        int itemsToSkip = 0;
+        if(pageNumber !=0){
+            itemsToSkip = (pageNumber - 1) * pageSize;
+        }
+        if(dynamicFilterVM.getCategoryID() !=0){
+            String sql =" Where CategoryID = ?";
+        }
+        String sql = "Select * from Items where UserID = ? and Share = ? and Item_Status = ? ORDER BY ItemID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, itemsToSkip, pageSize);
+        return items.size() != 0? items: null;
+    }
+
 
 
 }

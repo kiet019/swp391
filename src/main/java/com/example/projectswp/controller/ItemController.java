@@ -77,7 +77,7 @@ public class ItemController {
     }
     @PutMapping("/UpdateItem")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<Items> updateItem(@RequestBody Items item) {
+    public ResponseEntity<Items> updateItem(@RequestParam Items item) {
         try {
             boolean result = false;
             if (itemsRepository.getItem(item.getItemID()) != null) {
