@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -33,6 +34,11 @@ public class ItemsRepository {
         List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, itemID);
         return items.size() != 0? items.get(0): null;
     }
+//    public Items getRequestDetail(int requestID) {
+//        String sql = "select * from Items where ItemID = ?";
+//        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, itemID);
+//        return items.size() != 0? items.get(0): null;
+//    }
     public List<Items> getItems() {
         String sql = "Select * from Items";
         List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER);
@@ -189,10 +195,34 @@ public class ItemsRepository {
         if(pageNumber !=0){
             itemsToSkip = (pageNumber - 1) * pageSize;
         }
-        if(dynamicFilterVM.getCategoryID() !=0){
-            String sql =" Where CategoryID = ?";
+        String sql =  "Select * from Items";
+        int count= 0;
+        if(dynamicFilterVM.getCategoryID() !=0 && count == 0){
+            sql = sql + " Where CategoryID = " + String.valueOf(dynamicFilterVM.getCategoryID());
+            count = 1;
         }
-        String sql = "Select * from Items where UserID = ? and Share = ? and Item_Status = ? ORDER BY ItemID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        if(dynamicFilterVM.getTitleName() != null && count == 0) {
+            sql = sql + " Where Item_Title = "  + "'" + String.valueOf(dynamicFilterVM.getTitleName() +"%") +"'";
+            count = 1;
+        }
+        if(dynamicFilterVM.getTitleName() != null && count == 1){
+            sql = sql + " And Item_Title like "  + "'" + String.valueOf(dynamicFilterVM.getTitleName() +"%") +"'";
+        }
+        //////////////////////////////////////
+        if(dynamicFilterVM.getMaxPrice() >= dynamicFilterVM.getMinPrice() && count == 0) {
+            sql = sql + " Where Item_Sale_Price <= " +String.valueOf(dynamicFilterVM.getMaxPrice()) +"and Item_Sale_Price >="
+                    + String.valueOf(dynamicFilterVM.getMaxPrice());
+            count = 1;
+        }
+        if(dynamicFilterVM.getMaxPrice() >= dynamicFilterVM.getMinPrice() && count == 1){
+            sql = sql + " And Item_Sale_Price <= " +String.valueOf(dynamicFilterVM.getMaxPrice()) +"and Item_Sale_Price >="
+                    + String.valueOf(dynamicFilterVM.getMaxPrice());
+        }
+        sql = sql + " Where Item_Estimate_Value <= " +String.valueOf(dynamicFilterVM.getMaxUsable()) +"and Item_Estimate_Value >="
+                + String.valueOf(dynamicFilterVM.getMinUsable());
+
+        sql = sql + "ORDER BY ItemID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+
         List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, itemsToSkip, pageSize);
         return items.size() != 0? items: null;
     }

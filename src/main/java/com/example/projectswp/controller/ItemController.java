@@ -44,11 +44,11 @@ public class ItemController {
         Items items = itemsRepository.getItemDetail(itemID);
         return items != null ? ResponseEntity.ok(items) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @GetMapping("/GetRequestDetail")
-    public ResponseEntity<Items> getRequestDetail(@RequestParam int itemID) {
-        Items items = itemsRepository.getItemDetail(itemID);
-        return items != null ? ResponseEntity.ok(items) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    }
+//    @GetMapping("/GetRequestDetail")
+//    public ResponseEntity<Items> getRequestDetail(@RequestParam int requestID) {
+//        Items items = itemsRepository.getRequestDetail(requestID);
+//        return items != null ? ResponseEntity.ok(items) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+//    }
     @GetMapping("/GetBriefItemByOrBriefRequestUserID")
     public ResponseEntity<List<Items>> getBriefItemByUserId(@RequestParam int userID, @RequestParam boolean status, @RequestParam boolean share, @RequestParam int pageNumber, @RequestParam int pageSize) {
         List<Items> item = itemsRepository.getBriefItemByOrBriefRequestUserID(userID, status, share, pageNumber, pageSize);

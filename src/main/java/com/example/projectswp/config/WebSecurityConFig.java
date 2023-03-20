@@ -29,7 +29,7 @@ public class WebSecurityConFig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.addFilterBefore(firebaseAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(authorizationFilter, UsernamePasswordAuthenticationFilter.class)
-                .authorizeRequests().antMatchers(HttpMethod.GET,"/api/Items/**", "/api/Category/**", "/api/SubCategory/**", "/api/blog/**", "/api/category-sub/**", "/api/blogcategory/**", "/api/comment/**").permitAll()
+                .authorizeRequests().antMatchers(HttpMethod.GET,"/api/Item/**", "/api/Category/**", "/api/SubCategory/**", "/api/blog/**", "/api/category-sub/**", "/api/blogcategory/**", "/api/comment/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/useraccount/login").permitAll()
                 .antMatchers("/swagger-ui.html/**").permitAll()
                 .antMatchers("/swagger-ui.html/**", "/configuration/**", "/swagger-resources/**", "/v2/api-docs","/webjars/**").permitAll()
