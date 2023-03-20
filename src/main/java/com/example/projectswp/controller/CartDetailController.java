@@ -37,22 +37,26 @@ public class CartDetailController {
 
     @PutMapping("/cartdetail")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<Items> updateCartDetail(@RequestBody CartDetails cartDetails) {
+    public ResponseEntity<Object> updateCartDetail(@RequestBody CartDetails cartDetails) {
         try {
             boolean result = false;
-            if (cartDetailsRepository.getCartDetail(cartDetails.getCartDetailID()) != null) {
+            if (cartDetailsRepository.getCartDetail(cartDetails.getCartDetailId()) != null) {
                 result = cartDetailsRepository.updateCartDetail(cartDetails);
             }
             return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
     @DeleteMapping("/cartdetail")
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    public ResponseEntity<Items> deleteItem(@RequestBody CartDetails cartDetailsDelete){
-        boolean result = cartDetailsRepository.deleteCartDetail(cartDetailsDelete);
-        return result ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+    public ResponseEntity<Object> deleteItem(@RequestBody CartDetails cartDetailsDelete){
+        try {
+            boolean result = cartDetailsRepository.deleteCartDetail(cartDetailsDelete);
+            return result ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
 

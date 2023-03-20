@@ -27,7 +27,7 @@ public class CartDetailsRepository {
         return list.size() != 0 ? list.get(list.size()-1) : null;
     }
     public CartDetails getCartDetail(int cartDetailsID) {
-        String sql = "select * from CartDetails where Cart_DetailID = ?";
+        String sql = "select * from CartDetails where CartDetailID = ?";
         List<CartDetails> cartDetails = jdbcTemplate.query(sql,CART_DETAILS_ROW_MAPPER, cartDetailsID);
         return cartDetails.size() != 0? cartDetails.get(0): null;
     }
@@ -45,16 +45,16 @@ public class CartDetailsRepository {
         return check != 0;
     }
     public boolean updateCartDetail(CartDetails cartDetails) {
-        String sql = "update dbo.Items\n" +
-                "set Item_Quantity = ?\n" +
-                "where Cart_DetailID = ?";
-        int check = jdbcTemplate.update(sql,cartDetails.getItemQuantity(), cartDetails.getCartDetailID());
+        String sql = "update dbo.CartDetails\n" +
+                "set ItemQuantity = ?\n" +
+                "where CartDetailID = ?";
+        int check = jdbcTemplate.update(sql,cartDetails.getItemQuantity(), cartDetails.getCartDetailId());
         return check != 0;
     }
 
     public boolean deleteCartDetail(CartDetails cartDetails){
-        String sql = "DELETE dbo.CartDetails WHERE Cart_DetailID = ?";
-        int check = jdbcTemplate.update(sql, cartDetails.getCartDetailID());
+        String sql = "DELETE dbo.CartDetails WHERE CartDetailID = ?";
+        int check = jdbcTemplate.update(sql, cartDetails.getCartDetailId());
         return check > 0;
     }
 }

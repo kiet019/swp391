@@ -11,10 +11,10 @@ public class CartDetailsRowMapper implements RowMapper<CartDetails> {
     @Override
     public CartDetails mapRow(ResultSet rs, int rowNum) throws SQLException {
         CartDetails cartDetails = new CartDetails();
-        cartDetails.setCartDetailID(rs.getInt("Cart_DetailID"));
+        cartDetails.setCartDetailId(rs.getInt("CartDetailID"));
         cartDetails.setCartId(rs.getInt("CartID"));
         cartDetails.setItemId(rs.getInt("ItemID"));
-        cartDetails.setItemQuantity(rs.getInt("Cart_Detail_Item_Quantity"));
+        cartDetails.setItemQuantity(rs.getInt("ItemQuantity"));
         return cartDetails;
     }
 }

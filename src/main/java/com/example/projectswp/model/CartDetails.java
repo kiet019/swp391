@@ -11,7 +11,7 @@ import java.util.Date;
 @ToString
 
 public class CartDetails {
-    private int cartDetailID;
+    private int cartDetailId;
     private int cartId;
     private int itemId;
     private int itemQuantity;
