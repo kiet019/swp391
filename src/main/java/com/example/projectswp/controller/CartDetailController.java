@@ -1,5 +1,7 @@
 package com.example.projectswp.controller;
 
+import com.example.projectswp.data_view_model.cartdetail.CartDetailConfirmVM;
+import com.example.projectswp.data_view_model.cartdetail.CartDetailGetVM;
 import com.example.projectswp.model.Blog;
 import com.example.projectswp.model.CartDetails;
 import com.example.projectswp.model.Items;
@@ -22,10 +24,10 @@ public class CartDetailController {
     CartDetailsRepository cartDetailsRepository;
 
 
-    @GetMapping("/useraccount/cartdetail/all")
+    @GetMapping("/cartdetail")
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    public ResponseEntity<List<CartDetails>> getCartDetails() {
-        List<CartDetails> cartDetails = cartDetailsRepository.getCartDetails();
+    public ResponseEntity<List<CartDetails>> getCartDetails(@RequestBody CartDetailGetVM cartDetailGetVM) {
+        List<CartDetails> cartDetails = cartDetailsRepository.getCartDetails(cartDetailGetVM);
         return cartDetails != null ? ResponseEntity.ok(cartDetails) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
     @PostMapping("/cartdetail/create")
@@ -57,6 +59,11 @@ public class CartDetailController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @PatchMapping("/cartdetail/confirm")
+    public ResponseEntity<?> confirmCartDetail(@RequestBody CartDetailConfirmVM cartDetailConfirmVM) {
+        return null;
     }
 
 
