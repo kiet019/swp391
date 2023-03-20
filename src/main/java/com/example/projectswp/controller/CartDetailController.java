@@ -29,11 +29,10 @@ public class CartDetailController {
         return cartDetails != null ? ResponseEntity.ok(cartDetails) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
     @PostMapping("/cartdetail/create")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<CartDetails> createCartDetail(@RequestBody CartDetails addCartDetails) {
         boolean result = cartDetailsRepository.addCartDetails(addCartDetails);
-        URI uri = URI.create("localhost:8080/api/cartdetail/" + cartDetailsRepository.getLastCartDetails().getCartDetailsID());
-        return result ? ResponseEntity.created(uri).build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 
     @PutMapping("/cartdetail")
@@ -41,7 +40,7 @@ public class CartDetailController {
     public ResponseEntity<Items> updateCartDetail(@RequestBody CartDetails cartDetails) {
         try {
             boolean result = false;
-            if (cartDetailsRepository.getCartDetail(cartDetails.getCartDetailsID()) != null) {
+            if (cartDetailsRepository.getCartDetail(cartDetails.getCartDetailID()) != null) {
                 result = cartDetailsRepository.updateCartDetail(cartDetails);
             }
             return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
@@ -53,7 +52,7 @@ public class CartDetailController {
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<Items> deleteItem(@RequestBody CartDetails cartDetailsDelete){
         boolean result = cartDetailsRepository.deleteCartDetail(cartDetailsDelete);
-        return result ? ResponseEntity.accepted().build() : ResponseEntity.notFound().build();
+        return result ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
 
 

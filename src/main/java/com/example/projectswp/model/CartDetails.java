@@ -11,11 +11,8 @@ import java.util.Date;
 @ToString
 
 public class CartDetails {
-    private int cartDetailsID;
-    private int cartID;
-    private int itemID;
-    private Date cartDetailDateCreate;
-    private Date cartDetailDateUpdate;
-    private int cartDetailItemQuantity;
-    private int cartStatus;
+    private int cartDetailID;
+    private int cartId;
+    private int itemId;
+    private int itemQuantity;
 }

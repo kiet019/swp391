@@ -11,5 +11,6 @@ import java.util.Date;
 public class Carts {
     private int cartID;
     private int userID;
+    private String address;
 }
 

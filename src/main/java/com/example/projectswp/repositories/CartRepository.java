@@ -18,7 +18,8 @@ public class CartRepository {
     private static final CartsRowMapper CART_ROW_MAPPER = new CartsRowMapper();
     @Autowired
     JdbcTemplate jdbcTemplate;
-
+    @Autowired
+    UserAccountRepository userAccountRepository;
     public List<Carts> getCarts() {
         String sql = "Select * from Carts where UserID = ?";
         List<Carts> cart = jdbcTemplate.query(sql,CART_ROW_MAPPER, Ultil.getUserId());
@@ -29,9 +30,16 @@ public class CartRepository {
         return list.size() != 0 ? list.get(list.size()-1) : null;
     }
     public boolean addCart(int userID) {
-        String sql = "insert into dbo.Carts ([UserID])\n" +
-                "values (?)";
-        int check = jdbcTemplate.update(sql, userID);
+        String sql = "insert into dbo.Carts ([UserID], [Address])\n" +
+                "values (?, ?)";
+        int check = jdbcTemplate.update(sql, userID, userAccountRepository.getUserAddress(userID));
         return check != 0;
+    }
+    public boolean updateCartAddress(String address, int userID) {
+        String sql = " update Carts\n" +
+                "  set Address = ?\n" +
+                "  where UserID = ?";
+        int check = jdbcTemplate.update(sql, address, userID);
+        return check >0 ? true : false;
     }
 }

@@ -28,10 +28,21 @@ public class CartController {
     }
     @PostMapping("/cart/create")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<Carts> addCart() {
+    public ResponseEntity<Object> addCart() {
         int userID= Ultil.getUserId();
-        boolean result = cartRepository.addCart(userID);
-        URI uri = URI.create("localhost:8080/api/cart/" + cartRepository.getLastCart().getCartID());
-        return result ? ResponseEntity.created(uri).build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        boolean result = false;
+        if (cartRepository.getCarts() == null) {
+            result = cartRepository.addCart(userID);
+        }
+        return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+    }
+    @PatchMapping("/cart")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<Object> updateCartAddress(@RequestBody Carts carts) {
+        boolean result = false;
+        if (cartRepository.getCarts() != null) {
+            result = cartRepository.updateCartAddress(carts.getAddress(), Ultil.getUserId());
+        }
+        return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 }

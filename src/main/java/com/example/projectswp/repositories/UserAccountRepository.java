@@ -28,10 +28,17 @@ public class UserAccountRepository {
         List<UserAccount> userAccounts = jdbcTemplate.query(sql, USER_ACCOUNT_ROW_MAPPER, code);
         return userAccounts.size() != 0 ? userAccounts.get(0) : null;
     }
+
     public UserAccount getUserAccountById(int id) {
         String sql = "select * from UserAccounts where UserID = ?";
         List<UserAccount> userAccounts = jdbcTemplate.query(sql, USER_ACCOUNT_ROW_MAPPER, id);
         return userAccounts.size() != 0 ? userAccounts.get(0) : null;
+    }
+
+    public String getUserAddress(int id) {
+        String sql = "select * from UserAccounts where UserID = ?";
+        List<UserAccount> userAccounts = jdbcTemplate.query(sql, USER_ACCOUNT_ROW_MAPPER, id);
+        return userAccounts.size() != 0 ? userAccounts.get(0).getUserAddress() : null;
     }
 
     public boolean addUserAccount(UserAccount userAccount, UserRecord userRecord, int reputaion) {

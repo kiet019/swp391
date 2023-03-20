@@ -38,23 +38,23 @@ public class CartDetailsRepository {
     }
 
     public boolean addCartDetails(CartDetails cartDetails) {
-        String sql = "insert into dbo.CartDetails ([Cart_DetailID], [CartID], [ItemID], [Cart_Detail_Date_Create], [Cart_Detail_Date_Update], [Cart_Detail_Item_Quantity])\n" +
-                "values (?, ?, ?, ?, ?, ?)";
+        String sql = "insert into dbo.CartDetails ([CartID], [ItemID], [ItemQuantity])\n" +
+                "values (?, ?, ?)";
 
-        int check = jdbcTemplate.update(sql, cartDetails.getCartDetailsID(), cartDetails.getCartID(), cartDetails.getItemID(), getCurrentDate(), null, cartDetails.getCartDetailItemQuantity());
+        int check = jdbcTemplate.update(sql, cartDetails.getCartId(), cartDetails.getItemId(), 1);
         return check != 0;
     }
     public boolean updateCartDetail(CartDetails cartDetails) {
         String sql = "update dbo.Items\n" +
-                "set Cart_Detail_Item_Quantity = ?,\n" +
-                "    Cart_Detail_Date_Update = ?,\n" +
+                "set Item_Quantity = ?\n" +
                 "where Cart_DetailID = ?";
-        int check = jdbcTemplate.update(sql,cartDetails.getCartDetailItemQuantity(), getCurrentDate(), cartDetails.getCartDetailsID() );
+        int check = jdbcTemplate.update(sql,cartDetails.getItemQuantity(), cartDetails.getCartDetailID());
         return check != 0;
     }
+
     public boolean deleteCartDetail(CartDetails cartDetails){
         String sql = "DELETE dbo.CartDetails WHERE Cart_DetailID = ?";
-        int check = jdbcTemplate.update(sql, cartDetails.getCartDetailsID());
+        int check = jdbcTemplate.update(sql, cartDetails.getCartDetailID());
         return check > 0;
     }
 }
