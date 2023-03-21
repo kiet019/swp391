@@ -23,7 +23,7 @@ public class CartDetailsRepository {
     @Autowired
     RequestRepository requestRepository;
     @Autowired
-    UserAccountRepository userAccountRepository;
+    CartRepository cartRepository;
     public Date getCurrentDate(){
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         LocalDateTime now = LocalDateTime.now();
@@ -74,7 +74,7 @@ public class CartDetailsRepository {
     public boolean cartDetailtoRequest(String note, int cartDetailId, int userID) {
         CartDetails cartDetails = this.getCartDetail(cartDetailId);
         boolean check = requestRepository.addRequest(userID, cartDetails.getItemQuantity(),cartDetails.getItemId(),
-                userAccountRepository.getUserAddress(userID), note, Ultil.getCurrentDate(),1, null);
+                cartRepository.getAddress(userID), note, Ultil.getCurrentDate(),1, null);
         return check  ;
     }
 }

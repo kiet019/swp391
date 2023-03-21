@@ -42,4 +42,10 @@ public class CartRepository {
         int check = jdbcTemplate.update(sql, address, userID);
         return check >0 ? true : false;
     }
+
+    public String getAddress(int userID) {
+        String sql = "Select * from Carts where UserID = ?";
+        List<Carts> cart = jdbcTemplate.query(sql,CART_ROW_MAPPER, Ultil.getUserId());
+        return cart.size() != 0? cart.get(0).getAddress() : null;
+    }
 }

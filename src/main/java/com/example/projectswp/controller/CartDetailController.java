@@ -75,6 +75,4 @@ public class CartDetailController {
         }
         return ResponseEntity.ok().build();
     }
-
-
 }
