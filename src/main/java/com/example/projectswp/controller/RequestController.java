@@ -49,10 +49,16 @@ public class RequestController {
     }
     @PatchMapping("/requestdetail/accept")
     public ResponseEntity<?> acceptRequest(@RequestBody RequestIdVM requestIdVM) {
-        boolean isUpdated = requestRepository.updateStatus(requestIdVM.getRequestId(), ACCEPT_STATUS);
-        if(isUpdated)
+        Request request = requestRepository.getRequestByID(requestIdVM.getRequestId());
+        if(request == null) {
+            return ResponseEntity.badRequest().body(ReturnMessage.create("error at request not found"));
+        }
+        boolean isAccepted = requestRepository.acceptRequest(request);
+        if(isAccepted){
+            requestRepository.denyOtherRequestWhichPassItemQuantity(request);
             return ResponseEntity.ok(ReturnMessage.create("success"));
-        return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.badRequest().body(ReturnMessage.create("error at AcceptRequestDetail"));
     }
     @PatchMapping("/requestdetail/deny")
     public ResponseEntity<?> denyRequest(@RequestBody RequestIdVM requestIdVM) {

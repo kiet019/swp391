@@ -6,7 +6,6 @@ import com.example.projectswp.model.Order;
 import com.example.projectswp.model.Request;
 import com.example.projectswp.repositories.rowMapper.OrderRowMapper;
 import com.example.projectswp.repositories.ultil.Ultil;
-import com.sun.org.apache.xpath.internal.operations.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
