@@ -25,6 +25,12 @@ public class CartRepository {
         List<Carts> cart = jdbcTemplate.query(sql,CART_ROW_MAPPER, Ultil.getUserId());
         return cart.size() != 0? cart: null;
     }
+
+    public List<Carts> getCarts(int cartID) {
+        String sql = "Select * from Carts where CartID = ?";
+        List<Carts> cart = jdbcTemplate.query(sql,CART_ROW_MAPPER, cartID);
+        return cart.size() != 0? cart: null;
+    }
     public Carts getLastCart() {
         List<Carts> list = getCarts();
         return list.size() != 0 ? list.get(list.size()-1) : null;

@@ -4,6 +4,7 @@ import com.example.projectswp.data_view_model.blog.*;
 import com.example.projectswp.data_view_model.blogcategory.ReturnMessage;
 import com.example.projectswp.model.Blog;
 import com.example.projectswp.repositories.BlogRepository;
+import com.example.projectswp.repositories.UserAccountRepository;
 import com.example.projectswp.repositories.ultil.Ultil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,11 +24,12 @@ public class BlogController {
     private static final int DELETE_STATUS = 3;
     @Autowired
     BlogRepository blogRepository;
-
+    @Autowired
+    UserAccountRepository userAccountRepository;
     @GetMapping("/all")
     public ResponseEntity<?> getBlogs(@ModelAttribute BlogPage blogPage) {
         try {
-            List<Blog> blogs = blogRepository.getBlogs(1);
+            List<Blog> blogs = blogRepository.getBlogs();
             BlogListVM blogListVM = BlogListVM.create(blogs, blogPage.getPageNumber(), blogPage.getPageSize());
             return ResponseEntity.ok(blogListVM);
         } catch (Exception ex) {
@@ -85,7 +87,7 @@ public class BlogController {
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ReturnMessage> createBlog(@RequestBody CreateBlogVM createBlogVM) {
         try {
             int uid = Ultil.getUserId();

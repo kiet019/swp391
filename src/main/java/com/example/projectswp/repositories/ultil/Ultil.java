@@ -55,5 +55,4 @@ public class Ultil {
         int endIndex = Math.min(startIndex + pageSize, list.size());
         return list.subList(startIndex, endIndex);
     }
-
 }

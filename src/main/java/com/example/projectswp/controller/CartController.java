@@ -20,7 +20,7 @@ import java.util.List;
 public class CartController {
     @Autowired
     CartRepository cartRepository;
-    @GetMapping("/useraccount/cart")
+    @GetMapping("/cart/token")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<Carts>> getCarts() {
         List<Carts> cart = cartRepository.getCarts();
@@ -36,7 +36,7 @@ public class CartController {
         }
         return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
-    @PatchMapping("/cart")
+    @PatchMapping("/cart/update")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Object> updateCartAddress(@RequestBody Carts carts) {
         boolean result = false;
