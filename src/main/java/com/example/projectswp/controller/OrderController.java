@@ -8,7 +8,6 @@ import com.example.projectswp.model.Order;
 import com.example.projectswp.repositories.ItemsRepository;
 import com.example.projectswp.repositories.OrderRepository;
 import com.example.projectswp.repositories.ultil.Ultil;
-import com.sun.org.apache.xpath.internal.operations.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
