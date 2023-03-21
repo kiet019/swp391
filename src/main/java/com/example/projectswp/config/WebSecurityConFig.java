@@ -21,7 +21,12 @@ import java.util.Arrays;
 public class WebSecurityConFig extends WebSecurityConfigurerAdapter {
     @Autowired
     private FirebaseAuthenticationFilter firebaseAuthenticationFilter;
-
+    private static final String[] AUTH_WHITE_LIST = {
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/v2/api-docs/**",
+            "/swagger-resources/**"
+    };
     @Autowired
     private AuthorizationFilter authorizationFilter;
 
@@ -31,19 +36,14 @@ public class WebSecurityConFig extends WebSecurityConfigurerAdapter {
                 .addFilterAfter(authorizationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests().antMatchers(HttpMethod.GET,"/api/Item/**", "/api/Category/**", "/api/SubCategory/**", "/api/blog/**", "/api/category-sub/**", "/api/blogcategory/**", "/api/comment/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/useraccount/login").permitAll()
-                .antMatchers("/swagger-ui.html/**").permitAll()
-                .antMatchers("/swagger-ui.html/**", "/configuration/**", "/swagger-resources/**", "/v2/api-docs","/webjars/**").permitAll()
+                .antMatchers("/swagger-ui.html").permitAll()
+                .antMatchers(AUTH_WHITE_LIST).permitAll()
                 .anyRequest().authenticated()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().csrf().disable()
                 .cors();
     }
 
-//    @Override
-//    public void configure(WebSecurity web) throws Exception {
-//        web.ignoring().mvcMatchers(HttpMethod.OPTIONS, "/**");
-//        web.ignoring().mvcMatchers("/swagger-ui.html/**", "/configuration/**", "/swagger-resources/**", "/v2/api-docs","/webjars/**");
-//    }
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
