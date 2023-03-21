@@ -5,6 +5,7 @@ import com.example.projectswp.model.CartDetails;
 import com.example.projectswp.model.Carts;
 import com.example.projectswp.model.Items;
 import com.example.projectswp.repositories.rowMapper.CartDetailsRowMapper;
+import com.example.projectswp.repositories.ultil.Ultil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -19,6 +20,10 @@ public class CartDetailsRepository {
     private static final CartDetailsRowMapper  CART_DETAILS_ROW_MAPPER  = new CartDetailsRowMapper();
     @Autowired
     JdbcTemplate jdbcTemplate;
+    @Autowired
+    RequestRepository requestRepository;
+    @Autowired
+    UserAccountRepository userAccountRepository;
     public Date getCurrentDate(){
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         LocalDateTime now = LocalDateTime.now();
@@ -64,5 +69,12 @@ public class CartDetailsRepository {
         String sql = "DELETE dbo.CartDetails WHERE CartDetailID = ?";
         int check = jdbcTemplate.update(sql, id);
         return check > 0;
+    }
+
+    public boolean cartDetailtoRequest(String note, int cartDetailId, int userID) {
+        CartDetails cartDetails = this.getCartDetail(cartDetailId);
+        boolean check = requestRepository.addRequest(userID, cartDetails.getItemQuantity(),cartDetails.getItemId(),
+                userAccountRepository.getUserAddress(userID), note, Ultil.getCurrentDate(),1, null);
+        return check  ;
     }
 }

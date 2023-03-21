@@ -6,6 +6,7 @@ import com.example.projectswp.model.Blog;
 import com.example.projectswp.model.CartDetails;
 import com.example.projectswp.model.Items;
 import com.example.projectswp.repositories.CartDetailsRepository;
+import com.example.projectswp.repositories.ultil.Ultil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -62,8 +63,17 @@ public class CartDetailController {
     }
 
     @PatchMapping("/cartdetail/confirm")
-    public ResponseEntity<?> confirmCartDetail(@RequestBody CartDetailConfirmVM cartDetailConfirmVM) {
-        return null;
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<Object> confirmCartDetail(@RequestBody CartDetailConfirmVM cartDetailConfirmVM) {
+        boolean check = false;
+        for (int cartDetailID : cartDetailConfirmVM.getListCartDetailID()) {
+            check = cartDetailsRepository.cartDetailtoRequest(cartDetailConfirmVM.getNote(), cartDetailID, Ultil.getUserId());
+            cartDetailsRepository.deleteCartDetail(cartDetailID);
+            if (!check) {
+                return ResponseEntity.badRequest().build();
+            }
+        }
+        return ResponseEntity.ok().build();
     }
 
 

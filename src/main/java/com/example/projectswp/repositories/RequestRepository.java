@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -32,6 +33,14 @@ public class RequestRepository {
         String sql = "SELECT * FROM dbo.Requests WHERE RequestID = ?";
         List<Request> requestList= jdbcTemplate.query(sql,REQUEST_ROW_MAPPER,requestID);
         return requestList.size() != 0 ? requestList.get(0) : null;
+    }
+
+    public boolean addRequest(int userID, int itemQuality, int itemID, String address, String note, Date created, int status, Date update) {
+        int check = 0;
+        String sql = "insert into dbo.Requests([UserID], [ItemQuantity], [ItemID], [Address], [Note], [DateCreate], [Status], [DateChangeStatus])\n" +
+                "values (?, ?, ?, ?, ?, ?, ?, ?)";
+        check = jdbcTemplate.update(sql, userID, itemQuality, itemID, address, note, created, status, update);
+        return  check > 0;
     }
 
     public boolean updateStatus(int requestId,int status) {
