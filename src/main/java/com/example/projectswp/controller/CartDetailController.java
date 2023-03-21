@@ -50,9 +50,9 @@ public class CartDetailController {
     }
     @DeleteMapping("/cartdetail")
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    public ResponseEntity<Object> deleteItem(@RequestBody CartDetails cartDetailsDelete){
+    public ResponseEntity<Object> deleteItem(@RequestParam int CartDetailid){
         try {
-            boolean result = cartDetailsRepository.deleteCartDetail(cartDetailsDelete);
+            boolean result = cartDetailsRepository.deleteCartDetail(CartDetailid);
             return result ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

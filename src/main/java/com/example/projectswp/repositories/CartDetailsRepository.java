@@ -52,9 +52,9 @@ public class CartDetailsRepository {
         return check != 0;
     }
 
-    public boolean deleteCartDetail(CartDetails cartDetails){
+    public boolean deleteCartDetail(int id){
         String sql = "DELETE dbo.CartDetails WHERE CartDetailID = ?";
-        int check = jdbcTemplate.update(sql, cartDetails.getCartDetailId());
+        int check = jdbcTemplate.update(sql, id);
         return check > 0;
     }
 }
