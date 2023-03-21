@@ -8,6 +8,7 @@ import com.example.projectswp.repositories.ultil.Ultil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("api")
+@RequestMapping("api/blog")
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class BlogController {
     private static final int ACCEPT_STATUS = 1;
@@ -23,18 +24,19 @@ public class BlogController {
     @Autowired
     BlogRepository blogRepository;
 
-    @GetMapping("/blog/all")
+    @GetMapping("/all")
     public ResponseEntity<?> getBlogs(@ModelAttribute BlogPage blogPage) {
         try {
             List<Blog> blogs = blogRepository.getBlogs(1);
             BlogListVM blogListVM = BlogListVM.create(blogs, blogPage.getPageNumber(), blogPage.getPageSize());
             return ResponseEntity.ok(blogListVM);
         } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ReturnMessage.create(ex.getMessage()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-    @GetMapping("/useraccount/blog")
+    @GetMapping("/token")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> getBlog(@ModelAttribute BlogPage blogPage) {
         try {
             int userID = Ultil.getUserId();
@@ -42,11 +44,11 @@ public class BlogController {
             BlogListVM blogListVM = BlogListVM.create(blogs, blogPage.getPageNumber(), blogPage.getPageSize());
             return ResponseEntity.ok(blogListVM);
         } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ReturnMessage.create(ex.getMessage()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-    @GetMapping("/blog")
+    @GetMapping("")
     public ResponseEntity<?> getBlog(@ModelAttribute BlogGetVM blogGetVM) {
         try {
             List<Blog> blogs;
@@ -66,11 +68,12 @@ public class BlogController {
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.badRequest().body(ReturnMessage.create(ex.getMessage()));
         } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ReturnMessage.create(ex.getMessage()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-    @PutMapping("/blog")
+    @PutMapping("/update")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ReturnMessage> updateBlog(@RequestBody UpdateBlogVM blogVM) {
         try {
             int uid = Ultil.getUserId();
@@ -81,7 +84,8 @@ public class BlogController {
         }
     }
 
-    @PostMapping("/blog/create")
+    @PostMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ReturnMessage> createBlog(@RequestBody CreateBlogVM createBlogVM) {
         try {
             int uid = Ultil.getUserId();
@@ -97,7 +101,8 @@ public class BlogController {
         }
     }
 
-    @PatchMapping("/blog/accept")
+    @PatchMapping("/accept")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ReturnMessage> blogAccept(@RequestBody BlogIdVM blogIdVM) {
         try {
             boolean isUpdated = blogRepository.updateStatus(blogIdVM.getBlogId(), ACCEPT_STATUS);
@@ -107,25 +112,25 @@ public class BlogController {
         }
     }
 
-    @PatchMapping("/blog/deny")
+    @PatchMapping("/deny")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ReturnMessage> blogDeny(@RequestBody BlogDenyVM blogDenyVM) {
         try {
-
             boolean isDeleted = blogRepository.denyBlog(blogDenyVM);
             return isDeleted ? ResponseEntity.ok(ReturnMessage.create("success")) : ResponseEntity.notFound().build();
-
         } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ReturnMessage.create(ex.getMessage()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-    @PatchMapping("/blog/delete")
+    @PatchMapping("/delete")
+    @PreAuthorize("hasAnyRole('USER')")
     public ResponseEntity<ReturnMessage> deleteBlog(@RequestBody BlogIdVM blogIdVM) {
         try {
             boolean isDeleted = blogRepository.updateStatus(blogIdVM.getBlogId(), DELETE_STATUS);
             return isDeleted ? ResponseEntity.ok(ReturnMessage.create("Blog deleted successfully.")) : ResponseEntity.notFound().build();
         } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ReturnMessage.create(ex.getMessage()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 }

@@ -24,7 +24,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/user")
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@Api(tags = "Projects")
 public class AccountController {
     @Autowired
     UserAccountRepository userAccountRepository;

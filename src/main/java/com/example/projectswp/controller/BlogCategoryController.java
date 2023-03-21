@@ -8,6 +8,7 @@ import com.example.projectswp.repositories.BlogCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +27,7 @@ public class BlogCategoryController {
             List<BlogCategory> blogCategories = blogCategoryRepository.getBlogCategories();
             return ResponseEntity.ok(blogCategories);
         } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ReturnMessage.create(ex.getMessage()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -36,11 +37,12 @@ public class BlogCategoryController {
             BlogCategory blogCategory = blogCategoryRepository.getBlogCategory(blogCategoryId);
             return ResponseEntity.ok(blogCategory);
         } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ReturnMessage.create(ex.getMessage()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ReturnMessage> createBlogCategory(@RequestBody CreateBlogCategoryVM blogCategoryNameVM) {
         try {
             String blogCategoryName = blogCategoryNameVM.getBlogCategoryName();
@@ -53,7 +55,7 @@ public class BlogCategoryController {
             }
             return ResponseEntity.badRequest().body(ReturnMessage.create("error at create Blog Category"));
         } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ReturnMessage.create(ex.getMessage()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 }
