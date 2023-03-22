@@ -198,7 +198,7 @@ public class ItemsRepository {
         String sql =  "Select * from Items";
         int count= 0;
         if(dynamicFilterVM.getCategoryID() !=0 && count == 0){
-            sql = sql + " Where CategoryID = " + String.valueOf(dynamicFilterVM.getCategoryID());
+            sql = sql + " item inner join dbo.SubCategories subcategory on item.Sub_CategoryID = subcategory.Sub_CategoryID where subcategory.CategoryID = " + String.valueOf(dynamicFilterVM.getCategoryID());
             count = 1;
         }
         if(dynamicFilterVM.getTitleName() != null && count == 0) {
@@ -210,20 +210,20 @@ public class ItemsRepository {
         }
         //////////////////////////////////////
         if(dynamicFilterVM.getMaxPrice() >= dynamicFilterVM.getMinPrice() && count == 0) {
-            sql = sql + " Where Item_Sale_Price <= " +String.valueOf(dynamicFilterVM.getMaxPrice()) +"and Item_Sale_Price >="
+            sql = sql + " Where Item_Sale_Price <= " +String.valueOf(dynamicFilterVM.getMaxPrice()) +" and Item_Sale_Price >="
                     + String.valueOf(dynamicFilterVM.getMaxPrice());
             count = 1;
         }
-        if(dynamicFilterVM.getMaxPrice() >= dynamicFilterVM.getMinPrice() && count == 1){
+        else{
             sql = sql + " And Item_Sale_Price <= " +String.valueOf(dynamicFilterVM.getMaxPrice()) +"and Item_Sale_Price >="
                     + String.valueOf(dynamicFilterVM.getMaxPrice());
         }
-        sql = sql + " Where Item_Estimate_Value <= " +String.valueOf(dynamicFilterVM.getMaxUsable()) +"and Item_Estimate_Value >="
+        sql = sql + " and Item_Estimate_Value <= " +String.valueOf(dynamicFilterVM.getMaxUsable()) +" and Item_Estimate_Value >="
                 + String.valueOf(dynamicFilterVM.getMinUsable());
 
-        sql = sql + "ORDER BY ItemID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        sql = sql + " ORDER BY ItemID OFFSET " + String.valueOf(itemsToSkip)+ " ROWS FETCH NEXT " + String.valueOf(pageSize)+ " ROWS ONLY";
 
-        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER, itemsToSkip, pageSize);
+        List<Items> items = jdbcTemplate.query(sql,ITEMS_ROW_MAPPER);
         return items.size() != 0? items: null;
     }
 
