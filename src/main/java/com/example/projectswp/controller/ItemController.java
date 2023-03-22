@@ -1,5 +1,6 @@
 package com.example.projectswp.controller;
 
+import com.example.projectswp.data_view_model.Item.DynamicFilterVM;
 import com.example.projectswp.data_view_model.Item.ItemDeleteVM;
 import com.example.projectswp.data_view_model.blog.BlogDenyVM;
 import com.example.projectswp.data_view_model.blogcategory.ReturnMessage;
@@ -118,5 +119,9 @@ public class ItemController {
         List<Items> item = itemsRepository.getListAllMyRequestItem(share, status, pageNumber, pageSize);
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-
+    @GetMapping("/GetItemDynamicFilters")
+    public ResponseEntity<List<Items>> getItemDynamicFilters(@RequestParam int pageNumber, @RequestParam int pageSize, DynamicFilterVM dynamicFilterVM) {
+        List<Items> item = itemsRepository.getItemDynamicFilters(pageNumber, pageSize, dynamicFilterVM);
+        return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
 }
