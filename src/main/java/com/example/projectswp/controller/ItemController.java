@@ -120,7 +120,7 @@ public class ItemController {
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
     @GetMapping("/GetItemDynamicFilters")
-    public ResponseEntity<List<Items>> getItemDynamicFilters(@RequestParam int pageNumber, @RequestParam int pageSize, DynamicFilterVM dynamicFilterVM) {
+    public ResponseEntity<List<Items>> getItemDynamicFilters(@RequestParam int pageNumber, @RequestParam int pageSize, @RequestBody DynamicFilterVM dynamicFilterVM) {
         List<Items> item = itemsRepository.getItemDynamicFilters(pageNumber, pageSize, dynamicFilterVM);
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
