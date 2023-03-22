@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/reply")
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ReplyController {
 
@@ -24,19 +24,19 @@ public class ReplyController {
     @Autowired
     UserAccountRepository userAccountRepository;
 
-    @PostMapping("Reply/create")
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PostMapping("create")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Object> insertReply(@RequestBody Reply reply) {
         return replyRepository.insertReply(reply, Ultil.getUserId()) ? ResponseEntity.ok().body("success") : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 
-    @PutMapping("reply")
+    @PutMapping("")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Object> updateReply(@RequestBody Reply reply) {
         return replyRepository.updateReply(reply, Ultil.getUserId()) ? ResponseEntity.ok().body("success") : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 
-    @DeleteMapping("reply/delete")
+    @DeleteMapping("/delete")
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<Object> deleteReply(@RequestBody Reply reply) {
         int userID = Ultil.getUserId();
