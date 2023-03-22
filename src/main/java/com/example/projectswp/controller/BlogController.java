@@ -36,7 +36,7 @@ public class BlogController {
         }
     }
 
-    @GetMapping("/admin/blog")
+    @GetMapping("/blog/admin")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getBlogByAdmin(@ModelAttribute BlogAdminVM blogAdminVM) {
         try {
@@ -48,7 +48,7 @@ public class BlogController {
         }
 
     }
-    @GetMapping("/useraccont/blog")
+    @GetMapping("/blog/token")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> getBlog(@ModelAttribute BlogPage blogPage) {
         try {
