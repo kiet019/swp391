@@ -202,11 +202,11 @@ public class ItemsRepository {
             count = 1;
         }
         if(dynamicFilterVM.getTitleName() != null && count == 0) {
-            sql = sql + " Where Item_Title = "  + "'" + String.valueOf(dynamicFilterVM.getTitleName() +"%") +"'";
+            sql = sql + " Where Item_Title like "  + "'%" + String.valueOf(dynamicFilterVM.getTitleName()) +"%'";
             count = 1;
         }
         if(dynamicFilterVM.getTitleName() != null && count == 1){
-            sql = sql + " And Item_Title like "  + "'" + String.valueOf(dynamicFilterVM.getTitleName() +"%") +"'";
+            sql = sql + " And Item_Title like "  + "'%" + String.valueOf(dynamicFilterVM.getTitleName()) +"%'";
         }
         //////////////////////////////////////
         if(dynamicFilterVM.getMaxPrice() >= dynamicFilterVM.getMinPrice() && count == 0) {
