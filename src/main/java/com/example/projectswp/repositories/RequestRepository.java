@@ -64,7 +64,7 @@ public class RequestRepository {
             items.setItemShareAmount(items.getItemShareAmount() - request.getItemQuantity());
 
         }
-        if(itemsRepository.updateItems(items) && updateStatus(request.getRequestID(), 1)) {
+        if(itemsRepository.updateItems(items) && updateStatus(request.getRequestID(), 2)) {
             Request currentRequest = getRequestByID(request.getRequestID());
             if(currentRequest != null) {
                 orderRepository.createOrder(currentRequest);

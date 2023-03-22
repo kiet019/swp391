@@ -28,9 +28,9 @@ public class BlogRepository {
     @Autowired
     CommentRepository commentRepository;
 
-    public List<Blog> getBlogs() {
-        String sql = "SELECT * FROM Blogs where order by [Blog_Date_Create] DESC";
-        List<Blog> blogs = jdbcTemplate.query(sql,BLOG_ROW_MAPPER);
+    public List<Blog> getBlogs(int status) {
+        String sql = "SELECT * FROM Blogs where Blog_Status = ? order by [Blog_Date_Create] DESC";
+        List<Blog> blogs = jdbcTemplate.query(sql,BLOG_ROW_MAPPER, status);
         addCommentToBlogList(blogs);
         return blogs.size() != 0 ? blogs : null;
     }
@@ -75,9 +75,15 @@ public class BlogRepository {
         addCommentToBlogList(blogs);
         return blogs.size() != 0 ? blogs: null;
     }
+    public List<Blog> getBlogByUserId(int userID, int status) {
+        String sql = "SELECT * FROM Blogs WHERE UserID = ? and Blog_Status = ?";
+        List<Blog> blogs = jdbcTemplate.query(sql,BLOG_ROW_MAPPER, userID, status);
+        addCommentToBlogList(blogs);
+        return blogs.size() != 0 ? blogs: null;
+    }
 
     public List<Blog> getBlogByCategoryId(int blogCategoryId) {
-        String sql = "SELECT * FROM Blogs WHERE Blog_CategoryID = ?";
+        String sql = "SELECT * FROM Blogs WHERE Blog_CategoryID = ? and Blog_Status = 1";
         List<Blog> blogs = jdbcTemplate.query(sql,BLOG_ROW_MAPPER, blogCategoryId);
         addCommentToBlogList(blogs);
         return blogs.size() != 0 ? blogs: null;
