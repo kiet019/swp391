@@ -29,7 +29,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
             int role = userAccountRepository.getUserAccountRole(authentication.getPrincipal().toString());
                 if (role == 1) {
                     authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-                } else if (role == 2) {
+                } else if (role == 2 && userAccountRepository.isBanned(Integer.parseInt(authentication.getCredentials().toString()))){
                     authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
                 }
             Authentication updatedAuthentication = new UsernamePasswordAuthenticationToken(authentication.getPrincipal(), authentication.getCredentials(), authorities);

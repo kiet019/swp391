@@ -14,10 +14,10 @@ public class UserAddressRepository {
     private static final UserAddressRowMapper USER_ADDRESS_ROW_MAPPER = new UserAddressRowMapper();
     @Autowired
     JdbcTemplate jdbcTemplate;
-    public UserAddress getUserAddress(int uid) {
+    public List<UserAddress> getUserAddress(int uid) {
         String sql = "SELECT * FROM dbo.UserAddress WHERE UserID = ?";
         List<UserAddress> userAddress= jdbcTemplate.query(sql, USER_ADDRESS_ROW_MAPPER, uid);
-        return userAddress.size() > 0 ? userAddress.get(0) : null;
+        return userAddress.size() > 0 ? userAddress : null;
     }
 
     public boolean createAddress(int uid, String address) {

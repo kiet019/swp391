@@ -23,7 +23,7 @@ public class CartDetailsRepository {
     @Autowired
     RequestRepository requestRepository;
     @Autowired
-    UserAccountRepository userAccountRepository;
+    CartRepository cartRepository;
     public Date getCurrentDate(){
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         LocalDateTime now = LocalDateTime.now();
@@ -45,8 +45,8 @@ public class CartDetailsRepository {
         return cartDetails.size() != 0? cartDetails.get(0): null;
     }
     public List<CartDetails> getCartDetails() {
-        String sql = "Select * from CartDetails";
-        List<CartDetails> cartDetails = jdbcTemplate.query(sql,CART_DETAILS_ROW_MAPPER);
+        String sql = "Select * from CartDetails where CartID = ?";
+        List<CartDetails> cartDetails = jdbcTemplate.query(sql,CART_DETAILS_ROW_MAPPER, cartRepository.getCarts().get(0).getCartID());
         return cartDetails.size() != 0? cartDetails: null;
     }
 
@@ -54,14 +54,14 @@ public class CartDetailsRepository {
         String sql = "insert into dbo.CartDetails ([CartID], [ItemID], [ItemQuantity])\n" +
                 "values (?, ?, ?)";
 
-        int check = jdbcTemplate.update(sql, cartDetails.getCartId(), cartDetails.getItemId(), 1);
+        int check = jdbcTemplate.update(sql, cartRepository.getCarts().get(0).getCartID(), cartDetails.getItemId(), 1);
         return check != 0;
     }
     public boolean updateCartDetail(CartDetails cartDetails) {
         String sql = "update dbo.CartDetails\n" +
                 "set ItemQuantity = ?\n" +
-                "where CartDetailID = ?";
-        int check = jdbcTemplate.update(sql,cartDetails.getItemQuantity(), cartDetails.getCartDetailId());
+                "where CartDetailID = ? AND CartID = ?";
+        int check = jdbcTemplate.update(sql,cartDetails.getItemQuantity(), cartDetails.getCartDetailId(), cartRepository.getCarts().get(0).getCartID());
         return check != 0;
     }
 
@@ -74,7 +74,7 @@ public class CartDetailsRepository {
     public boolean cartDetailtoRequest(String note, int cartDetailId, int userID) {
         CartDetails cartDetails = this.getCartDetail(cartDetailId);
         boolean check = requestRepository.addRequest(userID, cartDetails.getItemQuantity(),cartDetails.getItemId(),
-                userAccountRepository.getUserAddress(userID), note, Ultil.getCurrentDate(),1, null);
+                cartRepository.getAddress(userID), note, Ultil.getCurrentDate(),1, null);
         return check  ;
     }
 }

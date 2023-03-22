@@ -8,7 +8,6 @@ import com.example.projectswp.repositories.UserAccountRepository;
 import com.example.projectswp.repositories.ultil.Ultil;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
-import com.google.firebase.auth.FirebaseToken;
 import com.google.firebase.auth.UserRecord;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,9 +22,8 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/useraccount")
+@RequestMapping("/api/user")
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@Api(tags = "Projects")
 public class AccountController {
     @Autowired
     UserAccountRepository userAccountRepository;
@@ -61,54 +57,76 @@ public class AccountController {
             boolean result = false;
             UserRecord userRecord = FirebaseAuth.getInstance().getUser(Ultil.getUserCode());
             if (Ultil.getUserId() == 0)
-            result = userAccountRepository.addUserAccount(userAccount, userRecord, 50);
+                result = userAccountRepository.addUserAccount(userAccount, userRecord, 50);
 //            Ultil.sendMail("Create Accounnt", "Create account success, welcome to MOBY shop", userRecord.getEmail());
             return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         } catch (Exception e) {
 //            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ReturnMessage.create(e.getMessage()));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 
-    @PutMapping("")
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PutMapping("/update")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Object> updateAccount(@RequestBody UpdateUserVM updateUserVM) {
-        int uid = Ultil.getUserId();
-        boolean result = userAccountRepository.updateUser(uid, updateUserVM);
-        return result ? ResponseEntity.ok(ReturnMessage.create("update success")) : ResponseEntity.notFound().build();
+        try {
+            int uid = Ultil.getUserId();
+            boolean result = userAccountRepository.updateUser(uid, updateUserVM);
+            return result ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @GetMapping("")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserAccount> getUserAccount(@RequestParam int UserId) {
-        UserAccount userAccount = userAccountRepository.getUserAccountById(UserId);
-        return userAccount != null ? ResponseEntity.ok(userAccount) : ResponseEntity.notFound().build();
+        try {
+            UserAccount userAccount = userAccountRepository.getUserAccountById(UserId);
+            return userAccount != null ? ResponseEntity.ok(userAccount) : ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PatchMapping("/ban")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Object> banAccount(@RequestBody UserIdVM userIdVM) {
-        boolean result = userAccountRepository.updateUserStatus(userIdVM.getUserId(), false);
-        return result ? ResponseEntity.ok(ReturnMessage.create("ban success")) : ResponseEntity.notFound().build();
+        try {
+            boolean result = userAccountRepository.updateUserStatus(userIdVM.getUserId(), false);
+            return result ? ResponseEntity.ok(ReturnMessage.create("ban success")) : ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return  ResponseEntity.badRequest().build();
+        }
+
     }
 
     @PatchMapping("/unban")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Object> unbanAccount(@RequestBody UserIdVM userIdVM) {
-        boolean result = userAccountRepository.updateUserStatus(userIdVM.getUserId(), true);
-        return result ? ResponseEntity.ok(ReturnMessage.create("unban success")) : ResponseEntity.notFound().build();
+        try {
+            boolean result = userAccountRepository.updateUserStatus(userIdVM.getUserId(), true);
+            return result ? ResponseEntity.ok(ReturnMessage.create("unban success")) : ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return  ResponseEntity.badRequest().build();
+        }
     }
 
     @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserAccount>> getAccounts( @RequestParam int pageNumber, @RequestParam int pageSize) {
-        int skip = (pageNumber-1)*5;
-        int getNumber = pageSize;
-        List<UserAccount> list = userAccountRepository.getUserAccounts(skip, getNumber);
-        return list != null ? ResponseEntity.ok(list) : ResponseEntity.notFound().build();
+        try {
+            int skip = (pageNumber-1)*5;
+            int getNumber = pageSize;
+            List<UserAccount> list = userAccountRepository.getUserAccounts(skip, getNumber);
+            return list != null ? ResponseEntity.ok(list) : ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @GetMapping("/token")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<UserAccount> getAccountToken() {
         int uid = Ultil.getUserId();
         UserAccount userAccount = userAccountRepository.getUserAccountById(uid);

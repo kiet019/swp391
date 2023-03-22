@@ -84,4 +84,9 @@ public class UserAccountRepository {
     public boolean isExistUser(int id){
         return getUserAccountById(id) != null;
     }
+    public boolean isBanned(int userID) {
+        String sql = "select * from UserAccounts where UserID = ?";
+        List<UserAccount> userAccounts = jdbcTemplate.query(sql, USER_ACCOUNT_ROW_MAPPER, userID);
+        return userAccounts.size() != 0 ? userAccounts.get(0).isStatus(): false;
+    }
 }

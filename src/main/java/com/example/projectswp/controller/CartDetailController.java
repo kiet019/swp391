@@ -6,6 +6,7 @@ import com.example.projectswp.model.Blog;
 import com.example.projectswp.model.CartDetails;
 import com.example.projectswp.model.Items;
 import com.example.projectswp.repositories.CartDetailsRepository;
+import com.example.projectswp.repositories.CartRepository;
 import com.example.projectswp.repositories.ultil.Ultil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,27 +19,35 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/cartdetail")
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class CartDetailController {
     @Autowired
     CartDetailsRepository cartDetailsRepository;
-
-
-    @GetMapping("/cartdetail")
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    public ResponseEntity<List<CartDetails>> getCartDetails(@RequestBody CartDetailGetVM cartDetailGetVM) {
-        List<CartDetails> cartDetails = cartDetailsRepository.getCartDetails(cartDetailGetVM);
-        return cartDetails != null ? ResponseEntity.ok(cartDetails) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    @Autowired
+    CartRepository cartRepository;
+    @GetMapping("/token")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<CartDetails>> getCartDetails() {
+        try {
+            List<CartDetails> cartDetails = cartDetailsRepository.getCartDetails();
+            return cartDetails != null ? ResponseEntity.ok(cartDetails) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
-    @PostMapping("/cartdetail/create")
+    @PostMapping("/create")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<CartDetails> createCartDetail(@RequestBody CartDetails addCartDetails) {
-        boolean result = cartDetailsRepository.addCartDetails(addCartDetails);
-        return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        try {
+            boolean result = cartDetailsRepository.addCartDetails(addCartDetails);
+            return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
-    @PutMapping("/cartdetail")
+    @PutMapping("/update")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Object> updateCartDetail(@RequestBody CartDetails cartDetails) {
         try {
@@ -48,21 +57,24 @@ public class CartDetailController {
             }
             return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
-    @DeleteMapping("/cartdetail")
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    public ResponseEntity<Object> deleteItem(@RequestParam int CartDetailid){
+    @DeleteMapping("/delete")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<Object> deleteItem(@RequestParam int cartDetailid){
         try {
-            boolean result = cartDetailsRepository.deleteCartDetail(CartDetailid);
+            boolean result = false;
+            if (cartRepository.getCarts(cartDetailsRepository.getCartDetail(cartDetailid).getCartId()).get(0).getUserID() == Ultil.getUserId()) {
+                result = cartDetailsRepository.deleteCartDetail(cartDetailid);
+            }
             return result ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().build();
         }
     }
 
-    @PatchMapping("/cartdetail/confirm")
+    @PatchMapping("/confirm")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Object> confirmCartDetail(@RequestBody CartDetailConfirmVM cartDetailConfirmVM) {
         boolean check = false;
@@ -75,6 +87,4 @@ public class CartDetailController {
         }
         return ResponseEntity.ok().build();
     }
-
-
 }
