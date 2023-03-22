@@ -122,8 +122,15 @@ public class BlogController {
     @PatchMapping("/blog/delete")
     public ResponseEntity<ReturnMessage> deleteBlog(@RequestBody BlogIdVM blogIdVM) {
         try {
+            int uid = Ultil.getUserId();
+            Blog blog = blogRepository.getBlog(blogIdVM.getBlogId());
+            if(blog == null)
+                return ResponseEntity.notFound().build();
+            if(blog.getUserId() != uid)
+                return ResponseEntity.badRequest().body(ReturnMessage.create("you are not blog owner!"));
+
             boolean isDeleted = blogRepository.updateStatus(blogIdVM.getBlogId(), DELETE_STATUS);
-            return isDeleted ? ResponseEntity.ok(ReturnMessage.create("Blog deleted successfully.")) : ResponseEntity.notFound().build();
+            return isDeleted ? ResponseEntity.ok(ReturnMessage.create("success")) : ResponseEntity.notFound().build();
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ReturnMessage.create(ex.getMessage()));
         }

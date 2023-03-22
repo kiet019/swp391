@@ -70,14 +70,14 @@ public class BlogRepository {
     }
 
     public List<Blog> getBlogByUserId(int userID) {
-        String sql = "SELECT * FROM Blogs WHERE UserID = ?";
+        String sql = "SELECT * FROM Blogs WHERE UserID = ? and Blog_Status = 1";
         List<Blog> blogs = jdbcTemplate.query(sql,BLOG_ROW_MAPPER, userID);
         addCommentToBlogList(blogs);
         return blogs.size() != 0 ? blogs: null;
     }
 
     public List<Blog> getBlogByCategoryId(int blogCategoryId) {
-        String sql = "SELECT * FROM Blogs WHERE Blog_CategoryID = ?";
+        String sql = "SELECT * FROM Blogs WHERE Blog_CategoryID = ? and Blog_Status = 1";
         List<Blog> blogs = jdbcTemplate.query(sql,BLOG_ROW_MAPPER, blogCategoryId);
         addCommentToBlogList(blogs);
         return blogs.size() != 0 ? blogs: null;
