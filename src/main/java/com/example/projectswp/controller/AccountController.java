@@ -125,7 +125,7 @@ public class AccountController {
         }
     }
 
-    @GetMapping("/token")
+    @GetMapping("/user")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<UserAccount> getAccountToken() {
         int uid = Ultil.getUserId();

@@ -26,7 +26,7 @@ public class CartDetailController {
     CartDetailsRepository cartDetailsRepository;
     @Autowired
     CartRepository cartRepository;
-    @GetMapping("/token")
+    @GetMapping("/user")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<CartDetails>> getCartDetails() {
         try {

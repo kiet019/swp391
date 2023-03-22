@@ -48,7 +48,7 @@ public class BlogController {
         }
 
     }
-    @GetMapping("/blog/token")
+    @GetMapping("/blog/user")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> getBlog(@ModelAttribute BlogPage blogPage) {
         try {
