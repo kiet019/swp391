@@ -16,7 +16,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/Item")
+@RequestMapping("/api/item")
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 
 public class ItemController {
@@ -27,55 +27,50 @@ public class ItemController {
         List<Items> item = itemsRepository.getItems();
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @PostMapping("/CreateItem")
+    @PostMapping("/create")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Items> createItem(@RequestBody Items addItems) {
         boolean result = itemsRepository.addItems(addItems);
         URI uri = URI.create("localhost:8080/api/Item/" + itemsRepository.getLastItem().getItemID());
         return result ? ResponseEntity.created(uri).build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
-    @GetMapping("/GetAllBriefItemAndBriefRequest")
+    @GetMapping("/getAllBriefItemAndBriefRequest")
         public ResponseEntity<List<Items>> getAllBriefItemAndBriefRequest(@RequestParam boolean share, @RequestParam boolean status, @RequestParam int pageNumber, @RequestParam int pageSize) {
         List<Items> item = itemsRepository.getAllBriefItemAndBriefRequest(share, status, pageNumber, pageSize);
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @GetMapping("/GetItemDetail")
+    @GetMapping("/getItemDetail")
     public ResponseEntity<Items> getItemDetail(@RequestParam int itemID) {
         Items items = itemsRepository.getItemDetail(itemID);
         return items != null ? ResponseEntity.ok(items) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-//    @GetMapping("/GetRequestDetail")
-//    public ResponseEntity<Items> getRequestDetail(@RequestParam int requestID) {
-//        Items items = itemsRepository.getRequestDetail(requestID);
-//        return items != null ? ResponseEntity.ok(items) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//    }
-    @GetMapping("/GetBriefItemByOrBriefRequestUserID")
+    @GetMapping("/getBriefItemByOrBriefRequestUserID")
     public ResponseEntity<List<Items>> getBriefItemByUserId(@RequestParam int userID, @RequestParam boolean status, @RequestParam boolean share, @RequestParam int pageNumber, @RequestParam int pageSize) {
         List<Items> item = itemsRepository.getBriefItemByOrBriefRequestUserID(userID, status, share, pageNumber, pageSize);
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @GetMapping("/SearchBriefItemByTitle")
+    @GetMapping("/searchBriefItemByTitle")
     public ResponseEntity<List<Items>> searchBriefItemByUserId(@RequestParam String itemTitle,@RequestParam boolean status) {
         List<Items> item = itemsRepository.searchBriefItemByItemTitle(itemTitle, status);
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @GetMapping("/SearchBriefItemBySubCategoryID")
+    @GetMapping("/searchBriefItemBySubCategoryID")
     public ResponseEntity<List<Items>> searchBriefItemBySubCategoryID(@RequestParam int subCategoryID, @RequestParam boolean status) {
         List<Items> item = itemsRepository.searchBriefItemBySubCategoryID(subCategoryID, status);
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @GetMapping("/SearchBriefItemOrBriefRequestByCategoryID")
+    @GetMapping("/searchBriefItemOrBriefRequestByCategoryID")
         public ResponseEntity<List<Items>> searchBriefItemOrBriefRequestByCategoryID(@RequestParam int categoryID, @RequestParam boolean status, @RequestParam boolean share, @RequestParam int pageNumber, @RequestParam int pageSize) {
         List<Items> item = itemsRepository.searchBriefItemByCategoryID(categoryID, status, share, pageNumber, pageSize);
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @PatchMapping("/DeleteItem")
+    @PatchMapping("/delete")
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<ReturnMessage> blogDeny(@RequestBody ItemDeleteVM itemDeleteVM){
         boolean isDeleted = itemsRepository.deleteItem(itemDeleteVM);
         return isDeleted ? ResponseEntity.ok(ReturnMessage.create("success")) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @PutMapping("/UpdateItem")
+    @PutMapping("/update")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Object> updateItem(@RequestBody Items item) {
         try {
@@ -88,32 +83,27 @@ public class ItemController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.toString());
         }
     }
-    @GetMapping("/GetAllMyBriefItemAndBriefRequest")
+    @GetMapping("/getAllMyBriefItemAndBriefRequest")
     public ResponseEntity<List<Items>> getAllMyBriefItemAndBriefRequest(@RequestParam int userID, @RequestParam boolean share) {
         List<Items> item = itemsRepository.getAllBriefItemAndBriefRequestByUserID(userID, share);
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @GetMapping("/GetAllShareRecently")
-    public ResponseEntity<List<Items>> getAllShareRecently(@RequestParam int pageNumber, @RequestParam int pageSize, @RequestParam int userID) {
-        List<Items> item = itemsRepository.getAllShareRecently(pageNumber, pageSize, userID);
-        return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    }
-    @GetMapping("/GetAllShareFree")
+    @GetMapping("/getAllShareFree")
     public ResponseEntity<List<Items>> getAllShareFree(@RequestParam int pageNumber, @RequestParam int pageSize, @RequestParam int userID) {
         List<Items> item = itemsRepository.getAllShareFree(pageNumber, pageSize, userID);
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @GetMapping("/GetAllMyShareAndRequest")
+    @GetMapping("/getAllMyShareAndRequest")
     public ResponseEntity<List<Items>> getAllMyShareAndRequest(@RequestParam boolean share, @RequestParam boolean status, @RequestParam int pageNumber, @RequestParam int pageSize) {
         List<Items> item = itemsRepository.getAllMyShareAndRequest(share, status, pageNumber, pageSize);
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @GetMapping("/GetListAllOtherPersonRequestItem")
+    @GetMapping("/getListAllOtherPersonRequestItem")
     public ResponseEntity<List<Items>> getListAllOtherPersonRequestItem(@RequestParam boolean share, @RequestParam boolean status, @RequestParam int pageNumber, @RequestParam int pageSize) {
         List<Items> item = itemsRepository.getListAllOtherPersonRequestItem(share, status, pageNumber, pageSize);
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    @GetMapping("/GetListAllMyRequestItem")
+    @GetMapping("/getListAllMyRequestItem")
     public ResponseEntity<List<Items>> getListAllMyRequestItem(@RequestParam boolean share, @RequestParam boolean status, @RequestParam int pageNumber, @RequestParam int pageSize) {
         List<Items> item = itemsRepository.getListAllMyRequestItem(share, status, pageNumber, pageSize);
         return item != null ? ResponseEntity.ok(item) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();

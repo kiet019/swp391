@@ -12,6 +12,7 @@ import com.example.projectswp.repositories.ultil.Ultil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,8 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-    @RequestMapping("/api/comment")
-//@EnableGlobalMethodSecurity(prePostEnabled = true)
+@RequestMapping("/api/comment")
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class CommentController {
     @Autowired
     CommentRepository commentRepository;
@@ -54,6 +55,7 @@ public class CommentController {
         }
     }
     @PutMapping("")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> updateComment(@RequestBody CommentUpdateVM commentUpdateVM) {
         try {
 
@@ -66,6 +68,7 @@ public class CommentController {
         }
     }
     @PostMapping("/create")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> createComment(@RequestBody CommentCreateVM createVM) {
         try {
 
@@ -78,6 +81,7 @@ public class CommentController {
         }
     }
     @DeleteMapping("/delete")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<?> deleteComment(@RequestBody CommentIdVM cmtId) {
         try {
 

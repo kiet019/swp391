@@ -12,13 +12,13 @@ import java.net.URI;
 import java.util.List;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 @RestController
-@RequestMapping("/api/Category")
+@RequestMapping("/api/category")
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class CategoryController {
     @Autowired
     CategoryRepository categoryRepository;
 
-    @GetMapping("GetAllCategory")
+    @GetMapping("/all")
     public ResponseEntity<List<Category>> getCategories() {
         try {
             List<Category> list = categoryRepository.getCategories();
@@ -28,7 +28,7 @@ public class CategoryController {
         }
     }
 
-    @GetMapping("GetStatus")
+    @GetMapping("/status")
     public ResponseEntity<List<Category>> getCategoriesByStatus(@RequestParam boolean categoryStatus) {
         try {
             List<Category> list = categoryRepository.getCategoryByStatus(categoryStatus);
@@ -38,7 +38,7 @@ public class CategoryController {
         }
     }
 
-    @GetMapping("SearchCategoryName")
+    @GetMapping("/name")
     public ResponseEntity<List<Category>> getCategoriesByName(@RequestParam String categoryName) {
         try {
             List<Category> list = categoryRepository.getCategoryByName(categoryName);
@@ -48,7 +48,7 @@ public class CategoryController {
         }
     }
 
-    @PostMapping("CreateCategory")
+    @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Category> insertCategory(@RequestBody Category addCategory) {
         try {
@@ -60,7 +60,7 @@ public class CategoryController {
     }
 
 
-    @PutMapping("UpdateCategory")
+    @PutMapping("/update")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Category> updateCategory(@RequestBody Category updateCategory) {
         try {
@@ -74,7 +74,7 @@ public class CategoryController {
         }
     }
 
-    @PutMapping("DeleteCategory")
+    @PutMapping("/delete")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Category> deleteCategory(@RequestBody Category deleteCategory) {
         try {
