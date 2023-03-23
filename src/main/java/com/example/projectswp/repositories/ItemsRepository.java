@@ -211,12 +211,12 @@ public class ItemsRepository {
         //////////////////////////////////////
         if(dynamicFilterVM.getMaxPrice() >= dynamicFilterVM.getMinPrice() && count == 0) {
             sql = sql + " Where Item_Sale_Price <= " +String.valueOf(dynamicFilterVM.getMaxPrice()) +" and Item_Sale_Price >="
-                    + String.valueOf(dynamicFilterVM.getMaxPrice());
+                    + String.valueOf(dynamicFilterVM.getMinPrice());
             count = 1;
         }
         else{
-            sql = sql + " And Item_Sale_Price <= " +String.valueOf(dynamicFilterVM.getMaxPrice()) +"and Item_Sale_Price >="
-                    + String.valueOf(dynamicFilterVM.getMaxPrice());
+            sql = sql + " And Item_Sale_Price <= " +String.valueOf(dynamicFilterVM.getMaxPrice()) +" and Item_Sale_Price >="
+                    + String.valueOf(dynamicFilterVM.getMinPrice());
         }
         sql = sql + " and Item_Estimate_Value <= " +String.valueOf(dynamicFilterVM.getMaxUsable()) +" and Item_Estimate_Value >="
                 + String.valueOf(dynamicFilterVM.getMinUsable());
