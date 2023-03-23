@@ -10,7 +10,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -121,10 +120,10 @@ public class ItemsRepository {
                 "    Image = ?,\n" +
                 "    Item_Expired_Time = ?,\n" +
                 "    Share = ?,\n" +
-                "    Item_Date_Update = ?,\n" +
+                "    Item_Date_Update = ?\n" +
                 "where ItemID = ? and UserID =?";
 
-        int check = jdbcTemplate.update(sql,item.getUserId(),
+        int check = jdbcTemplate.update(sql,
                 item.getSubCategoryId(), item.getItemTitle(),
                 item.getItemDetailedDescription(), item.getItemMass(),
                 item.isItemSize(),  item.getItemQuanlity(),
@@ -132,7 +131,7 @@ public class ItemsRepository {
                 item.getItemShareAmount(), item.isItemSponsoredOrderShippingFee(),
                 item.getItemShippingAddress(),item.getImage(),
                 item.getStringDateTimeExpired(), item.isShare(),
-                getCurrentDate(), item.getItemID(),Ultil.getUserId());
+                getCurrentDate(), item.getItemID() ,Ultil.getUserId());
         return check != 0;
     }
     public boolean deleteItem(ItemDeleteVM itemDeleteVM){

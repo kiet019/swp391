@@ -74,7 +74,7 @@ public class CartDetailsRepository {
     public boolean cartDetailtoRequest(String note, int cartDetailId, int userID) {
         CartDetails cartDetails = this.getCartDetail(cartDetailId);
         boolean check = requestRepository.addRequest(userID, cartDetails.getItemQuantity(),cartDetails.getItemId(),
-                cartRepository.getAddress(userID), note, Ultil.getCurrentDate(),1, null);
+                cartRepository.getAddress(userID), note, Ultil.getCurrentDate(),0, null);
         return check  ;
     }
 }

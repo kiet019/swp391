@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -64,7 +63,7 @@ public class RequestRepository {
             items.setItemShareAmount(items.getItemShareAmount() - request.getItemQuantity());
 
         }
-        if(itemsRepository.updateItems(items) && updateStatus(request.getRequestID(), 2)) {
+        if(itemsRepository.updateItems(items) && updateStatus(request.getRequestID(), 1)) {
             Request currentRequest = getRequestByID(request.getRequestID());
             if(currentRequest != null) {
                 orderRepository.createOrder(currentRequest);
