@@ -19,23 +19,36 @@ public class AddressUserController {
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> createAddress(@RequestBody String location) {
-        int uid = Ultil.getUserId();
-        boolean result = userAddressRepository.createAddress(uid, location);
-        return result ? ResponseEntity.ok(ReturnMessage.create("đã thêm địa chỉ mới")) : ResponseEntity.badRequest().build();
+    public ResponseEntity<?> createAddress(@RequestBody UserAddress userAddress) {
+        try {
+            int uid = Ultil.getUserId();
+            boolean result = userAddressRepository.createAddress(uid, userAddress.getAddress());
+            return result ? ResponseEntity.ok(ReturnMessage.create("đã thêm địa chỉ mới")) : ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
     @GetMapping("")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> getAddress() {
-        int uid = Ultil.getUserId();
-        List<UserAddress> list = userAddressRepository.getUserAddress(uid);
-        return list != null ? ResponseEntity.ok(list) : ResponseEntity.notFound().build();
+        try {
+            int uid = Ultil.getUserId();
+            List<UserAddress> list = userAddressRepository.getUserAddress(uid);
+            return list != null ? ResponseEntity.ok(list) : ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
     @DeleteMapping("/delete")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> deleteAddress(@RequestBody String location) {
-        int uid = Ultil.getUserId();
-        boolean result = userAddressRepository.deleteAddress(uid, location);
-        return result ? ResponseEntity.ok(ReturnMessage.create("đã xóa địa chỉ")) : ResponseEntity.badRequest().build();
+    public ResponseEntity<?> deleteAddress(@RequestParam String location) {
+        try {
+            int uid = Ultil.getUserId();
+            boolean result = userAddressRepository.deleteAddress(uid, location);
+            return result ? ResponseEntity.ok(ReturnMessage.create("đã xóa địa chỉ")) : ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
+
 }

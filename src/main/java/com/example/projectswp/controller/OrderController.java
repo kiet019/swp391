@@ -11,54 +11,72 @@ import com.example.projectswp.repositories.ultil.Ultil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("api")
+@RequestMapping("api/order")
 public class OrderController {
     @Autowired
     OrderRepository orderRepository;
     @Autowired
     ItemsRepository itemsRepository;
 
-    @GetMapping("/useraccount/order/reciever")
+    @GetMapping("reciever")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> getOrderbyRecieverID(@ModelAttribute OrderGetVM orderGetVM) {
-        int uid = Ultil.getUserId();
-        List<Order> orderList = orderRepository.getOrderByRecieverId(uid, orderGetVM);
-        if (orderList != null) {
-            return ResponseEntity.ok(orderList);
+        try {
+            int uid = Ultil.getUserId();
+            List<Order> orderList = orderRepository.getOrderByRecieverId(uid, orderGetVM);
+            if (orderList != null) {
+                return ResponseEntity.ok(orderList);
+            }
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.notFound().build();
     }
-    @GetMapping("/useraccount/order/sharer")
+    @GetMapping("sharer")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> getOrderbyShareID(@ModelAttribute OrderGetVM orderGetVM) {
-        int uid = Ultil.getUserId();
-        List<Order> orderList = orderRepository.getOrderByShareId(uid, orderGetVM);
-        if (orderList != null) {
-            return ResponseEntity.ok(orderList);
+        try {
+            int uid = Ultil.getUserId();
+            List<Order> orderList = orderRepository.getOrderByShareId(uid, orderGetVM);
+            if (orderList != null) {
+                return ResponseEntity.ok(orderList);
+            }
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.notFound().build();
+
     }
-    @GetMapping("useraccount/order/sharer/check")
+    @GetMapping("sharer/check")
     public ResponseEntity<?> name3(){
         return null;
     }
-    @GetMapping("useraccount/order/reciever/check")
+    @GetMapping("reciever/check")
     public ResponseEntity<?> name4(){
         return null;
     }
-    @GetMapping("/order")
+    @GetMapping("")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> getOrder(@RequestParam(name = "OrderId", required = true) int OrderId ){
-        Order order = orderRepository.getOrderByOrderId(OrderId);
-        if (order != null) {
-            return ResponseEntity.ok(order);
+        try {
+            Order order = orderRepository.getOrderByOrderId(OrderId);
+            if (order != null) {
+                return ResponseEntity.ok(order);
+            }
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.notFound().build();
     }
-    @PutMapping("/order")
+    @PutMapping("")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> updateOrder(@RequestBody OrderUpdateVM orderUpdateVM){
         try {
 
@@ -76,7 +94,7 @@ public class OrderController {
                 return ResponseEntity.ok(ReturnMessage.create("success"));
             return ResponseEntity.badRequest().body(ReturnMessage.create("error at UpdateOrder"));
         } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ReturnMessage.create(ex.getMessage()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 

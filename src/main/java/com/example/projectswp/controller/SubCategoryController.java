@@ -14,14 +14,14 @@ import javax.websocket.server.PathParam;
 import java.util.List;
 
 @RestController
-@RequestMapping(path="/api/SubCategory")
+@RequestMapping(path="/api/subCategory")
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SubCategoryController {
 
     @Autowired
     SubCategoryRepository subCategoryRepository;
 
-    @GetMapping("/GetAllSubCategory")
+    @GetMapping("/all")
     public ResponseEntity<List<SubCategory>> getSubCategories(@RequestParam int categoryID) {
         try {
             List<SubCategory> list = subCategoryRepository.getSubCategoriesByCategory(categoryID);
@@ -31,7 +31,7 @@ public class SubCategoryController {
         }
     }
 
-    @GetMapping("/SearchSubCategoryName")
+    @GetMapping("/name")
     public ResponseEntity<List<SubCategory>> getSubCategory(@RequestParam String subCategoryName) {
         try {
             List<SubCategory> list = subCategoryRepository.getSubCategoryByName(subCategoryName);
@@ -41,7 +41,7 @@ public class SubCategoryController {
         }
     }
 
-    @PostMapping("/createSubCategory")
+    @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<SubCategory>> insertSubCategory(@RequestBody SubCategory addSubCategory) {
         try {
@@ -52,7 +52,7 @@ public class SubCategoryController {
         }
     }
 
-    @PutMapping("/updateSubCategory")
+    @PutMapping("/update")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<SubCategory> updateSubCategory(@RequestBody SubCategory subCategory) {
         try {
@@ -66,7 +66,7 @@ public class SubCategoryController {
         }
     }
 
-    @PutMapping("/DeleteCategory")
+    @PutMapping("/delte")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<SubCategory> deleteSubCategory(@RequestBody SubCategory subCategory) {
         try {
