@@ -4,11 +4,14 @@ import com.example.projectswp.data_view_model.blog.BlogDenyVM;
 import com.example.projectswp.data_view_model.blog.BlogForBlogCategory;
 import com.example.projectswp.data_view_model.blog.CreateBlogVM;
 import com.example.projectswp.data_view_model.blog.UpdateBlogVM;
+import com.example.projectswp.data_view_model.user.UserVM;
 import com.example.projectswp.model.Blog;
 import com.example.projectswp.model.BlogCategory;
 import com.example.projectswp.model.Comment;
+import com.example.projectswp.model.UserAccount;
 import com.example.projectswp.repositories.rowMapper.BlogRowMapper;
 import com.example.projectswp.repositories.ultil.Ultil;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -27,10 +30,13 @@ public class BlogRepository {
     JdbcTemplate jdbcTemplate;
     @Autowired
     CommentRepository commentRepository;
+    @Autowired
+    UserAccountRepository userAccountRepository;
 
     public List<Blog> getBlogs(int status) {
         String sql = "SELECT * FROM Blogs where Blog_Status = ? order by [Blog_Date_Create] DESC";
         List<Blog> blogs = jdbcTemplate.query(sql,BLOG_ROW_MAPPER, status);
+        addUserVM(blogs);
         addCommentToBlogList(blogs);
         return blogs.size() != 0 ? blogs : null;
     }
@@ -38,6 +44,7 @@ public class BlogRepository {
     public Blog getBlog(int blogID) {
         String sql = "SELECT * FROM Blogs WHERE BlogID = ?";
         List<Blog> blogs = jdbcTemplate.query(sql,BLOG_ROW_MAPPER, blogID);
+        addUserVM(blogs);
         addCommentToBlogList(blogs);
         return blogs.size() != 0 ? blogs.get(0) : null;
     }
@@ -72,6 +79,7 @@ public class BlogRepository {
     public List<Blog> getBlogByUserId(int userID) {
         String sql = "SELECT * FROM Blogs WHERE UserID = ?";
         List<Blog> blogs = jdbcTemplate.query(sql,BLOG_ROW_MAPPER, userID);
+        addUserVM(blogs);
         addCommentToBlogList(blogs);
         return blogs.size() != 0 ? blogs: null;
     }
@@ -85,6 +93,7 @@ public class BlogRepository {
     public List<Blog> getBlogByCategoryId(int blogCategoryId) {
         String sql = "SELECT * FROM Blogs WHERE Blog_CategoryID = ? and Blog_Status = 1";
         List<Blog> blogs = jdbcTemplate.query(sql,BLOG_ROW_MAPPER, blogCategoryId);
+        addUserVM(blogs);
         addCommentToBlogList(blogs);
         return blogs.size() != 0 ? blogs: null;
     }
@@ -116,5 +125,16 @@ public class BlogRepository {
             }
         }
         return blogListForCategory;
+    }
+    private void addUserVM(List<Blog> blogs) {
+        if (blogs == null)
+            return;
+        for (Blog blog: blogs) {
+            UserVM userVM = UserVM.create(getUser(blog.getBlogId()));
+            blog.setUserVM(userVM);
+        }
+    }
+    private UserAccount getUser(int id){
+        return userAccountRepository.getUserAccountById(id);
     }
 }

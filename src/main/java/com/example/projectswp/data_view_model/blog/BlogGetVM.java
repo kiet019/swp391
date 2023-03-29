@@ -16,4 +16,5 @@ public class BlogGetVM {
     private int pageNumber;
     private int pageSize;
 
+
 }

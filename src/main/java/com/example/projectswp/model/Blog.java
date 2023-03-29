@@ -1,5 +1,6 @@
 package com.example.projectswp.model;
 
+import com.example.projectswp.data_view_model.user.UserVM;
 import lombok.*;
 
 import java.util.Date;
@@ -22,5 +23,6 @@ public class Blog {
     private Date blogDateUpdate;
     private int blogStatus;
     private String reasonDeny;
+    private UserVM userVM;
     private List<Comment> listComment;
 }

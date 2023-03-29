@@ -32,8 +32,7 @@ public class ItemController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Items> createItem(@RequestBody Items addItems) {
         boolean result = itemsRepository.addItems(addItems);
-        URI uri = URI.create("localhost:8080/api/Item/" + itemsRepository.getLastItem().getItemID());
-        return result ? ResponseEntity.created(uri).build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
     @GetMapping("/getAllBriefItemAndBriefRequest")
         public ResponseEntity<List<Items>> getAllBriefItemAndBriefRequest(@RequestParam boolean share, @RequestParam boolean status, @RequestParam int pageNumber, @RequestParam int pageSize) {
