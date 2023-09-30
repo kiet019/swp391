@@ -19,12 +19,7 @@ public class UserAccount {
     private String userEmail;
     private String userAddress;
     private String userPhone;
-    private boolean userSex;
-    private Date userDateOfBirth;
-    private String userMoreInformation;
-    private String userImage;
-    private boolean status;
+    private String userInformation;
     private Date created;
     private Date update;
-    private int reputation;
 }
